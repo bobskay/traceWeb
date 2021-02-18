@@ -19,4 +19,6 @@ public class KlineVo {
 
     private List<List> data;
 
+    private String sellDetail;
+
 }

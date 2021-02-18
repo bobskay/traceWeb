@@ -9,10 +9,14 @@ import wang.wangby.entity.request.Response;
 import wang.wangby.trace.dto.StockOrderDto;
 import wang.wangby.trace.model.StockOrder;
 import wang.wangby.trace.service.MarketService;
+import wang.wangby.utils.DateTime;
+import wang.wangby.utils.StringUtil;
 import wang.wangby.web.controller.BaseController;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("stockOrder")
@@ -24,11 +28,17 @@ public class StockOrderController extends BaseController {
     @Menu("历史记录")
     @RequestMapping("index")
     public String index() {
-        return $("index");
+        Map map=new HashMap<>();
+        map.put("today", DateTime.current().toString(DateTime.Format.YEAR_TO_DAY));
+        return $("index",map);
     }
 
     @RequestMapping("/query")
     public Response<List<StockOrder>> query(StockOrderDto order)  {
+        if(StringUtil.isEmpty(order.getDate())){
+            order.setDate(DateTime.today());
+        }
+
         List<StockOrder> list= marketService.query(order);
         Collections.sort(list,(o1, o2) -> {
             if(o1.getCreatedAt()==null){

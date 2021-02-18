@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import wang.wangby.repostory.Repository;
 import wang.wangby.trace.dto.TraceOrderDto;
 import wang.wangby.trace.model.TraceOrder;
+import wang.wangby.utils.DateTime;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +20,15 @@ public class TraceOrderService {
         List<TraceOrder> all = repository.select(new TraceOrder(), 0, 10000);
         List<TraceOrder> list = new ArrayList<>();
         for (TraceOrder o : all) {
-            list.add(o);
+            if(o.getFinishAt()==null){
+                list.add(o);
+                continue;
+            }
+
+            String time=new DateTime(o.getFinishAt()).toString(DateTime.Format.YEAR_TO_DAY);
+            if(time.equalsIgnoreCase(query.getDate())){
+                list.add(o);
+            }
         }
         return list;
     }

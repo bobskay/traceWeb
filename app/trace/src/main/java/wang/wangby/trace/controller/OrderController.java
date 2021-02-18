@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 import wang.wangby.annotation.web.Menu;
 import wang.wangby.entity.request.Response;
 import wang.wangby.exchange.Exchange;
+import wang.wangby.exchange.enums.OrderSide;
 import wang.wangby.exchange.socket.listener.AccountUpdateListener;
 import wang.wangby.exchange.vo.BalanceVo;
 import wang.wangby.trace.config.MarketConfig;
@@ -41,8 +42,7 @@ public class OrderController extends BaseController {
         Stock stock = stockService.getStock();
         Map map = new HashMap<>();
         map.put("openOrders", stock.getOpenOrders());
-        map.put("hold", stock.getHolds());
-        map.put("current", marketService.currentOrder());
+        map.put("traceVo", getTraceVo());
         return $("index", map);
     }
 
@@ -54,11 +54,23 @@ public class OrderController extends BaseController {
 
     @RequestMapping("trace")
     public String trace() {
+        TraceVo tr = getTraceVo();
+        return json(Response.success(tr));
+    }
+
+    private TraceVo getTraceVo() {
         Stock stock = stockService.getStock();
         TraceVo tr = new TraceVo();
         tr.setPrice(marketService.getPrice() + "");
         tr.setHold(stock.getHolds() + "");
         tr.setHigh(rule.getHigh() + "");
+
+        if(stock.sellPrice()!=null){
+            tr.setSell(stock.sellPrice().getPrice()+"");
+        }
+        if(stock.buyPrice()!=null){
+            tr.setBuy(stock.buyPrice().getPrice()+"");
+        }
 
         BalanceVo vo = accountUpdateListener.getBalance(marketConfig.getAccountSymbol());
         if (vo != null) {
@@ -66,7 +78,6 @@ public class OrderController extends BaseController {
         }else{
             tr.setWallet("未初始化");
         }
-
-        return json(Response.success(tr));
+        return tr;
     }
 }

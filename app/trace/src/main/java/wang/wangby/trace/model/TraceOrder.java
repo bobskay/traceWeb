@@ -43,13 +43,13 @@ public class TraceOrder  implements Entity {
     }
 
     public String getSellUsed(){
-        if(buyFinish==null){
-            return "未开始";
+        if(buyFinish==null||finishAt==null){
+            return "-";
         }
         return TimeUtil.showTime(buyFinish,finishAt);
     }
     public String getTotalUsed(){
-        return TimeUtil.showTime(createdAt,buyFinish);
+        return TimeUtil.showTime(createdAt,finishAt);
     }
 
 

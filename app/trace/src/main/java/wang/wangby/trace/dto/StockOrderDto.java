@@ -6,4 +6,5 @@ import lombok.Data;
 public class StockOrderDto {
     private String type;
     private String clientOrderId;
+    private String date;
 }

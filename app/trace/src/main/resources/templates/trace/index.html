@@ -18,10 +18,12 @@
     <tr>
         <td >买入</td>
         <td ><spen id="buyAmount"></spen></td>
-        <td >卖出</td>
-        <td ><spen id="sellAmount"></spen></td>
         <td >持仓</td>
-        <td ><spen id="hold"></spen></td>
+        <td colspan="3"><spen id="hold"></spen></td>
+    </tr>
+    <tr>
+        <td >卖出</td>
+        <td colspan="5"><spen id="sellDetail"></spen></td>
     </tr>
     <tr>
         <td colspan="6">
@@ -222,7 +224,7 @@ function updateChart(kline){
 
 
         if(buy!=-1){
-            buy=line.buyCount+"("+buy+")"
+            buy=buy+"("+line.buyCount+")"
         }
         if(sell!=-1){
             sell=line.sellCount+"("+sell+")"
@@ -230,7 +232,7 @@ function updateChart(kline){
 
         $("#currentPrice").html(line.current);
         $("#buyAmount").html(buy);
-        $("#sellAmount").html(sell);
+        $("#sellDetail").html(line.sellDetail);
         $("#hold").html(line.hold);
 
         document.title=line.current;

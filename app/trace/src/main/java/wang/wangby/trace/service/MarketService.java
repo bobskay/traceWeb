@@ -143,6 +143,13 @@ public class MarketService {
                 }
             }
 
+            if(StringUtil.isNotEmpty(query.getDate())){
+                String date=new DateTime(o.getCreatedAt()).toString(DateTime.Format.DAY_TO_DAY);
+                if(!query.getDate().equalsIgnoreCase(date)){
+                    continue;
+                }
+            }
+
             list.add(o);
         }
         return list;

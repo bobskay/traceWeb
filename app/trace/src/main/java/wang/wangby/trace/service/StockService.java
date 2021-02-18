@@ -8,8 +8,11 @@ import wang.wangby.exchange.Exchange;
 import wang.wangby.exchange.dto.Account;
 import wang.wangby.exchange.dto.OpenOrder;
 import wang.wangby.trace.model.Stock;
+import wang.wangby.trace.utils.OrderId;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -26,10 +29,15 @@ public class StockService implements CommandLineRunner {
 
     @Scheduled(cron = "0/10 * * * * ? ")
     public void updateSock(){
-        List<OpenOrder> list = exchange.openOrders();
-        Collections.sort(list, (o1, o2) -> {
-            return o1.getClientOrderId().compareTo(o2.getClientOrderId());
-        });
+        List<OpenOrder> all = exchange.openOrders();
+        List<OpenOrder> list=new ArrayList<>();
+        for(OpenOrder o:all){
+            if(OrderId.getSide(o.getClientOrderId())!=null){
+                list.add(o);
+            }
+        }
+
+        Collections.sort(list, Comparator.comparing(OpenOrder::getClientOrderId));
 
         int hold = 0;
         Account account = exchange.account();
