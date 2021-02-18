@@ -12,14 +12,16 @@
         <td >$marketConfig.sellPlus</td>
         <td >买入减价</td>
         <td >$marketConfig.buyMinutes</td>
-        <td >交易数量</td>
-        <td >$marketConfig.quantity</td>
+        <td >停止价格</td>
+        <td ><spen id="stopPrice"></spen></td>
     </tr>
     <tr>
         <td >买入</td>
         <td ><spen id="buyAmount"></spen></td>
         <td >持仓</td>
-        <td colspan="3"><spen id="hold"></spen></td>
+        <td ><spen id="hold"></spen></td>
+        <td >余额</td>
+        <td ><spen id="wallet"></spen></td>
     </tr>
     <tr>
         <td >卖出</td>
@@ -234,6 +236,8 @@ function updateChart(kline){
         $("#buyAmount").html(buy);
         $("#sellDetail").html(line.sellDetail);
         $("#hold").html(line.hold);
+        $("#wallet").html(line.wallet);
+        $("#stopPrice").html(line.stopPrice);
 
         document.title=line.current;
 }

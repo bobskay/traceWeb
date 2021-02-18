@@ -9,7 +9,6 @@ import wang.wangby.trace.model.Stock;
 import wang.wangby.trace.service.KlineService;
 import wang.wangby.trace.service.StockService;
 
-import java.beans.BeanInfo;
 import java.math.BigDecimal;
 
 @Component
@@ -63,7 +62,7 @@ public class Rule {
     }
 
     //超过某个值就不下单了
-    public BigDecimal getHigh() {
+    public BigDecimal stopPrice() {
         BigDecimal price= klineService.getHigh(CandlestickInterval.HALF_HOURLY);
         Double d=price.doubleValue();
         d=d*0.99;
@@ -72,12 +71,12 @@ public class Rule {
 
     //价格过高，并且已经持有了
     public boolean isTooHigh(BigDecimal price) {
-       //如果持仓是空的，就买点
+       //如果持仓小于2就买点
         Stock stock = stockService.getStock();
         int hasBuy = stock.getHolds() - marketConfig.getBase();
-        if(hasBuy==0){
+        if(hasBuy<2){
             return false;
         }
-        return price.compareTo(getHigh())>0;
+        return price.compareTo(stopPrice())>0;
     }
 }

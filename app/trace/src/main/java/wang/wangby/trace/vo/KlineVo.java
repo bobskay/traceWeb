@@ -17,7 +17,10 @@ public class KlineVo {
     private String max;
     private String min;
 
+    private String wallet;
     private List<List> data;
+
+    private String stopPrice;
 
     private String sellDetail;
 

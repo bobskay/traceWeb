@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.RestController;
 import wang.wangby.annotation.web.Menu;
 import wang.wangby.entity.request.Response;
 import wang.wangby.exchange.Exchange;
-import wang.wangby.exchange.enums.OrderSide;
 import wang.wangby.exchange.socket.listener.AccountUpdateListener;
 import wang.wangby.exchange.vo.BalanceVo;
 import wang.wangby.trace.config.MarketConfig;
@@ -63,7 +62,7 @@ public class OrderController extends BaseController {
         TraceVo tr = new TraceVo();
         tr.setPrice(marketService.getPrice() + "");
         tr.setHold(stock.getHolds() + "");
-        tr.setHigh(rule.getHigh() + "");
+        tr.setHigh(rule.stopPrice() + "");
 
         if(stock.sellPrice()!=null){
             tr.setSell(stock.sellPrice().getPrice()+"");

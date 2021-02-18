@@ -9,8 +9,10 @@ import wang.wangby.exchange.Exchange;
 import wang.wangby.exchange.dto.Kline;
 import wang.wangby.exchange.dto.OpenOrder;
 import wang.wangby.exchange.enums.CandlestickInterval;
-import wang.wangby.exchange.socket.listener.AggTradeListener;
+import wang.wangby.exchange.socket.listener.AccountUpdateListener;
+import wang.wangby.exchange.vo.BalanceVo;
 import wang.wangby.trace.config.MarketConfig;
+import wang.wangby.trace.config.Rule;
 import wang.wangby.trace.model.Stock;
 import wang.wangby.trace.service.KlineService;
 import wang.wangby.trace.service.MarketService;
@@ -37,6 +39,10 @@ public class TraceController extends BaseController {
     KlineService klineService;
     @Autowired
     StockService stockService;
+    @Autowired
+    AccountUpdateListener accountUpdateListener;
+    @Autowired
+    Rule rule;
 
     @Menu("交易信息")
     @RequestMapping("index")
@@ -125,6 +131,14 @@ public class TraceController extends BaseController {
         klineVo.setMin(min + "");
         klineVo.setMax(max + "");
 
+        BalanceVo vo = accountUpdateListener.getBalance(marketConfig.getAccountSymbol());
+        if (vo != null) {
+            klineVo.setWallet(vo.getTotal() + "");
+        }else{
+            klineVo.setWallet("未初始化");
+        }
+
+        klineVo.setStopPrice(rule.stopPrice()+"");
         return json(klineVo);
     }
 }
