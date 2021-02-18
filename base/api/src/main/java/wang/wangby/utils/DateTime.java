@@ -11,9 +11,7 @@ import java.util.*;
  */
 @Slf4j
 public class DateTime extends Date{
-	public static String today() {
-		return DateTime.current().toString(Format.YEAR_TO_DAY);
-	}
+
 
 	public enum Format{
 		YEAR_TO_YEAR("yyyy"),

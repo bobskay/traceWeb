@@ -9,6 +9,7 @@ import wang.wangby.entity.request.Response;
 import wang.wangby.trace.dto.TraceOrderDto;
 import wang.wangby.trace.model.TraceOrder;
 import wang.wangby.trace.service.TraceOrderService;
+import wang.wangby.trace.utils.TimeUtil;
 import wang.wangby.utils.DateTime;
 import wang.wangby.utils.StringUtil;
 import wang.wangby.web.controller.BaseController;
@@ -37,7 +38,7 @@ public class TraceOrderController extends BaseController {
     @RequestMapping("/query")
     public Response<List<TraceOrder>> query(TraceOrderDto order)  {
         if(StringUtil.isEmpty(order.getDate())){
-            order.setDate(DateTime.today());
+            order.setDate(TimeUtil.today());
         }
 
         List<TraceOrder> list= traceOrderService.query(order);

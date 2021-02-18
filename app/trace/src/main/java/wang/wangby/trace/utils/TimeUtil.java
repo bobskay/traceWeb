@@ -41,4 +41,8 @@ public class TimeUtil {
         return sb.toString();
     }
 
+    public static String today() {
+        return DateTime.current().toString(DateTime.Format.YEAR_TO_DAY);
+    }
+
 }
