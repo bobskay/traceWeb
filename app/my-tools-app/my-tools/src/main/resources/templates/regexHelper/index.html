@@ -1,0 +1,83 @@
+<form id="fm" name="fm">
+    <table class="form">
+        <tr>
+            <td width="20%">
+                正则
+            </td>
+            <td width="80%">
+                <input name="regex" class="form-control" value="$!{regex}" >
+            </td>
+        </tr>
+        <tr>
+            <td>
+                要测试的字符串
+            </td>
+            <td>
+                <textarea name="str" class="form-control" rows="5" >$!{str}</textarea>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <button type="button" class="btn-info" onclick="setRegex('\\d*[.]?\\d+$')" >数字</button>
+                <button type="button" class="btn-info" onclick="setRegex('^(\\w)+(\\.\\w+)*@(\\w)+((\\.\\w+)+)$')">email</button>
+                <button type="button" class="btn-info" onclick="setRegex('^([\\u4e00-\\u9fa5]|[a-z]|[A-Z]|[0-9])*$')">数字字母或汉字</button>
+                <button type="button"  class="btn-success" onclick="subForm()">验证</button>
+            </td>
+        </tr>
+    </table>
+</form>
+<table class="list" id="result">
+    <thead>
+    <tr>
+        <th>正则</th>
+        <th>字符串</th>
+        <th>是否匹配</th>
+    </tr>
+    </thead>
+    <tbody>
+    #foreach($result in $regexResultList)
+    <tr>
+        <td>
+            ${result.regex}
+        </td>
+        <td>
+            ${result.str}
+        </td>
+        <td>
+            ${result.match}
+        </td>
+    </tr>
+    </tbody>
+    #end
+</table>
+
+<script>
+    function subForm() {
+        var url = "${path}/test";
+        var data = $(fm).serialize();
+        ajaxUtil.json(url, data, function (resp) {
+            if (!resp.success) {
+                dialog.alert(resp.message)
+                return;
+            }
+            var html = "";
+            for (var i = 0; i < resp.data.length; i++) {
+                html += "<tr>";
+                html += "<td>" + resp.data[i].regex + "</td>";
+                html += "<td>" + resp.data[i].str + "</td>";
+                if(resp.data[i].match){
+                    html += "<td style='color: green;'>" + resp.data[i].match + "</td>";
+                }else{
+                    html += "<td style='color: red;'>" + resp.data[i].match + "</td>";
+                }
+
+                html += "</tr>";
+                $("#result tbody").html(html);
+            }
+        })
+    }
+
+    function setRegex(str) {
+        $("input[name='regex']").val(str);
+    }
+</script>

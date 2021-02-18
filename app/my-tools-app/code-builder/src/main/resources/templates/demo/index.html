@@ -1,0 +1,103 @@
+<form id="searchForm">
+
+    <table class="table form">
+        #foreach($fields in $codeCreator.getFieldRows(3))
+        <tr>
+            #foreach($field in $fields)
+                <td width="10%">${field.remark}</td>
+                <td>
+                    <input name="$field.name" class="form-control" type="text">
+                </td>
+            #end
+        </tr>
+        #end
+
+        <tr>
+            <td>
+                <button type="button" id="btnSelect" class="btn btn-primary">查询</button>
+            </td>
+        </tr>
+    </table>
+    <input type="hidden" name="sql" :value="sql"/>
+</form>
+
+<div id="toolbar" class="btn-group">
+    <button id="btnAdd" type="button" class="btn btn-default">
+        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增
+    </button>
+    <button id="btnUpdate" type="button" class="btn btn-default">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>修改
+    </button>
+    <button id="btnDelete" type="button" class="btn btn-default">
+        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>删除
+    </button>
+</div>
+
+<table id="queryResult"></table>
+
+<script>
+    var tableDiv = 'queryResult';
+    var searchForm = 'searchForm';
+    var pkName= "${codeCreator.pkField.name}";
+    var codeConfig=$html.json($codeConfig);
+    var appData = {
+        sql: codeConfig.sql,
+    #foreach($field in $codeCreator.fields)$field.name: "",
+        #end
+    }
+    var vue = vueUtil.init({
+        el: "#searchForm",
+        data: appData
+    })
+
+    tableEvents = {
+        "click #btnOperate": function (e, value, row, index) {
+            var data = "";
+            ajaxUtil.json("$path/xxx", data, function (ret) {
+                if (!ret.success) {
+                    dialog.alert(ret.message);
+                } else {
+                    dialog.alert("操作成功");
+                }
+            })
+        },
+    };
+
+    btnOperate = function (value, row, index) {
+        return [
+            '<button id="btnOperate" class="btn-small btn-primary">操作</button>'
+        ].join("")
+    };
+
+    $(function () {
+        var columns = [
+            {checkbox: true},
+            #foreach($field in $codeCreator.fields){field: '$field.Name', title: '$field.remark'},
+            #end
+{title: "操作", formatter: btnOperate, events: tableEvents, visible: false},
+        ]
+        tableUtil.init(tableDiv, columns, '$path/select', function (config) {
+
+            config.uniqueId = pkName;
+            tableUtil.queryParam={"sql":codeConfig.sql}
+
+        });
+    });
+
+    $('#btnAdd').click(function () {
+        var param="sql="+codeConfig.sql;
+        frame.prepareInsert("新增", '${path}/prepareInsert', '$path/insert',null,2,param);
+    });
+
+    $("#btnUpdate").click(function () {
+        frame.update(pkName, "修改", '${path}/prepareUpdate', '$path/updateById');
+    });
+
+    $("#btnDelete").click(function () {
+        frame.delete(pkName, '$path/deleteById');
+    });
+
+    $("#btnSelect").click(function () {
+        frame.search(searchForm, '$path/select', vue)
+    });
+</script>

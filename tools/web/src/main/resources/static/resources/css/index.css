@@ -1,0 +1,42 @@
+
+pre {outline: 1px solid #ccc; padding: 5px; margin: 5px; }
+.string { color: green; }
+.number { color: darkorange; }
+.boolean { color: blue; }
+.null { color: magenta; }
+.key { color: red; }
+
+.form {
+  width: 100%;
+  max-width: 100%;
+}
+
+.form > tbody > tr > td, .form > tbody > tr > th, .form > tfoot > tr > td, .form > tfoot > tr > th, .form > thead > tr > td, .form > thead > tr > th {
+  padding: 8px;
+  line-height: 1.42857143;
+  vertical-align: middle;
+  border: 1px solid #ddd
+}
+
+.form {
+  width: 100%;
+  max-width: 100%;
+}
+
+.list {
+  width: 100%;
+  max-width: 100%;
+}
+
+.list > tbody > tr > td, .list > tbody > tr > th, .list > tfoot > tr > td, .list > tfoot > tr > th, .list > thead > tr > td, .list > thead > tr > th {
+  padding: 8px;
+  line-height: 1.42857143;
+  vertical-align: middle;
+  text-align: center;
+  border: 1px solid #ddd
+}
+
+li{
+  list-style-type:none;
+}
+

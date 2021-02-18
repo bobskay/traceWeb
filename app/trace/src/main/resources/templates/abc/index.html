@@ -1,0 +1,14 @@
+https://github.com/bobskay/trace
+<br>
+<textarea id="content" cols="100" rows="20"></textarea>
+
+<button onclick="doSave()">save</button>
+
+<script>
+    function doSave(){
+        var param="text="+$("#content").val();
+        ajaxUtil.json("$path/save",param,function(data){
+            alert(data);
+        });
+    }
+</script>

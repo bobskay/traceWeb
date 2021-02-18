@@ -1,0 +1,28 @@
+<table class="form">
+    <tr>
+        <td><a href="javascript:" onclick="show('/actuator/metrics')">/actuator/metrics</a>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <a href="javascript:" onclick="show('/actuator/mappings')">/actuator/mappings</a>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <a href="javascript:" onclick="show('/actuator/prometheus')">/actuator/prometheus</a>
+        </td>
+    </tr>
+
+
+</table>
+<pre id="content"></pre>
+
+<script>
+    function show(url) {
+        ajaxUtil.html(url, "", function (html) {
+            $("#content").html(utils.jsonToStr(html));
+        })
+    }
+</script>
+

@@ -1,0 +1,13 @@
+package ${codeConfig.packageName};
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.ImportResource;
+
+@SpringBootApplication
+@ImportResource({"classpath:${codeConfig.appName}-provider.xml"})
+public class ${codeConfig.upAppName}ProvierApp {
+    public static void main(String args[]){
+        SpringApplication.run(${codeConfig.upAppName}ProvierApp.class, args);
+    }
+}

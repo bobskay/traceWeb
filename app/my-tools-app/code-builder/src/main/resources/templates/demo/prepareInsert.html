@@ -1,0 +1,16 @@
+<table class="table table-bordered ">
+    #foreach($field in $codeCreator.fields)<tr>
+    <td width="20%">${field.remark}</td>
+    <td width="80%">
+        <input name="$field.name" class="form-control" type="text">
+    </td>
+</tr>
+    #end
+</table>
+<script>
+    //这个名称是固定的,在frame.js里需要用到
+    var insertData={
+    #foreach($field in $codeCreator.fields)$field.name: "",
+        #end
+    }
+</script>

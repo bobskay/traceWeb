@@ -1,0 +1,22 @@
+<table class="form">
+    <tr>
+        <input class="form-control" name="bookName" placeholder="请输入图书名称"/>
+    </tr>
+    <tr>
+        <td>
+            <button class="btn btn-success" onclick="select()">查询</button>
+        </td>
+    </tr>
+</table>
+<pre id="result" style="display:none;"></pre>
+
+
+<script>
+    function  select() {
+        var data="bookName="+$("input[name='bookName']").val();
+        ajaxUtil.json("$path/select",data,function (resp) {
+            var str=utils.jsonToStr(resp);
+            $('#result').html(str).show();
+        });
+    }
+</script>

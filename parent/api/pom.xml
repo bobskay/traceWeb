@@ -1,0 +1,37 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>wang.wangby</groupId>
+		<artifactId>base-parent</artifactId>
+		<version>1</version>
+	</parent>
+	<packaging>pom</packaging>
+
+	<artifactId>api-parent</artifactId>
+
+	<dependencies>
+		<dependency>
+			<groupId>wang.wangby</groupId>
+			<artifactId>base-test</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>wang.wangby</groupId>
+			<artifactId>base-provided</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>wang.wangby</groupId>
+			<artifactId>base-template</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>wang.wangby</groupId>
+			<artifactId>base-json</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>wang.wangby</groupId>
+			<artifactId>base-api</artifactId>
+		</dependency>
+	</dependencies>
+
+</project>

@@ -1,0 +1,93 @@
+<form id="searchForm">
+    <table class="table form">
+        <tr>
+            <td width="10%">用户名</td>
+            <td>
+                <input name="userName" class="form-control" type="text">
+            </td>
+            <td width="10%">昵称</td>
+            <td>
+                <input name="nickName" class="form-control" type="text">
+            </td>
+            <td>
+                <button type="button" id="btnSelect" class="btn btn-primary">查询</button>
+            </td>
+        </tr>
+    </table>
+</form>
+
+<div id="toolbar" class="btn-group">
+    <button id="btnAdd" type="button" class="btn btn-default">
+        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增
+    </button>
+    <button id="btnUpdate" type="button" class="btn btn-default">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>修改
+    </button>
+    <button id="btnDelete" type="button" class="btn btn-default">
+        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>删除
+    </button>
+</div>
+
+<table id="queryResult"></table>
+
+<script>
+    var tableDiv = 'queryResult';
+    var searchForm = 'searchForm';
+    var pkName = "userId";
+    var appData = {
+        userId: "",
+        userName: "",
+        passwd: "",
+        nickName: "",
+    }
+    var vue = vueUtil.init({
+        el: "#searchForm",
+        data: appData
+    })
+
+    tableEvents = {
+        "click #btnUserRole": function (e, value, row, index) {
+            var data = "userId="+row.userId;
+            dialog.html("用户角色","$path/prepareUpdateUserRole",data,function () {
+                updateUerRole();
+                return false;
+            })
+        },
+    };
+
+    btnOperate = function (value, row, index) {
+        return [
+            '<button id="btnUserRole" class="btn-small btn-success">角色配置</button>'
+        ].join("")
+    };
+
+    $(function () {
+        var columns = [
+            {checkbox: true},
+            {field: 'userId', title: '用户id'},
+            {field: 'userName', title: '用户名'},
+            {field: 'passwd', title: '密码'},
+            {field: 'nickName', title: '昵称'},
+            {title: "操作", formatter: btnOperate, events: tableEvents, visible: true},
+        ]
+        tableUtil.init(tableDiv, columns, '$path/select', function (config) {
+            config.uniqueId = pkName;
+        });
+    });
+
+    $('#btnAdd').click(function () {
+        frame.prepareInsert("新增", '${path}/prepareInsert', '$path/insert');
+    });
+
+    $("#btnUpdate").click(function () {
+        frame.update(pkName, "修改", '${path}/prepareUpdate', '$path/updateById');
+    });
+
+    $("#btnDelete").click(function () {
+        frame.delete(pkName, '$path/deleteById');
+    });
+
+    $("#btnSelect").click(function () {
+        frame.search(searchForm, '$path/select', vue)
+    });
+</script>

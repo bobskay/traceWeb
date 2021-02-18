@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>${title}</title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <link rel="stylesheet" href="${staticRoot}/plugins/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="${staticRoot}/plugins/bootstrap-table/css/bootstrap-table.min.css">
+    <link rel="stylesheet" href="${staticRoot}/plugins/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="${staticRoot}/plugins/Ionicons/css/ionicons.min.css">
+    <link rel="stylesheet" href="${staticRoot}/css/AdminLTE.css">
+    <link rel="stylesheet" href="${staticRoot}/css/skins/_all-skins.min.css">
+    <link rel="stylesheet" href="${staticRoot}/css/googleFont.css">
+    <link rel="stylesheet" href="${staticRoot}/css/index.css">
+    <link rel="stylesheet" href="${staticRoot}/plugins/ztree/demo.css" rel="stylesheet">
+    <link rel="stylesheet" href="${staticRoot}/plugins/ztree/zTreeStyle/zTreeStyle.css" rel="stylesheet">
+</head>
+<body class="hold-transition skin-blue sidebar-mini ">
+<div class="wrapper" id="mainApp">
+
+    <header class="main-header">
+        <a href="index.html" class="logo">
+            <span class="logo-mini">--</span>
+            <span class="logo-lg">${title}</span>
+        </a>
+        <nav class="navbar navbar-static-top">
+            <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
+                <span class="sr-only">Toggle navigation</span>
+            </a>
+
+            <div class="navbar-custom-menu">
+                <ul class="nav navbar-nav">
+                    <li>
+                        <a href="JavaScript:" onclick="logout()">退出</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+    <aside class="main-sidebar">
+        <section class="sidebar">
+            <ul class="sidebar-menu">
+                #foreach($menu in $menus)
+                <li class="treeview">
+                    <a href="javscript:" onclick="leftMenu.load('$!menu.url',this)" url="$!menu.url" text="$menu.text">
+                        <i class="$menu.icon"></i> <span>$menu.text</span>
+                        #if($menu && $menu.children && $!menu.children.size()>0)
+                        <span class="pull-right-container">
+                          <i class="fa fa-angle-left pull-right"></i>
+                        </span>
+                        #end
+                    </a>
+                    #if($menu && $menu.children && $menu.children.size()>0)
+                    <ul class="treeview-menu">
+                        #foreach($secMenu in $menu.children)
+                        <li>
+                            <a href="javscript:" onclick="leftMenu.load('$!secMenu.url',this)" url="$!secMenu.url"
+                               text="$secMenu.text" style="padding-top: 10px;padding-bottom: 10px">
+                                <i class="$secMenu.icon"></i> <span>$secMenu.text</span>
+                            </a>
+                        </li>
+                        #end
+                    </ul>
+                    #end
+                </li>
+                #end
+            </ul>
+        </section>
+    </aside>
+
+    <!--页面主体内容,通过ajax获取-->
+    <div class="content-wrapper" style="background-color: white">
+        <section class="content-header">
+            <h1 id="contentTitle"></h1>
+        </section>
+
+        <section class="content" id="main-content">
+        </section>
+    </div>
+
+</div>
+<script src="${staticRoot}/plugins/jquery/jquery.min.js"></script>
+<script src="${staticRoot}/plugins/jquery-ui/jquery-ui.min.js"></script>
+<script>
+    var staticRoot="${staticRoot}";
+    var webRoot="${webRoot}";
+    $.widget.bridge('uibutton', $.ui.button);
+</script>
+<script src="${staticRoot}/plugins/bootstrap/js/bootstrap.min.js"></script>
+<script src="${staticRoot}/plugins/bootstrap-table/js/bootstrap-table.min.js"></script>
+<script src="${staticRoot}/plugins/bootstrap-table/js/bootstrap-table-zh_CN.min.js"></script>
+<script src="${staticRoot}/plugins/ztree/jquery.ztree.all.min.js"></script>
+<script src="${staticRoot}/js/adminlte.js"></script>
+<script src="${staticRoot}/plugins/vue/vue.min.js"></script>
+<script src="${staticRoot}/plugins/vue/vee-validate.min.js"></script>
+<script src="${staticRoot}/plugins/vue/vue-i18n.min.js"></script>
+
+<script src="${staticRoot}/js/utils.js"></script>
+<script src="${staticRoot}/js/dialog.js"></script>
+<script src="${staticRoot}/js/ajaxUtil.js"></script>
+<script src="${staticRoot}/js/vueUtil.js"></script>
+<script src="${staticRoot}/js/tableUtil.js"></script>
+<script src="${staticRoot}/js/frame.js"></script>
+<script src="${staticRoot}/js/myTree.js"></script>
+
+
+</body>
+<script>
+    $(function () {
+        var config=$html.json($codeConfig);
+        ajaxUtil.post("$path/index", config, function (html) {
+            $("#main-content").html(html);
+        })
+
+        $("#contentTitle").text("$!condConfig.menuName");
+    })
+</script>
+</html>

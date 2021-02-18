@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="${daoClass}" >
+ 
+<insert id="insert" parameterType="${entityClass}">
+  insert into $help.tableName ($help.getFieldNames()) values ($help.getValuedNames())
+</insert>
+
+<insert id="insertBatch" parameterType="java.util.List">
+  insert into $help.tableName ($help.getFieldNames()) values
+	<foreach collection="list" item="item" separator=",">
+  		($help.getValuedNames("item"))
+	</foreach>
+</insert>
+
+
+<delete id="deleteById">
+	delete from $help.tableName where $help.pkName in
+	<foreach collection="array" index="index" item="item" open="(" separator="," close=")">
+		#{item}       
+	</foreach>
+</delete>
+
+<delete id="delete">
+delete from $help.tableName where 1=1
+$help.getIfNotNull(false)
+</delete>
+
+<update id="updateById">
+	update $help.tableName 
+	<trim prefix="set" suffixOverrides=",">
+$help.getIfNotNull(true)
+	</trim>
+	where $help.getPkEqual()
+</update>
+
+<update id="updateFull">
+	update $help.tableName set $help.getSetEqual() where $help.getPkEqual()
+</update>
+
+<update id="updateField">
+	update $help.tableName set ${fieldName}$=#{newValue}#  where $help.pkName in
+	<foreach collection="array" index="index" item="item" open="(" separator="," close=")">
+		#{ids}
+	</foreach>
+	and ${fieldName}$ in
+	<foreach collection="array" index="index" item="item" open="(" separator="," close=")">
+		#{oldValues}#
+	</foreach>
+</update>
+
+
+ <select id="select" resultType="${entityClass}">
+     select $help.getFieldNames() from $help.tableName where 1=1
+$help.getIfNotNull(false)
+	 <if test="ext.condition != null">
+		 and ${ext.condition}
+	 </if>
+
+	 <if test="ext.orderBy != null">
+		 order by ${ext.orderBy}
+	 </if>
+
+	<if test="ext.offset != null">
+	   limit #{ext.offset},#{ext.limit}
+	</if>
+ </select>
+
+  <select id="getCount" resultType="long">
+  	 select count(*) from $help.tableName where 1=1
+$help.getIfNotNull(false)
+  </select>
+
+  <select id="get" resultType="${entityClass}">
+  	 select $help.getFieldNames() from $help.tableName where $help.getPkEqual()
+  </select>
+
+	<select id="getById" resultType="${entityClass}" parameterType="java.util.List">
+  	 select $help.getFieldNames() from $help.tableName where $help.pkName in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+  </select>
+
+
+  
+  <select id="max" resultType="Integer">
+	  select max(${ext.fieldName}) from $help.tableName where 1=1
+$help.getIfNotNull(false)
+  </select>
+
+</mapper>

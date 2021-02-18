@@ -1,0 +1,10 @@
+package ${codeConfig.packageName}.service;
+
+import com.alibaba.dubbo.config.annotation.Service;
+import ${codeConfig.packageName}.model.${codeConfig.upModelName};
+
+@Service
+public interface ${codeConfig.upModelName}Service{
+
+    ${codeConfig.upModelName} get(${codeConfig.upModelName} ${codeConfig.modelName} );
+}

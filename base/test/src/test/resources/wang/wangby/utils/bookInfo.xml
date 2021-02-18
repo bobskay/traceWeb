@@ -1,0 +1,8 @@
+<Book>
+    <bookId>1</bookId>
+    <price>100</price>
+    <user>
+        <userId>this is userId</userId>
+    </user>
+    <abc>test</abc>
+</Book>

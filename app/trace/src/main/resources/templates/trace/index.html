@@ -1,0 +1,239 @@
+<table class="form">
+    <tr>
+        <td width="10%">当前价格</td>
+        <td width="23%"><span id="currentPrice">$price</span></td>
+        <td width="10%">最大持仓</td>
+        <td width="23%">$marketConfig.maxHold</td>
+        <td width="10%">最小持仓</td>
+        <td width="23%">$marketConfig.base</td>
+    </tr>
+    <tr>
+        <td >卖出加价</td>
+        <td >$marketConfig.sellPlus</td>
+        <td >买入减价</td>
+        <td >$marketConfig.buyMinutes</td>
+        <td >交易数量</td>
+        <td >$marketConfig.quantity</td>
+    </tr>
+    <tr>
+        <td >买入</td>
+        <td ><spen id="buyAmount"></spen></td>
+        <td >卖出</td>
+        <td ><spen id="sellAmount"></spen></td>
+        <td >持仓</td>
+        <td ><spen id="hold"></spen></td>
+    </tr>
+    <tr>
+        <td colspan="6">
+            <button class="btn-success" onclick="stopKline()">停止</button>
+            <button class="btn-success" onclick="syncKline()">同步</button>
+        </td>
+    </tr>
+
+</table>
+<br/>
+<div id="main" style="width: 1200px;height:400px;"></div>
+
+<button type="button" class="btn-xs btn-default" onclick="zoomAdd(-10)">
+    <span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
+</button>
+
+<button  type="button" class="btn-xs btn-default" onclick="zoomAdd(10)">
+    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+</button>
+
+<button  type="button" class="btn-xs btn-default" onclick="changeType('1m')">1m</button>
+<button  type="button" class="btn-xs btn-default" onclick="changeType('30m')">30m</button>
+
+
+<script>
+var myChart = echarts.init(document.getElementById('main'));
+var upColor = '#ec0000';
+var upBorderColor = '#8A0000';
+var downColor = '#00da3c';
+var downBorderColor = '#008F28';
+var yMax;
+var yMin;
+var data0;
+var zoomStart=80;
+var lineType="1m";
+
+function zoomAdd(add){
+    zoomStart+=add;
+    if(zoomStart<=0){
+        zoomStart=0;
+    }
+    if(zoomStart>90){
+        zoomStart=90;
+    }
+}
+
+function changeType(type){
+    lineType=type;
+}
+
+function splitData(rawData) {
+    var categoryData = [];
+    var values = []
+    for (var i = 0; i < rawData.length; i++) {
+        categoryData.push(rawData[i].splice(0, 1)[0]);
+        values.push(rawData[i])
+    }
+    return {
+        categoryData: categoryData,
+        values: values
+    };
+}
+
+
+function doCreate(current,buy,sell){
+option = {
+    title: {
+        text: 'ETHUSDT',
+        left: 0
+    },
+    tooltip: {
+        trigger: 'axis',
+        axisPointer: {
+            type: 'cross'
+        }
+    },
+    legend: {
+        data: [lineType]
+    },
+    grid: {
+        left: '5%',
+        right: '10%',
+        bottom: '10%'
+    },
+    xAxis: {
+        type: 'category',
+        data: data0.categoryData,
+        scale: true,
+        boundaryGap: false,
+        axisLine: {onZero: false},
+        splitLine: {show: false},
+        splitNumber: 20,
+        min: 'dataMin',
+        max: 'dataMax'
+    },
+    yAxis: {
+        scale: true,
+        splitArea: {
+            show: true
+        },
+        max:yMax,
+        min:yMin
+    },
+    dataZoom: [
+        {
+            type: 'inside',
+            start: zoomStart,
+            end: 100
+        },
+        {
+            show: true,
+            type: 'slider',
+            top: '90%',
+            start: 50,
+            end: 100
+        }
+    ],
+    series: [
+        {
+            name: lineType,
+            type: 'candlestick',
+            data: data0.values,
+            itemStyle: {
+                color: upColor,
+                color0: downColor,
+                borderColor: upBorderColor,
+                borderColor0: downBorderColor
+            },
+
+            markLine: {
+                symbol: ['none', 'none'],
+                data: [
+                    {
+                        name: 'buy',
+                        label:{
+                              position:'end',
+                              formatter:"买("+buy+")"
+                        },
+                        yAxis:buy
+                    },
+                    {
+                        name: 'sell',
+                        label:{
+                              position:'end',
+                              formatter:"卖("+sell+")"
+                        },
+                        yAxis:sell
+                    },
+                    {
+                        name: 'current',
+                        label:{
+                              position:'end',
+                              formatter:current
+                        },
+                        yAxis:current
+                    }
+                ]
+            }
+        },
+
+
+
+    ]
+};
+myChart.setOption(option);
+}
+var i=-1;
+timeOutFunction=function(){
+    var main=$("#main").html();
+    if(!main){
+        return;
+    }
+    updateKline();
+}
+
+function stopKline(){
+timeOutFunction=null;
+}
+
+function updateKline(){
+    var param="zoomStart="+zoomStart;
+    param+="&type="+lineType;
+    ajaxUtil.json("$path/kline",param,function(kline){
+        updateChart(kline);
+    })
+}
+
+
+function updateChart(kline){
+        var line=JSON.parse(kline)
+        data0= splitData(line.data);
+        yMax=line.max;
+        yMin=line.min;
+
+        var buy=line.buy||-1;
+        var sell=line.sell||-1;
+        doCreate(line.current,buy,sell);
+
+
+        if(buy!=-1){
+            buy=line.buyCount+"("+buy+")"
+        }
+        if(sell!=-1){
+            sell=line.sellCount+"("+sell+")"
+        }
+
+        $("#currentPrice").html(line.current);
+        $("#buyAmount").html(buy);
+        $("#sellAmount").html(sell);
+        $("#hold").html(line.hold);
+
+        document.title=line.current;
+}
+
+</script>

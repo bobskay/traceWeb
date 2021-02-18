@@ -1,0 +1,46 @@
+<form name="fm" id="fm">
+    <table class="form">
+        <tr>
+            <td>
+                包名
+                <input class="form-control" title="包名" v-validate="'required'" name="packageName">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                sql
+                <textarea name="sql" title="sql" v-validate="'required'"  style="width: 100%" rows="10"></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <button type="button" onclick="toJava()" class=" btn-success">生成Java文件</button>
+                <button type="button" onclick="toHtml()" class=" btn-success">生成页面</button>
+            </td>
+        </tr>
+    </table>
+</form>
+
+<script>
+    var vue=vueUtil.init({
+        el:"#fm",
+        data:{
+            packageName:"wang.wangby",
+            sql:""
+        }
+    })
+
+    function toJava() {
+        var data = $(fm).serialize();
+        vueUtil.submitHtml(vue,"$path/createJava", data, function (content) {
+            dialog.alert(content)
+        });
+    }
+
+    function toHtml() {
+        var data = $(fm).serialize();
+        vueUtil.submitHtml(vue,"$path/createPage", data, function (content) {
+            dialog.alert(content)
+        });
+    }
+</script>

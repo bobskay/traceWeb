@@ -1,0 +1,77 @@
+<div id="app" class="panel-body" style="padding-bottom:0px;">
+    <table class="form ">
+        <tr>
+            <td width="20%">执行间隔(ms)</td>
+            <td>
+                <input type="text" title="执行间隔"  name="interval">
+            </td>
+        </tr>
+        <tr>
+            <td width="20%">最短用时</td>
+            <td>
+                <input type="text" title="最短"  name="min">
+            </td>
+        </tr>
+        <tr>
+            <td width="20%">最长用时</td>
+            <td>
+                <input type="text" title="最长"  name="max">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                已经运行次数
+            </td>
+            <td>
+                {{count}}
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <button type="button" v-show="running==false" class="btn-sm btn-success" @click="start()">启动</button>
+                <button type="button" v-show="running==true" class="btn-sm btn-danger" @click="stop()">停止</button>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<script>
+    var testInfo={
+        "min":0,
+        "max":1000,
+        "interval":100,
+        "count":0,
+        "running":false
+    }
+
+    vueUtil.init({
+        el: '#app',
+        path:"$path",
+        name:"testInfo",
+        data: testInfo,
+        methods:{
+            start:function () {
+                testInfo.running=true;
+                doInvoke();
+            },
+            stop:function () {
+                testInfo.running=false;
+                testInfo.count=0;
+            }
+        }
+    });
+
+    function doInvoke() {
+        if(!testInfo.running){
+            return;
+        }
+        param="min="+testInfo.min;
+        param+="&max="+testInfo.max
+        ajaxUtil.json("$path/invoke",param,function (resp) {
+            testInfo.count++;
+            setTimeout(doInvoke,testInfo.interval);
+        });
+
+    }
+
+</script>

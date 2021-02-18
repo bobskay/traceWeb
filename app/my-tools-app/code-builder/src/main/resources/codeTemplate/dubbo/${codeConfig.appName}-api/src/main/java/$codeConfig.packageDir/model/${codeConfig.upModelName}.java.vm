@@ -1,0 +1,13 @@
+package $codeCreateResult.model().packageName;
+#foreach($imp in $codeCreateResult.model().importList)import $imp;
+#end
+@Data
+@Table("$codeCreateResult.tableInfo.tableName")
+@Remark("$!codeCreateResult.tableInfo.tableComment")
+public class $codeCreateResult.model().name extends BaseModel{
+#foreach($field in $codeCreateResult.model().javaFieldList)#foreach($ann in $field.annotation)  $ann
+#end
+    private $field.typeName.html $field.name;
+
+#end
+}

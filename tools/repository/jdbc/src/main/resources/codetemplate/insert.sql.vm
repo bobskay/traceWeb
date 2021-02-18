@@ -1,0 +1,10 @@
+INSERT INTO ${tableInfo.tableName} (
+#foreach($column in $tableInfo.ColumnsWithoutPk)
+    ${column.columnName},
+#end
+${tableInfo.pkName()}
+) VALUES (
+#foreach($value in $values)
+    $value
+#end
+)

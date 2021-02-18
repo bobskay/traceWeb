@@ -1,0 +1,110 @@
+<div class="panel-body" style="padding-bottom:0px;">
+    <div class="row" style="padding: 0">
+        <pre id="editor" style="height: 80px"></pre>
+    </div>
+
+    <div class="row">
+        <div class="row" align="center" style="margin: 10px">
+            <button type="button" onclick="getLogger()" class="btn btn-primary">查询</button>
+        </div>
+    </div>
+</div>
+<table class="form" id="loggerTable" style="display: none">
+    <tr id="columnTr">
+        <td width="50%"><span name="logger" ></span></td>
+        <td width="50%" align="left">
+            <div class="btn-group" role="group" aria-label="...">
+                <button type="button" onclick="setLevel(this)" title="TRACE" class="btn btn-default">TRACE</button>
+                <button type="button" onclick="setLevel(this)" title="DEBUG" class="btn btn-default">DEBUG</button>
+                <button type="button" onclick="setLevel(this)" title="INFO" class="btn btn-default">INFO</button>
+                <button type="button" onclick="setLevel(this)" title="WARN" class="btn btn-default">WARN</button>
+                <button type="button" onclick="setLevel(this)" title="ERROR" class="btn btn-default">ERROR</button>
+            </div>
+        </td>
+    </tr>
+</table>
+
+
+<script>
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    })
+    function setLevel(el) {
+        var level=el.title;
+        var name=$(el).parent().parent().parent().find("span[name='logger']").html();
+        var url="${path}/changeLevel";
+        var param="name="+ name;
+        param+="&level="+level;
+        ajaxUtil.data(url,param,function (data) {
+            getLogger();
+        })
+    }
+
+    function getLogger() {
+        var url="${path}/getLogger";
+        var param="name="+ editor.getValue();
+        ajaxUtil.data(url,param,function (data) {
+            var trs=$("#loggerTable").find("tr")
+            for(var i=0;i<trs.length;i++){
+                if(i==0){
+                    continue;
+                }
+                trs[i].remove();
+            }
+
+            if(data.length>0){
+                $("#loggerTable").show();
+            }
+            $("#columnTr").find("span[name='logger']").html(editor.getValue());
+            for(var i=0;i<data.length;i++){
+               // console.log(data[i])
+                var cloneTr = $("#columnTr").clone();
+                $("#loggerTable").append(cloneTr);
+                cloneTr.show();
+                var loggerName=data[i].name;
+                if(loggerName.length>80){
+                    var shortName=loggerName.substring(0,77)+"...";
+                    cloneTr.find("span[name='logger']").html(shortName);
+                    cloneTr.find("span[name='logger']").attr("title",loggerName);
+                }else{
+                    cloneTr.find("span[name='logger']").html(loggerName);
+                }
+
+                if(data[i].traceEnabled){
+                    cloneTr.find("button[title='TRACE']").addClass("btn-primary");
+                }else if(data[i].debugEnabled){
+                    cloneTr.find("button[title='DEBUG']").addClass("btn-success");
+                }else if(data[i].infoEnabled){
+                    cloneTr.find("button[title='INFO']").addClass("btn-info");
+                }else if(data[i].warnEnabled){
+                    cloneTr.find("button[title='WARN']").addClass("btn-warning");
+                }else if(data[i].errorEnabled){
+                    cloneTr.find("button[title='ERROR']").addClass("btn-danger");
+                }
+            }
+        })
+    }
+
+</script>
+
+<script src="$staticRoot/ace/ace.js"></script>
+<script src="$staticRoot/ace/ext-language_tools.js"></script>
+<script>
+    var editor = ace.edit("editor");
+    editor.session.setMode("ace/mode/java");
+    editor.setFontSize(18);
+    //editor.setTheme("ace/theme/twilight");
+
+    editor.setOptions({
+        enableBasicAutocompletion: false,
+        enableSnippets: false,
+        enableLiveAutocompletion: true
+    });
+
+    var languageTools = ace.require("ace/ext/language_tools");
+    languageTools.addCompleter({
+        getCompletions: function (editor, session, pos, prefix, callback) {
+            callback(null,${aceTips});
+        }
+    });
+</script>

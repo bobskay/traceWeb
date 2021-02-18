@@ -1,0 +1,30 @@
+<div>
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs" id="myTabs">
+        #foreach($cls in $javaClassList)
+        <li><a href="#$cls.name" data-toggle="tab">$cls.name</a></li>
+        #end
+    </ul>
+
+    <div class="tab-content">
+        #foreach($cls in $javaClassList)
+        <div class="tab-pane " id="$cls.name">
+<pre>
+package $cls.packageName
+#foreach($imp in $cls.importList)import $imp;
+#end
+@Data
+public class $cls.name{
+#foreach($field in $cls.javaFieldList)  private $field.typeName.html $field.name;
+#end
+}
+</pre>
+        </div>
+        #end
+    </div>
+</div>
+
+<script>
+    $('#myTabs a[href="#$javaClassList.get(0).name"]').tab('show');
+</script>
+

@@ -1,0 +1,9 @@
+<ol>
+    #foreach($li in $liGroup.liList)
+    <li>
+        #foreach($content in $li.content)
+        $content
+        #end
+    </li>
+    #end
+</ol>

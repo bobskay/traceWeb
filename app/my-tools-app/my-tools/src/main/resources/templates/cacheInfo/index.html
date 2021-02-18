@@ -1,0 +1,16 @@
+#foreach($detail in $cacheDetailList)
+<table class="form">
+    <tr>
+        <td width="10%">名称</td>
+        <td width="90%">$detail.name </td>
+    </tr>
+    <tr>
+        <td>命中</td>
+        <td>$detail.cacheStat.total</td>
+    </tr>
+    <tr>
+        <td>keys</td>
+        <td>$detail.keys</td>
+    </tr>
+</table>
+#end

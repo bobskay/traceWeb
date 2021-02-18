@@ -1,0 +1,22 @@
+<table class="form">
+    <tr>
+        <td width="20%">名称</td>
+        <td width="80%">
+            <input class="form-control" name="name" v-validate="'required'" maxlength="64" />
+        </td>
+    </tr>
+    <tr>
+        <td width="20%">地址</td>
+        <td width="80%">
+            <input class="form-control" name="address" v-validate="'required'" maxlength="64" />
+        </td>
+    </tr>
+
+</table>
+<script>
+    //这个名称是固定的,在frame.js里需要用到
+    var insertData={
+        name: "",
+        address: "127.0.0.1:2181",
+    }
+</script>

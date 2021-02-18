@@ -1,0 +1,33 @@
+<div id="app" class="panel-body" style="padding-bottom:0px;">
+    <table class="form ">
+        <tr>
+            <td>http://mytools:8080/testCase/httpTest/postBody</td>
+        </tr>
+        <tr>
+            <td>
+                <textarea class="form-control" id="bodyContent">{"id":1,"name":"test","text":"测试"}</textarea>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <button type="button" class="btn-sm btn-success" onclick="send() ">发送</button>
+            </td>
+        </tr>
+        <tr s>
+            <td>
+                <pre style="display:none;" id="dataCotent"></pre>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<script>
+    function send() {
+        var body=$("#bodyContent").val();
+        var url="/testCase/httpTest/postBody";
+        ajaxUtil.post(url,body,function (resp) {
+            $("#dataCotent").show();
+            $("#dataCotent").html(utils.jsonToStr(resp));
+        })
+    }
+</script>

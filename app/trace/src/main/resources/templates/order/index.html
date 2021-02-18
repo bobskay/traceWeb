@@ -1,0 +1,74 @@
+<table class="list">
+    <tr>
+        <th>序号</th>
+        <th>id</th>
+        <th>时间</th>
+        <th>方向</th>
+        <th>成本</th>
+        <th>下单价</th>
+        <th>数量</th>
+        <th></th>
+    </tr>
+    #foreach($order in $openOrders)
+    <tr>
+        <td>$velocityCount</td>
+        <td>$order.clientOrderId</td>
+        <td>$order.orderTime</td>
+        <td>$order.side.name</td>
+        <td>$order.orderPrice</td>
+        <td>$order.price</td>
+        <td>$order.origQty</td>
+        <td></td>
+    </tr>
+    #end
+</table>
+
+<table class="form">
+    <tr>
+        <td width="10%">持仓</td>
+        <td width="40%" align="left"><span id="hold">${hold}</span></td>
+        <td width="10%">钱包</td>
+        <td width="40%" align="left"><span id="wallet"></span></td>
+    </tr>
+    <tr>
+        <td>当前价格</td>
+        <td><span id="price">$current.price</span></td>
+        <td>最高价</td>
+        <td><span id="high"></span></td>
+    </tr>
+    <tr>
+        <td>等待买入</td>
+        <td>$!current.buy.price</td>
+        <td>等待卖出</td>
+        <td>$!current.sell.price</td>
+    </tr>
+
+</table>
+
+
+<script>
+    function doCancel(id){
+        var pram="orderId="+id;
+        ajaxUtil.json("$path/cancel","pram",function(data){
+            alert(data);
+        });
+    }
+
+timeOutFunction=function(){
+    var hold=$("#hold").html();
+    if(!hold){
+        return;
+    }
+    ajaxUtil.json("$path/trace","",function(resp){
+        resp=JSON.parse(resp)
+        var trace=resp.data;
+        $("#price").html(trace.price);
+        $("#high").html(trace.high);
+        $("#wallet").html(trace.wallet);
+        document.title=trace.price;
+    });
+}
+
+
+
+</script>

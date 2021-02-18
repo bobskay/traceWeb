@@ -1,0 +1,71 @@
+<div class="panel-body" style="padding-bottom:0px;">
+    <div class="panel panel-default">
+        <div class="panel-heading">zookeeper配置</div>
+    </div>
+
+    <div id="toolbar" class="btn-group">
+        <button id="btnAdd" type="button" class="btn btn-default">
+            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增
+        </button>
+        <button id="btnDelete" type="button" class="btn btn-default">
+            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>删除
+        </button>
+    </div>
+
+    <table id="queryResult"></table>
+</div>
+
+<script>
+    var tableDiv = 'queryResult';
+    var searchForm = 'searchForm';
+
+    tableEvents = {
+        "click #btnOperate": function (e, value, row, index) {
+            var data = "";
+            ajaxUtil.json("$path/xxx", data, function (ret) {
+                if (!ret.success) {
+                    dialog.alert(ret.message);
+                } else {
+                    dialog.alert("操作成功");
+                }
+            })
+        },
+    };
+
+    btnOperate = function (value, row, index) {
+        return [
+            '<button id="btnOperate" class="btn-small btn-primary">操作</button>'
+        ].join("")
+    };
+
+    $(function () {
+        var columns = [
+            {checkbox: true},
+            {field:'name',title:'名称'},
+            {field:'address',title:'地址'},
+        ]
+        tableUtil.init(tableDiv, columns, '', function (config) {
+            config.uniqueId = 'id';
+        });
+        tableUtil.load('$path/getAll')
+    });
+
+    $('#btnAdd').click(function () {
+        frame.prepareInsert("新增", '${path}/prepareInsert', '$path/insert',function () {
+            self.location.href="/?forward=$path/index"
+        });
+    });
+
+
+    $("#btnDelete").click(function () {
+        frame.delete('id', '$path/deleteById',function () {
+            self.location.href="/?forward=$path/index"
+        });
+
+    });
+
+    $("#btnQuery").click(function () {
+        tableUtil.loadByForm("searchForm");
+    });
+
+</script>

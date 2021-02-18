@@ -1,0 +1,37 @@
+<link rel="stylesheet" href="${staticRoot}/main.css">
+<script src="${staticRoot}/raphael-min.js"></script>
+<script src="${staticRoot}/flowchart.js"></script>
+
+<script src="${staticRoot}/webfont.js"></script>
+<script src="${staticRoot}/snap.svg-min.js"></script>
+<script src="${staticRoot}/underscore-min.js"></script>
+<script src="${staticRoot}/sequence-diagram-min.js"></script>
+
+<div id="blogContent" >
+
+$blogHtml
+
+</div>
+
+<script>
+    $("div[type='flow']").each(function (idx,el) {
+        var id = $(el).attr("id");
+        var chart = flowchart.parse($(el).text());
+        $(el).html("");
+        chart.drawSVG(id);
+    });
+
+    $("div[type='sequence']").each(function (idx,el) {
+        var id = $(el).attr("id");
+        var chart = Diagram.parse($(el).text());
+        $(el).html("");
+        chart.drawSVG(id);
+    });
+
+    $(".blogImg").css("cursor","pointer");
+    $(".blogImg").click(function () {
+        var content="<img src='"+$(this).attr("src")+"' style='max-width:  100%'/>";
+        dialog.createPop('alertDialogLarge',"",content,3,null)
+    });
+
+</script>

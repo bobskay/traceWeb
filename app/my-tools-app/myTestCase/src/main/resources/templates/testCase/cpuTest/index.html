@@ -1,0 +1,59 @@
+<div id="app" class="panel-body" style="padding-bottom:0px;">
+    <table class="form ">
+        <tr>
+            <td width="20%">活跃线程数</td>
+            <td>{{poolInfo.activeCount}}</td>
+        </tr>
+        <tr>
+            <td>线程池大小</td>
+            <td>{{poolInfo.poolSize}}</td>
+        </tr>
+        <tr>
+            <td>排队数</td>
+            <td>{{poolInfo.queueSize}}</td>
+        </tr>
+        <tr >
+            <td>启动任务数</td>
+            <td>
+                <span v-show="running==true">{{taskCount}}</span>
+                <input type="text" title="任务数量" v-show="running==false" v-validate="'required'" name="taskCount" style="width: 60px;">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <button type="button" v-show="running==false" class="btn-sm btn-success" @click="start()">启动</button>
+                <button type="button" v-show="running==true" class="btn-sm btn-danger" @click="stop()">停止</button>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<script>
+    var cpuTestInfo=$html.json($cpuTestInfo);
+
+    vueUtil.init({
+        el: '#app',
+        path:"$path",
+        name:"cpuTestInfo",
+        data: cpuTestInfo,
+        methods:{
+            start:function () {
+                param="count="+cpuTestInfo.taskCount;
+                ajaxUtil.data("$path/start",param,function (data) {
+                    cpuTestInfo.running=data.running;
+                    cpuTestInfo.taskCount=data.taskCount;
+                    cpuTestInfo.poolInfo=data.poolInfo;
+
+                });
+            },
+            stop:function () {
+                ajaxUtil.data("$path/stop","",function (data) {
+                    cpuTestInfo.running=data.running;
+                    cpuTestInfo.taskCount=data.taskCount;
+                    cpuTestInfo.poolInfo=data.poolInfo;
+                });
+            }
+        }
+    });
+
+</script>

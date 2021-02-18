@@ -1,0 +1,16 @@
+package $codeCreateResult.service().packageName;
+#foreach($imp in $codeCreateResult.service().importList)import $imp;
+#end
+@Service
+public class ${codeCreateResult.ModelName()}Service extends BaseService<${codeCreateResult.ModelName()}> {
+@Autowired
+${codeCreateResult.ModelName()}Dao ${codeCreateResult.modelName}Dao;
+
+    public BaseDao defaultDao() {
+        return ${codeCreateResult.modelName}Dao;
+    }
+
+    public ${codeCreateResult.ModelName()} newModel() {
+        return new ${codeCreateResult.ModelName()}();
+    }
+}

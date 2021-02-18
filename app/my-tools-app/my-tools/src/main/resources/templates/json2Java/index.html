@@ -1,0 +1,63 @@
+<form name="fm" id="fm">
+    <table class="form">
+        <tr>
+            <td>
+                包名
+                <input class="form-control" title="包名" name="packageName" v-validate="'required'">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                类名
+                <input class="form-control" title="类名" name="rootClass" v-validate="'required'">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                js
+                <textarea name="json" title="js" v-validate="'required'" style="width: 100%" rows="10"></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <button type="button" onclick="formatJson()" class=" btn-success">格式化</button>
+                <button type="button" onclick="toJava()" class=" btn-success">生成</button>
+            </td>
+        </tr>
+        <tr id="showJsonTr" style="display: none">
+            <td>
+                <pre id="showJson"></pre>
+            </td>
+        </tr>
+    </table>
+</form>
+
+<script>
+    var vue=vueUtil.init({
+        el:"#fm",
+        data:{
+            packageName:"wang.wangby",
+            rootClass:"XmlBean",
+            json:""
+        }
+    })
+
+    function toJava() {
+        var data = $(fm).serialize();
+        vueUtil.submitHtml(vue,"$path/toJava", data, function (content) {
+            dialog.alert(content)
+        });
+    }
+
+    function formatJson() {
+        try{
+            var value=$("textarea[name='json']").val();
+            value=eval('(' + value+ ')');
+            $("#showJsonTr").show();
+            $("#showJson").html(utils.jsonToStr(value));
+        }catch (e) {
+            dialog.alert(e,"格式化出错");
+        }
+
+    }
+</script>

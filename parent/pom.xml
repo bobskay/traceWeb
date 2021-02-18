@@ -1,0 +1,212 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>wang.wangby</groupId>
+    <artifactId>base-parent</artifactId>
+    <version>1</version>
+    <packaging>pom</packaging>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <velocity.version>1.7</velocity.version>
+        <my.version>1</my.version>
+        <byte-buddy.version>1.7.10</byte-buddy.version>
+        <powermock-verion>1.6.6</powermock-verion>
+        <mockito.version>1.9.5</mockito.version>
+        <fastjson.version>1.2.47</fastjson.version>
+        <spring.version>5.1.10.RELEASE</spring.version>
+        <spring-boot.version>2.0.4.RELEASE</spring-boot.version>
+        <spring-cloud.version>Finchley.RELEASE</spring-cloud.version>
+        <druid.version>1.1.9</druid.version>
+    </properties>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring-boot.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.velocity</groupId>
+                <artifactId>velocity</artifactId>
+                <version>${velocity.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>fastjson</artifactId>
+                <version>${fastjson.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.mockito</groupId>
+                <artifactId>mockito-all</artifactId>
+                <version>${mockito.version}</version>
+            </dependency>
+
+
+            <dependency>
+                <groupId>org.powermock</groupId>
+                <artifactId>powermock-api-mockito</artifactId>
+                <version>${powermock-verion}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.powermock</groupId>
+                <artifactId>powermock-module-junit4</artifactId>
+                <version>${powermock-verion}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>wang.wangby</groupId>
+                <artifactId>base-test</artifactId>
+                <version>${my.version}</version>
+                <scope>test</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>wang.wangby</groupId>
+                <artifactId>base-utils</artifactId>
+                <version>${my.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>wang.wangby</groupId>
+                <artifactId>base-tools</artifactId>
+                <version>${my.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>wang.wangby</groupId>
+                <artifactId>base-dao</artifactId>
+                <version>${my.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>wang.wangby</groupId>
+                <artifactId>base-web</artifactId>
+                <version>${my.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>wang.wangby</groupId>
+                <artifactId>base-auto-configuration</artifactId>
+                <version>${my.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>druid</artifactId>
+                <version>${druid.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>wang.wangby</groupId>
+                <artifactId>base-permission</artifactId>
+                <version>${my.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>wang.wangby</groupId>
+                <artifactId>my-app-starter</artifactId>
+                <version>${my.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>wang.wangby</groupId>
+                <artifactId>base-provided</artifactId>
+                <scope>provided</scope>
+                <version>${my.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>wang.wangby</groupId>
+                <artifactId>base-api</artifactId>
+                <version>${my.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>wang.wangby</groupId>
+                <artifactId>base-log</artifactId>
+                <version>${my.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>wang.wangby</groupId>
+                <artifactId>base-config</artifactId>
+                <version>1</version>
+            </dependency>
+
+            <dependency>
+                <groupId>wang.wangby</groupId>
+                <artifactId>base-beans</artifactId>
+                <version>${my.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>wang.wangby</groupId>
+                <artifactId>base-template</artifactId>
+                <version>${my.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>wang.wangby</groupId>
+                <artifactId>base-json</artifactId>
+                <version>${my.version}</version>
+            </dependency>
+        </dependencies>
+
+    </dependencyManagement>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                    <encoding>UTF-8</encoding>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>3.1.0</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <modules>
+
+    </modules>
+</project>

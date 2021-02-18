@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <conversionRule conversionWord="code" converterClass="wang.wangby.log.CodeConvert"/>
+
+    <!--线程开始前需要将requestId放入MDC MDC.put("requestId", uuid);-->
+    <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss} %-5level %t %X{requestId} %code %msg%n</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+
+    <!--每天生成1个文件只保留7天-->
+    <appender name="file"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>/opt/logs/${codeConfig.appName}-consumer%d{yyyyMMdd}.log</fileNamePattern>
+            <maxHistory>7</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <!--线程开始前需要将requestId放入MDC MDC.put("requestId", uuid);-->
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %t %X{requestId} %code %msg%n</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <logger name="wang.wangby" level="debug" addtivity="false"/>
+    <logger name="wang.wangby.utils.threadpool" level="info" addtivity="false"/>
+
+    <root level="info">
+        <appender-ref ref="stdout"/>
+        <appender-ref ref="file"/>
+    </root>
+</configuration>

@@ -1,0 +1,49 @@
+<div>
+    <div class="panel panel-default" style="margin: 0px">
+        <div class="panel-heading">菜单</div>
+        <div class="panel-body row">
+            <div class="col-sm-3">
+                <ul id="menuTree" class="ztree" style="background-color: white;width: 100%;"></ul>
+            </div>
+            <div class="col-sm-9" id="detail">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function viewTree(id) {
+        var data = "menuCode=" + id;
+        ajaxUtil.html("$path/get", data, function (html) {
+            $("#detail").html(html);
+        })
+    }
+
+    var zTreeObj;
+    var setting = {
+        callback: {
+            onClick: function (event, treeId, treeNode) {
+                viewTree(treeNode.id);
+            }
+        }
+    };
+    $(document).ready(function () {
+        dialog.loading();
+        ajaxUtil.json('${path}/tree', null, function (resp) {
+            dialog.loading(false);
+            if (!resp.success) {
+                dialog.alert(resp.message);
+                return;
+            }
+            zTreeObj = $.fn.zTree.init($("#menuTree"), setting, resp.data);
+            zTreeObj.expandAll(true);
+            var menuBar = $(".main-header").height();
+            var height = document.documentElement.clientHeight - menuBar
+            var top = $("#menuTree").offset().top;
+            $("#menuTree").css("height", height - top);
+        })
+    });
+
+
+</script>

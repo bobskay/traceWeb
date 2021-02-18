@@ -1,0 +1,2 @@
+log.fileNamePattern=/opt/logs/${codeConfig.appName}%d{yyyyMMdd}.log
+log.maxHistory=7

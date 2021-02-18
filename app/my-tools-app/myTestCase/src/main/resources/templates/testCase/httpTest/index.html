@@ -1,0 +1,74 @@
+<div id="app" class="panel-body" style="padding-bottom:0px;">
+    <table class="form ">
+        <tr>
+            <td width="20%">restfull测试</td>
+            <td>
+                <a href="/?forward=/testCase/httpTest/restIndex">
+                    http://mytools:8080/?forward=/testCase/httpTest/restIndex
+                </a>
+            </td>
+        </tr>
+        <tr>
+            <td width="20%">超时测试</td>
+            <td>
+                <a href="/?forward=/testCase/httpTest/timeoutIndex">
+                    http://mytools:8080/?forward=/testCase/httpTest/timeoutIndex
+                </a>
+            </td>
+        </tr>
+        <tr>
+            <td width="20%">gc</td>
+            <td>
+                <a href="javaScript:" onclick="invoke('/testCase/httpTest/gc')">
+                    /testCase/gcTest/gc
+                </a>
+            </td>
+        </tr>
+    </table>
+
+    <table class="list">
+        <tr>
+            <th colspan="2" style="text-align: left">超时请求
+                <a href="JavaScript:" onclick="timeoutInvoke()">
+                    /${path}/timeout
+                </a>
+            </th>
+
+        </tr>
+        <tr>
+            <th>key</th>
+            <th>请求时间</th>
+            <th><button type="button" class="btn-sm btn-primary" onclick=menu.open("$path/index")>刷新</button></th>
+        </tr>
+        #foreach($item in $runningThreads.entrySet())
+        <tr>
+            <td>$item.key</td>
+            <td>$item.value.dateTime</td>
+            <td>
+                <button type="button" class="btn-sm btn-danger" onclick="killThread('${item.key}')">移除</button>
+            </td>
+        </tr>
+        #end
+    </table>
+</div>
+<script>
+    function invoke(url) {
+        ajaxUtil.data(url,"",function (data) {
+            var str=utils.jsonToStr(data);
+            dialog.alert(str,"调用结果");
+        })
+    }
+
+    function killThread(key) {
+        var url="$path/kill?key="+key
+        ajaxUtil.data(url,"",function (data) {
+            var str=utils.jsonToStr(data);
+            dialog.alert(str,"移除结果");
+            menu.open("$path/index")
+        })
+    }
+
+    function timeoutInvoke() {
+        window.open("${path}/timeout?"+Math.random());
+    }
+</script>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="wang.wangby.codebuilder.dao.DemoDao" >
+
+    <select id="getCount" resultType="long">
+        select count(*) from ${tableName} where 1=1
+        <if test="condition">
+            and ${condition}
+        </if>
+    </select>
+
+    <select id="select" resultType="wang.wangby.codebuilder.model.DemoModel">
+    select ${columns} from ${tableName} where 1=1
+        <if test="condition">
+            and ${condition}
+        </if>
+        <if test="limit">
+            ${limit}
+        </if>
+    </select>
+</mapper>

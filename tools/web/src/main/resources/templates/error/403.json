@@ -1,0 +1,5 @@
+{
+  "message": "权限不够",
+  "usi": "$uri",
+  "user": "$user"
+}

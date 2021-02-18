@@ -1,0 +1,28 @@
+<table class="form">
+	<tr>
+		<td width="20%">父节点</td>
+		<td width="80%">
+			<input type="hidden" name="zkAddress" value="${zooNode.zkAddress}">
+			<input type="hidden" name="parentPath" value="${zooNode.parentPath}">
+			${zooNode.parentPath}
+		</td>
+	</tr>
+	<tr>
+		<td width="20%">名称</td>
+		<td width="80%">
+			<input class="form-control" name="name" validate="notNull" maxlength="32"/>
+		</td>
+	</tr>
+	<tr>
+		<td width="20%">数据</td>
+		<td width="80%">
+			<textarea class="form-control" name="dataString" validate="" maxlength="255" />
+		</td>
+	</tr>
+
+</table>
+
+<script>
+
+</script>
+

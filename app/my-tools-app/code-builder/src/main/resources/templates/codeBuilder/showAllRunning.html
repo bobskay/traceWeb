@@ -1,0 +1,9 @@
+#foreach($runningInfo in $runningInfos)
+
+    <h4 class="box box-title">${runningInfo.appName}</h4>
+    <textarea style="width: 100%" rows="5">
+#foreach($data in $runningInfo.datas)
+$data
+#end
+    </textarea>
+#end

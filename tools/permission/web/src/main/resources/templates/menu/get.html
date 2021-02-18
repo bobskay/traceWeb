@@ -1,0 +1,54 @@
+<table class="form" id="app">
+    <tr>
+        <td style="width: 10%">名称</td>
+        <td>
+            <input name="menuText" class="form-control">
+        </td>
+    </tr>
+    <tr>
+        <td>url</td>
+        <td>
+            {{menuCode}}
+        </td>
+    </tr>
+    <tr>
+        <td>显示序号</td>
+        <td><input name="menuIndex" class="form-control"> </td>
+    </tr>
+    <tr>
+        <td>图标</td>
+        <td><button class="btn" onclick="selectIcon()"><i :class="menuIcon"></i></button></td>
+    </tr>
+    <tr>
+        <td colspan="2">
+            <button class="btn btn-success" onclick="updateMenu()">保存</button>
+        </td>
+    </tr>
+</table>
+
+<script>
+    var menuData={
+        menuText:"$!menu.menuText",
+        menuIndex:"$!menu.menuIndex",
+        menuIcon:"$!menu.menuIcon",
+        menuCode:"$!menu.menuCode",
+        keyword:"$!menu.keyword",
+        menuId:"$menu.menuId"
+    }
+    var vue=vueUtil.init({
+        el:"#app",
+        data:menuData
+    });
+
+    function selectIcon() {
+        dialog.html("请选择图标","$path/icon","",function () {
+
+        })
+    }
+
+    function updateMenu() {
+        vueUtil.submit(vue,"$path/update",menuData,function (menu) {
+            dialog.alert("操作成功");
+        })
+    }
+</script>

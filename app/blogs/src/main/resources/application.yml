@@ -1,0 +1,26 @@
+my:
+  web:
+    index:
+      title: "个人博客"
+      indexContentUrl: ""
+      expandAll: false
+  webfilter:
+    permission: false
+  blog:
+    markdownDir: "/blog/blog/_posts"
+    imgDir: "/blog/blog/images"
+
+server:
+   port: 8080
+
+spring:
+  application:
+    name: blog
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always

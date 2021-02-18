@@ -1,0 +1,17 @@
+my:
+  web:
+    index:
+      title: "-_-"
+      indexContentUrl: ""
+      expandAll: false
+  webfilter:
+    permission: false
+
+test: true
+
+server:
+   port: 9999
+
+spring:
+  application:
+    name: trace

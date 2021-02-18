@@ -1,0 +1,24 @@
+<div>
+    <ul class="nav nav-tabs" id="myTabs">
+        #foreach($page in $codeCreateResult.pages)
+        <li><a href="#$page.name" data-toggle="tab">$page.name</a></li>
+        #end
+    </ul>
+
+    <div class="tab-content">
+
+        #foreach($page in $codeCreateResult.pages)
+<div class="tab-pane " id="$page.name">
+<textarea style="width: 100%;" rows="20">
+$page.content.html
+</textarea></div>
+#end
+
+</div>
+</div>
+
+
+<script>
+    $('#myTabs a[href="#$codeCreateResult.pages.get(0).name"]').tab('show');
+</script>
+

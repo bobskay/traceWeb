@@ -1,0 +1,6 @@
+CREATE TABLE ${tableInfo.tableName} (
+#foreach($column in $tableInfo.columns)
+    ${column.columnName} $column.dataTypeStr comment '${column.columnComment}',
+#end
+    PRIMARY KEY (${tableInfo.pkName()})
+) ENGINE=InnoDB DEFAULT CHARSET=utf8

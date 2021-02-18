@@ -1,0 +1,61 @@
+<div>
+    <div class="row" style="margin-left: 20px">
+        <button class="btn-sm btn-success" onclick="updateMenu()">保存</button>
+    </div>
+    <ul id="menuTree" class="ztree" style="background-color: white;width: 100%;border: 0"></ul>
+</div>
+
+
+<script>
+    var zTreeObj;
+    var setting = {
+        callback: {
+            onClick: function (event, treeId, treeNode) {
+                if(treeNode.checked){
+                    zTreeObj.checkNode(treeNode, false, true);
+                }else{
+                    zTreeObj.checkNode(treeNode, true, true);
+                }
+            }
+        },
+        check: {
+            enable: true,//显示复选框
+            chkStyle: "checkbox",
+            chkboxType : { "Y" : "ps", "N" : "ps" }
+        }
+    };
+    $(document).ready(function () {
+        dialog.loading();
+        ajaxUtil.json('${path}/menuTree?roleId=${roleId}', "", function (resp) {
+            dialog.loading(false);
+            if (!resp.success) {
+                dialog.alert(resp.message);
+                return;
+            }
+            zTreeObj = $.fn.zTree.init($("#menuTree"), setting, resp.data);
+            zTreeObj.expandAll(true);
+            var menuBar=$(".main-header").height();
+            var height=document.documentElement.clientHeight-menuBar
+            var top=$("#menuTree").offset().top;
+            $("#menuTree").css("height", height-top);
+        })
+    });
+
+    function updateMenu() {
+        var nodes = zTreeObj.getCheckedNodes(true);
+        var roleMenus=[];
+        for(var i=0;i<nodes.length;i++){
+            roleMenus.push({
+               menuId:nodes[i].id
+            });
+        }
+        var roleInfo={
+            roleId:"${roleId}",
+            roleMenus:roleMenus
+        }
+        ajaxUtil.postJson("$path/updateRoleMenu",roleInfo,function (data) {
+            dialog.alert("操作成功")
+        })
+    }
+
+</script>

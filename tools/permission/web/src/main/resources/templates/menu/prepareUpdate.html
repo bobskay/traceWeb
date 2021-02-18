@@ -1,0 +1,29 @@
+<table class="form">
+	<tr>
+		<td width="20%">路径</td>
+		<td width="80%">
+			<input type="hidden" name="zkAddress" value="${zooNode.zkAddress}">
+			<input type="hidden" name="path" value="${zooNode.path}">
+			<input type="hidden" name="stat.version" value="${zooNode.stat.version}">
+			${zooNode.path}
+		</td>
+	</tr>
+	<tr>
+		<td width="20%">版本</td>
+		<td width="80%">
+			${zooNode.stat.version}
+		</td>
+	</tr>
+	<tr>
+		<td width="20%">数据</td>
+		<td width="80%">
+			<textarea class="form-control" rows="15" name="dataString" validate="" maxlength="255" >$zooNode.dataString</textarea>
+		</td>
+	</tr>
+
+</table>
+
+<script>
+
+</script>
+

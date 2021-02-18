@@ -1,0 +1,181 @@
+<div>
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs" role="tablist" id="myTabs">
+        <li role="presentation" class="active"><a href="#stat" aria-controls="stat" role="tab" data-toggle="tab">stat</a></li>
+        <li role="presentation" ><a href="#data" aria-controls="data" role="tab" data-toggle="tab">data</a></li>
+        <li role="presentation"><a href="#permission" aria-controls="permission" role="tab" data-toggle="tab">ACL</a></li>
+    </ul>
+
+    <!-- Tab panes -->
+    <div class="tab-content">
+        <div role="tabpanel" class="tab-pane " id="data">
+            #if($zooNode.stat.dataLength!=0)
+            <pre id="dataCotent">$zooNode.dataString</pre>
+            #end
+        </div>
+        <div role="tabpanel" class="tab-pane " id="permission">
+            <table class="table table-bordered ">
+                <tr>
+                    <th>Id</th>
+                    <th>Scheme</th>
+                    <th>Permission</th>
+                </tr>
+                #foreach($acl in $zooNode.acls)
+                <tr>
+                    <td>$acl.id.id</td>
+                    <td>$acl.id.scheme</td>
+                    <td>$zooNode.getPermsText($acl)</td>
+                </tr>
+                #end
+            </table>
+        </div>
+        <div role="tabpanel" class="tab-pane active"  id="stat">
+            <table class="form ">
+                <tr>
+                    <td>path</td>
+                    <td style="word-wrap:break-word;word-break:break-all;">
+                        $zooNode.path.decode
+                    </td>
+                </tr>
+                <tr>
+                    <td>创建时间</td>
+                    <td>$zooNode.stat.ctime.dateTime</td>
+                </tr>
+                <tr>
+                    <td>修改时间</td>
+                    <td>$zooNode.stat.mtime.dateTime</td>
+                </tr>
+                <tr>
+                    <td>版本号</td>
+                    <td>$zooNode.stat.version</td>
+                </tr>
+                <tr>
+                    <td>数据长度</td>
+                    <td>$zooNode.stat.dataLength</td>
+                </tr>
+                <tr>
+                    <td>子节点个数</td>
+                    <td>$zooNode.stat.numChildren</td>
+                </tr>
+
+                <tr>
+                    <td>czxid</td>
+                    <td>$zooNode.stat.czxid</td>
+                </tr>
+                <tr>
+                    <td>mzxid</td>
+                    <td>$zooNode.stat.mzxid</td>
+                </tr>
+                <tr>
+                    <td>pzxid</td>
+                    <td>$zooNode.stat.pzxid</td>
+                </tr>
+
+                <tr>
+                    <td>cversion</td>
+                    <td>$zooNode.stat.cversion</td>
+                </tr>
+                <tr>
+                    <td>aversion</td>
+                    <td>$zooNode.stat.aversion</td>
+                </tr>
+                <tr>
+                    <td>ephemeralOwner</td>
+                    <td>$zooNode.stat.ephemeralOwner</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div class="tab-pane ">
+        <button type="button" onclick="addChild()" class="btn btn-primary">新增子节点</button>
+        <button type="button" onclick="update()" class="btn btn-primary">修改</button>
+        <button type="button" onclick="deleteNode()" class="btn btn-primary">删除</button>
+        <button type="button" onclick="deleteBatch()" class="btn btn-primary">批量删除</button>
+    </div>
+</div>
+
+
+
+<script>
+    #if($zooNode.stat.dataLength==0)
+        $('#myTabs a[href="#stat"]').tab('show')
+    #else
+        $('#myTabs a[href="#data"]').tab('show')
+    #end
+
+
+    function addChild() {
+        var url="$path/prepareInsert";
+        url+="?zkAddress=$zooNode.zkAddress";
+        url+="&path=$zooNode.path"
+        frame.prepareInsert("新增节点",url,"$path/insert",function (data) {
+            var parent = zTreeObj.getSelectedNodes()[0];
+            newNode = zTreeObj.addNodes(parent, data);
+        });
+    }
+    function update() {
+        var prepare="$path/prepareUpdate";
+        prepare+="?zkAddress=$zooNode.zkAddress";
+        prepare+="&path=$zooNode.path";
+        var updateUrl="$path/update";
+        dialog.form('prepareUpdate',"修改",prepare,function(){
+            var fm=$("#prepareUpdate")[0];
+            if(!validate.valiForm(fm)){
+                return false;
+            }
+            var data=$("#prepareUpdate").serialize();
+            ajaxUtil.json(updateUrl,data,function(resp){
+                if(resp.success){
+                    load('$zooNode.path');
+                }else{
+                    dialog.alert(resp.message);
+                }
+            });
+        });
+    }
+
+    function deleteBatch() {
+        deleteNode("${path}/deleteBatch");
+    }
+
+    function deleteNode(url) {
+        url=url||"$path/delete";
+        var data="zkAddress=$zooNode.zkAddress";
+        data+="&path=$zooNode.path";
+        data+="&version=$zooNode.stat.version";
+        ajaxUtil.json(url,data,function (resp) {
+            if(!resp.success){
+                dialog.alert(resp.message);
+                return;
+            }
+            var node = zTreeObj.getSelectedNodes()[0];
+            zTreeObj.removeNode(node);
+            $("#detail").html("");
+        })
+    }
+
+    function formatData() {
+        var html=$("#dataCotent").html();
+        if(!html){
+            return;
+        }
+        if(html.startsWith("{")||html.startsWith("[")){
+            html= eval('(' + html+ ')');
+            html=common.jsonToStr(html);
+            $("#dataCotent").html(html);
+        }
+    }
+    formatData();
+
+    var tabeHeight=$("#myTabs").height();
+    var h1=$("#dataCotent").height();
+    var h2=$("#zkTree").height();
+    if(eval(h1+50)>eval(h2)){
+        //树高度-页眉-按钮
+        h1=h2-tabeHeight-34;
+    }else{
+        h1=h1+50
+    }
+    $("#dataCotent").css("height",h1)
+</script>

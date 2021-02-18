@@ -1,0 +1,94 @@
+<div class="panel-body" style="padding-bottom:0px;">
+    <div class="panel panel-default">
+        <div class="panel-heading">历史订单</div>
+        <form id="searchForm" >
+            <table class="form">
+                <tr>
+                    <td><input name="clientOrderId" placeholder="订单id"></td>
+                    <td>
+                        <select name="type">
+                            <option value="">订单类型</option>
+                            <option value="NEW">新增</option>
+                            <option value="FILLED">成交</option>
+                            <option value="CANCELED">取消</option>
+                            <option value="PARTIALLY_FILLED">部分成交</option>
+                        </select>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+
+    <div id="toolbar" class="btn-group">
+        <button id="btnQuery" type="button" class="btn btn-default">
+            <span class="glyphicon glyphicon-search" aria-hidden="true"></span>查询
+        </button>
+        <button id="btnDelete" type="button" class="btn btn-default">
+            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>删除
+        </button>
+    </div>
+
+    <table id="queryResult"></table>
+</div>
+
+<script>
+    var tableDiv = 'queryResult';
+    var searchForm = 'searchForm';
+
+    tableEvents = {
+        "click #btnOperate": function (e, value, row, index) {
+            var data = "";
+            ajaxUtil.json("$path/xxx", data, function (ret) {
+                if (!ret.success) {
+                    dialog.alert(ret.message);
+                } else {
+                    dialog.alert("操作成功");
+                }
+            })
+        },
+    };
+
+    btnOperate = function (value, row, index) {
+        return [
+            '<button id="btnOperate" class="btn-small btn-primary">操作</button>'
+        ].join("")
+    };
+
+    dateToString=function(value, row, index){
+        if(!value){
+            return "";
+        }
+        var d=new Date(value);
+        return d.format("yyyy-MM-dd hh:mm:ss");
+    }
+
+    $(function () {
+        var columns = [
+            {checkbox: true},
+            {field:'clientOrderId',title:'订单id'},
+            {field:'createdAt',title:'时间',formatter:dateToString},
+            {field:'type',title:'订单类型'},
+            {field:'price',title:'价格'},
+            {field:'quantity',title:'下单量'},
+            {field:'finish',title:'成交量'}
+        ]
+        tableUtil.init(tableDiv, columns, '', function (config) {
+            config.uniqueId = 'id';
+        });
+        tableUtil.load('$path/query')
+    });
+
+
+    $("#btnDelete").click(function () {
+        frame.delete('id', '$path/deleteById',function () {
+            self.location.href="/?forward=$path/index"
+        });
+    });
+
+    $("#btnQuery").click(function () {
+        tableUtil.loadByForm("searchForm","$path/query");
+    });
+
+
+
+</script>

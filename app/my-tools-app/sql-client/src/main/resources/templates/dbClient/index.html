@@ -1,0 +1,27 @@
+
+#foreach($tableInfo in $tableInfoList)
+<div class="box">
+    <div class="box-title"><h3>$tableInfo.tableName</h3></div>
+<table class="list">
+    <tr>
+
+        <th>字段名</th>
+        <th>数据类型</th>
+        <th>长度</th>
+        <th>是否主键</th>
+        <th>备注</th>
+    </tr>
+    #foreach($column in $tableInfo.columns)
+    <tr>
+
+        <td>$column.columnName</td>
+        <td>$column.dataType</td>
+        <td>$!column.maxLength</td>
+        <td>$column.isPk</td>
+        <td>$!column.columnComment</td>
+    </tr>
+    #end
+
+</table>
+</div>
+#end

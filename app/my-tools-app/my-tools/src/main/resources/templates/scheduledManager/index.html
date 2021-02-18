@@ -1,0 +1,51 @@
+<table class="list">
+    <tr>
+        <th>名称</th>
+        <th>执行间隔(ms)</th>
+        <th>执行中</th>
+        <th>最近一次开始</th>
+        <th>最近一次结束</th>
+        <th>执行次数</th>
+        <th></th>
+    </tr>
+    #foreach($job in $jobInfoList)
+    <tr>
+        <td>${job.name}</td>
+        <td>${job.periodMs}</td>
+        <td>${job.running}</td>
+        <td>$!{job.lastBegin.dateTime}</td>
+        <td>$!{job.lastEnd.dateTime}</td>
+        <td>${job.count}</td>
+        <td>
+            #if($job.running==true)
+            <button class="btn-mini btn-danger" onclick="stopJob('${job.Name}')">暂停</button>
+            #else
+            <button class="btn-mini btn-success" onclick="startJob('${job.Name}')">恢复</button>
+            #end
+            <button class="btn-mini btn-info" onclick="showStack(this)">创建人</button>
+            <pre style="display:none">$job.createInfo}</pre>
+        </td>
+    </tr>
+    #end
+</table>
+
+<script>
+    function stopJob(name) {
+        ajaxUtil.data('${path}/pause',"name="+name,function (data) {
+            dialog.alert("操作成功");
+            loadPage("${path}/index")
+        })
+    }
+
+    function startJob(name) {
+        ajaxUtil.data('${path}/resume',"name="+name,function (data) {
+            dialog.alert("操作成功");
+            loadPage("${path}/index")
+        })
+    }
+
+    function showStack(el) {
+        var html=$(el).parent().find("pre").html();
+        dialog.alert("<pre>"+html+"</pre>");
+    }
+</script>

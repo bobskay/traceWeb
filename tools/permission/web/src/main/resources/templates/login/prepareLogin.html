@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>${title}</title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <link rel="stylesheet" href="${staticRoot}/plugins/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="${staticRoot}/plugins/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="${staticRoot}/plugins/Ionicons/css/ionicons.min.css">
+    <link rel="stylesheet" href="${staticRoot}/css/AdminLTE.min.css">
+    <link rel="stylesheet" href="${staticRoot}/plugins/iCheck/square/blue.css">
+    <link rel="stylesheet" href="${staticRoot}/css/googleFont.css">
+</head>
+<body class="hold-transition login-page">
+<div class="login-box" id="fm" style="display: none">
+    <div class="login-box-body" style="margin-top: 200px">
+        <p class="login-box-msg">请输入用户名密码</p>
+
+        <div class="form-group has-feedback">
+            <input type="text" name="username" v-validate="'required'" class="form-control" placeholder="用户名" title="用户名">
+            <span class="fa fa-user form-control-feedback"></span>
+        </div>
+        <div class="form-group has-feedback">
+            <input type="password"  v-validate="'required'" class="form-control" placeholder="密码" title="密码" name="password">
+            <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+        </div>
+        <div v-show="error!=''">
+            <span style="color: red;">{{error}}</span>
+        </div>
+        <div class="row">
+            <div class="col-xs-8">
+                <div class="checkbox icheck">
+                    <label>
+                        <input type="checkbox"  name="remeber" value="true"> 记住我
+                    </label>
+                </div>
+            </div>
+            <div class="col-xs-4">
+                <button onclick="sumForm()" class="btn btn-primary btn-block btn-flat">登录</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script>
+    var staticRoot="$staticRoot";
+</script>
+<script src="${staticRoot}/plugins/jquery/jquery.min.js"></script>
+<script src="${staticRoot}/plugins/bootstrap/js/bootstrap.min.js"></script>
+<script src="${staticRoot}/plugins/iCheck/icheck.min.js"></script>
+
+<script src="${staticRoot}/js/utils.js"></script>
+<script src="${staticRoot}/js/dialog.js"></script>
+<script src="${staticRoot}/js/ajaxUtil.js"></script>
+
+<script src="${staticRoot}/plugins/vue/vue.min.js"></script>
+<script src="${staticRoot}/plugins/vue/vee-validate.min.js"></script>
+<script src="${staticRoot}/plugins/vue/vue-i18n.min.js"></script>
+<script src="${staticRoot}/js/vueUtil.js"></script>
+<script>
+    var appData = {
+        username: "admin",
+        password: "admin",
+        remeber: "",
+        error:"",
+        tokenId: ""
+    }
+
+    var vue= vueUtil.init({
+        el: "#fm",
+        data: appData
+
+    });
+
+    $(function () {
+        $('input').iCheck({
+            checkboxClass: 'icheckbox_square-blue',
+            radioClass: 'iradio_square-blue',
+            increaseArea: '20%'
+        });
+        $("#fm").show();
+    });
+
+    function sumForm() {
+        appData.error="";
+        vueUtil.submit(vue,"/login/login",appData,function (data) {
+            if(data.error){
+                appData.error=data.error;
+            }else{
+                var forward="$!{forward}";
+                var url="/";
+                if(forward) {
+                    url+="?forward="+forward;
+                }else{
+                    var currentUrl=utils.getUrl();
+                    if(currentUrl!="/login/prepareLogin" && currentUrl!="/login/logout"){
+                        url+="?forward="+currentUrl;
+                    }
+                }
+                window.location.href=url;
+            }
+        })
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,24 @@
+<table class="list">
+    <tr>
+        <th>名称</th>
+        <th>用户名</th>
+        <th>类型</th>
+        <th>url</th>
+    </tr>
+    #foreach($databaseInfo in $databaseInfoList)
+    <tr>
+        <td>
+            <a href="javaScript:" onclick="showTables('$databaseInfo.alias')">$databaseInfo.alias</a>
+        </td>
+        <td>$databaseInfo.username</td>
+        <td>$databaseInfo.dbType</td>
+        <td>$databaseInfo.url</td>
+    </tr>
+    #end
+</table>
+
+<script>
+    function showTables(alias) {
+       leftMenu.load("$webRoot/dbClient/index?alias="+alias)
+    }
+</script>

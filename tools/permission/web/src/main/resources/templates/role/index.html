@@ -1,0 +1,66 @@
+<div class="panel-body" style="padding:0px; width: 99%">
+    <div class="panel panel-default" style="margin: 0px">
+        <div class="panel-heading">角色管理</div>
+        <div class="panel-body row">
+            <div class="col-sm-3">
+                <table class="list">
+                    <tr>
+                        <th>代码</th>
+                        <th>名称</th>
+                        <th>
+                            <button type="button" onclick="prepareInsert()" class="btn-sm btn-primary">新增</button>
+                        </th>
+                    </tr>
+                    #foreach($role in $roleList)
+                    <tr>
+                        <td>$role.roleCode</td>
+                        <td>$role.roleName</td>
+                        <td>
+                            #if($role.roleCode!="admin")
+                            <button type="button" onclick="prepareUpdate('${role.roleId}')" class="btn-sm btn-primary">修改</button>
+                            <button type="button" onclick="deleteRole('${role.roleId}')" class="btn-sm btn-danger">删除</button>
+                            <button type="button" onclick="showMenu('${role.roleId}')" class="btn-sm btn-success">菜单</button>
+                            #end
+                        </td>
+                        #end
+                    </tr>
+                </table>
+            </div>
+            <div class="col-sm-9" id="detail">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function showMenu(roleId) {
+        ajaxUtil.html("$path/roleMenus", "roleId=" + roleId, function (html) {
+            $("#detail").html(html);
+        })
+    }
+    
+    function prepareInsert() {
+        frame.prepareInsert("新增", '${path}/prepareInsert', '$path/insert',function () {
+            loadPage("$path/index")
+        });
+    }
+
+    function prepareUpdate(roleId) {
+        var url="${path}/prepareUpdate?roleId="+roleId;
+        frame.openUpdate("roleId","修改",url, '$path/updateById',2,function () {
+            loadPage("$path/index")
+        })
+    }
+    
+    function deleteRole(roleId) {
+        var data="roleId="+roleId;
+        ajaxUtil.json("$path/deleteById",data,function(resp){
+            if(!resp.success){
+                dialog.alert(resp.message);
+            }else{
+                loadPage("$path/index")
+            }
+        })
+    }
+</script>

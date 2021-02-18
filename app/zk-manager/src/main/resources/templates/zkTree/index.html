@@ -1,0 +1,53 @@
+<div class="panel-body" style="padding:0px; width: 99%">
+    <div class="panel panel-default" style="margin: 0px">
+        <div class="panel-heading">zookeeper</div>
+        <div class="panel-body row">
+            <div class="col-sm-3">
+                <ul id="zkTree" class="ztree" style="background-color: white;width: 100%;"></ul>
+            </div>
+            <div class="col-sm-9" id="detail">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function zTreeOnClick(event, treeId, treeNode) {
+        load(treeNode.id);
+    };
+
+    function load(id) {
+        var data = "zkAddress=${zkInfo.address}";
+        data += "&path=" + escape(id);
+        ajaxUtil.html("$path/get", data, function (html) {
+            $("#detail").html(html);
+        })
+    }
+
+    var zTreeObj;
+    var setting = {
+        callback: {
+            onClick: zTreeOnClick
+        }
+    };
+    $(document).ready(function () {
+        dialog.loading();
+        var data = "zkAddress=${zkInfo.address}"
+        ajaxUtil.json('${path}/tree', data, function (resp) {
+            dialog.loading(false);
+            if (!resp.success) {
+                dialog.alert(resp.message);
+                return;
+            }
+            zTreeObj = $.fn.zTree.init($("#zkTree"), setting, resp.data);
+            zTreeObj.expandAll(true);
+            var menuBar = $("main-header").height();
+            var height = document.documentElement.clientHeight - menuBar
+            var top = $("#zkTree").offset().top;
+            $("#zkTree").css("height", height - top);
+        })
+    });
+
+
+</script>

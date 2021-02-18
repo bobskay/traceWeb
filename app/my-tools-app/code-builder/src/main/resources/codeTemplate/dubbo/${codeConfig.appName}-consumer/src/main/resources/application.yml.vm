@@ -1,0 +1,7 @@
+my:
+  web:
+    index:
+      title: "hello"
+      indexContentUrl: ""
+server:
+  port: 9999

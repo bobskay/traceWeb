@@ -1,0 +1,70 @@
+package $codeCreateResult.controller().packageName;
+#foreach($imp in $codeCreateResult.controller().importList)import $imp;
+#end
+@RestController
+@RequestMapping("${codeCreateResult.modelName}")
+public class ${codeCreateResult.ModelName()}Controller extends BaseController {
+
+    @Autowired
+    ${codeCreateResult.ModelName()}Service ${codeCreateResult.modelName}Service;
+
+    @RequestMapping("/index")
+    @Menu("${codeConfig.menuName}")
+    public String index() {
+        return $("index");
+    }
+
+    @RequestMapping("/prepareInsert")
+    @Remark("进入新增页面")
+    public String prepareInsert() {
+        return $("prepareInsert");
+    }
+
+
+   @RequestMapping("/insert")
+   @Remark("新增数据")
+   @Param("要插入数据库的对象")
+   @Return("新增成功后的数据,填充了主键")
+   public Response<${codeCreateResult.ModelName()}> insert(${codeCreateResult.ModelName()} ${codeCreateResult.modelName}) {
+       ${codeCreateResult.modelName}Service.insert(${codeCreateResult.modelName});
+       return respone(${codeCreateResult.modelName});
+   }
+
+    @RequestMapping("/select")
+    @Remark("查询")
+    @Param("查询条件")
+    @Param("起始条数,从0开始")
+    @Param("返回条数")
+    @Return("分页后的查询结果")
+    public Response<Pagination> select(${codeCreateResult.ModelName()} ${codeCreateResult.modelName}, Integer offset, Integer limit) {
+        Pagination page = ${codeCreateResult.modelName}Service.selectPage(${codeCreateResult.modelName}, offset, limit);
+        return respone(page);
+    }
+
+    @Remark("通过主键删除")
+    @RequestMapping("/deleteById")
+    @Param("要删除的数据Id")
+    @Return("删除记录数")
+    public Response<Integer> deleteById(Long[] ${codeCreateResult.pkName}) {
+        return respone(${codeCreateResult.modelName}Service.deleteById(${codeCreateResult.pkName}));
+    }
+
+    @Remark("通过主键删除数据")
+    @RequestMapping("/updateById")
+    public Response<${codeCreateResult.ModelName()}> updateById(${codeCreateResult.ModelName()} ${codeCreateResult.modelName}) {
+        ${codeCreateResult.modelName}Service.updateById(${codeCreateResult.modelName});
+        return respone(${codeCreateResult.modelName});
+    }
+
+
+    @Remark("进入修改页面")
+    @RequestMapping("/prepareUpdate")
+    @Param("主键")
+    public  String prepareUpdate(Long ${codeCreateResult.pkName}) {
+        if (${codeCreateResult.pkName} == null) {
+            throw new Message("主键不能为空");
+        }
+        ${codeCreateResult.ModelName()} model = ${codeCreateResult.modelName}Service.get(${codeCreateResult.pkName});
+        return $("prepareUpdate",model);
+    }
+}

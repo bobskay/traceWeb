@@ -1,0 +1,79 @@
+<section class="content-header" id="app">
+    <div class="input-group ">
+        <input class="form-control" type="text" onkeyup="doSearch(this.value)"
+               placeholder="search...">
+        <span class="input-group-btn">
+                <button type="button" class="btn btn-info btn-flat"><i class="fa fa-search"></i></button>
+         </span>
+    </div>
+    <div id="searchResult" v-show="appData.showContent==true" v-for="result in resultList">
+        <div class="box box-solid" style="margin-bottom: 2px">
+            <div class="box-header with-border">
+                <a @click="load(result.url)" class="btn">
+                    <i class="fa fa-file-text-o"></i>&nbsp;
+                    <h3 class="box-title" v-html="result.title"></h3>
+                </a>
+            </div>
+            <div class="box-body">
+                <h5 v-html="result.content"></h5>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    var appData = {
+        showContent: false,
+        blogs: [],
+        resultList: []
+    }
+    ajaxUtil.data("$path/blogjs", "", function (blogjs) {
+        appData.blogs = blogjs
+    });
+    var subLength = 100;
+
+    function doSearch(value) {
+        if (!value) {
+            appData.showContent = false;
+            return;
+        }
+        appData.showContent = true;
+        var rts = [];
+        var blogs = appData.blogs;
+        for (var i = 0; i < blogs.length; i++) {
+            var idx = blogs[i].content.indexOf(value);
+            if (idx != -1) {
+                var max = blogs[i].content.length;
+                var begin = idx - subLength;
+                if (begin < 0) {
+                    begin = 0;
+                }
+                var end = idx + subLength;
+                if (end >= max) {
+                    end = max;
+                }
+                var url = blogs[i].url;
+                var title = blogs[i].title.replaceAll(value, "<span style='color: red;'>" + value + "</span>");
+                var content = blogs[i].content.substring(begin, end).replaceAll(value, "<span style='color: red;'>" + value + "</span>");
+                var result = {
+                    "title": title,
+                    "content": content,
+                    "url": url
+                }
+                rts.push(result);
+            }
+        }
+        appData.resultList = rts;
+    }
+
+    vueUtil.init({
+        el: "#app",
+        data: appData,
+        methods: {
+            load: function (url) {
+                leftMenu.load(url);
+            }
+        }
+    })
+
+</script>

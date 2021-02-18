@@ -1,0 +1,57 @@
+<table class="form" id="app">
+    <tr>
+        <th width="35%">代码</th>
+        <th width="35%">名称</th>
+        <td  width="15%">优先级</td>
+        <td width="15%"></td>
+    </tr>
+    #foreach($userRole in $userRoleList)
+    <tr>
+        <td>$userRole.role.roleCode</td>
+        <td>$userRole.role.roleName</td>
+        <td>
+            <input type="text"
+                   v-show="userRoles[$html.add(${velocityCount},-1)].checked"
+                   title="优先级$html.add(${velocityCount},-1)"
+                   maxlength="2"  v-validate="'numeric'"
+                   name="userRoles[$html.add(${velocityCount},-1)].priority">
+        </td>
+        <td><input type="checkbox" name="userRoles[$html.add(${velocityCount},-1)].checked" v-model="userRoles[$html.add(${velocityCount},-1)].checked"/> </td>
+    </tr>
+    #end
+
+</table>
+<script>
+    var appData={
+        userId:"$user.userId",
+        userRoles:$html.json($userRoleList)
+    }
+    for(var i=0;i<appData.userRoles.length;i++){
+        if(appData.userRoles[i].userId){
+            appData.userRoles[i].checked=true;
+        }else{
+            appData.userRoles[i].checked=false;
+        }
+    }
+    var vue=vueUtil.init({
+        el:"#app",
+        data:appData
+    })
+
+    function updateUerRole() {
+        var urs=[];
+        for(var i=0;i<appData.userRoles.length;i++){
+            if( appData.userRoles[i].checked){
+                urs.push(appData.userRoles[i]);
+            }
+        }
+        var data={
+            userId:appData.userId,
+            userRoles:urs
+        };
+        ajaxUtil.postJson("$path/updateUserRole",data,function (data) {
+            dialog.hide("用户角色");
+        })
+    }
+
+</script>

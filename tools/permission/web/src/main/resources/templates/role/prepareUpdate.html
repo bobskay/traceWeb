@@ -1,0 +1,19 @@
+<table class="table table-bordered ">
+    <input type="hidden" name="roleId" :value="roleId">
+    <tr>
+        <td width="20%">角色代码</td>
+        <td width="80%">
+            <input name="roleCode" readonly class="form-control" type="text">
+        </td>
+    </tr>
+    <tr>
+        <td width="20%">角色名称</td>
+        <td width="80%">
+            <input name="roleName" class="form-control" type="text">
+        </td>
+    </tr>
+</table>
+<script>
+    //这个名称是固定的,在frame.js里需要用到
+    var updateData=$html.json($role)
+</script>

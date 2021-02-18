@@ -1,0 +1,6 @@
+package $codeCreateResult.dao().packageName;
+#foreach($imp in $codeCreateResult.dao().importList)import $imp;
+#end
+@Mapper
+public interface ${codeCreateResult.ModelName()}Dao extends BaseDao<${codeCreateResult.ModelName()}> {
+}

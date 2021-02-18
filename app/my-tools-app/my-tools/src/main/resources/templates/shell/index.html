@@ -1,0 +1,89 @@
+<div id="app">
+    <table class="form">
+        <tr>
+            <td>
+                <input title="主机" placeholder="主机" class="form-control" name="shell.hostname">
+            </td>
+            <td>
+                <input title="用户名" placeholder="用户名" class="form-control" name="shell.username">
+            </td>
+            <td>
+                <input title="密码" placeholder="密码" class="form-control" name="shell.password">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <input title="要执行的shell" placeholder="要执行的shell" class="form-control" name="shell.command">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <button class="btn btn-success" onclick="exec()">开始执行</button>
+                <span v-show="shell.key!=''">
+                    <button class="btn btn-primary" v-show="refresh==false" onclick="refresh(true)">自动刷新</button>
+                    <button class="btn btn-danger" v-show="refresh==true" onclick="refresh(false)">停止刷新</button>
+                </span>
+            </td>
+        </tr>
+    </table>
+    <div class="box" v-show="datas.length>0">
+        <h4 class="box-title">返回内容</h4>
+        <pre><p  v-for="data in datas">{{data}}</p></pre>
+    </div>
+</div>
+<script>
+    var appData = {
+        shell:{
+            command: "tail -f /opt/logtask/logs/1.txt",
+            hostname: "myos",
+            username: "root",
+            password: "root",
+            key: "",
+        },
+        datas: [],
+        refresh:false
+    }
+    var vue = vueUtil.init({
+        el: "#app",
+        data: appData
+    })
+
+    function exec() {
+        vueUtil.submit(vue, "$path/exec", appData.shell, function (shellInfo) {
+            if(shellInfo.datas){
+                appData.datas=shellInfo.datas;
+                appData.shell.key="";
+                return;
+            }
+            appData.datas=[];
+            appData.shell.key = shellInfo.key;
+            var old=appData.refresh;
+            appData.refresh=true;
+            read();
+            appData.refresh=old;
+        })
+    }
+
+    function refresh(refresh) {
+        appData.refresh=refresh;
+        if(refresh){
+            read();
+        }
+    }
+
+    function read() {
+        if(!appData.refresh){
+            return;
+        }
+        ajaxUtil.json("$path/read", "key=" + appData.shell.key, function (resp) {
+            if(resp.success){
+                for (var i = 0; i < resp.data.length; i++) {
+                    appData.datas.push( resp.data[i]);
+                }
+                window.setTimeout(read,2000);
+            }else{
+                dialog.alert(resp.message)
+            }
+        })
+    }
+</script>

@@ -1,0 +1,22 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>wang.wangby</groupId>
+		<artifactId>base-parent</artifactId>
+		<version>1</version>
+	</parent>
+	<packaging>pom</packaging>
+
+	<artifactId>a-tools</artifactId>
+
+	<modules>
+		<module>../../tools/common</module>
+		<module>../../tools/entity/service</module>
+		<module>../../tools/permission/api</module>
+		<module>../../tools/permission/service</module>
+		<module>../../tools/repository/api</module>
+		<module>../../tools/repository/jdbc</module>
+	</modules>
+</project>

@@ -1,0 +1,36 @@
+<table class="list">
+    <tr>
+        <th>model</th>
+        <th>表名</th>
+        <th>建表语句</th>
+    </tr>
+    #foreach($modelTable in $modelTableList)
+    <tr>
+        <td>${modelTable.modelInfo.clazz}</td>
+        <td>${modelTable.tableInfo.tableName}</td>
+        <td>
+            <pre style="text-align: left" ondblclick="selectText(this)">${modelTable.createSql}</pre>
+        </td>
+    </tr>
+    #end
+</table>
+
+<script>
+    function selectText(element) {
+        if (document.body.createTextRange) {
+            var range = document.body.createTextRange();
+            range.moveToElementText(element);
+            range.select();
+        } else if (window.getSelection) {
+            var selection = window.getSelection();
+            var range = document.createRange();
+            range.selectNodeContents(element);
+            selection.removeAllRanges();
+            selection.addRange(range);
+        } else {
+            console.log("浏览器不支持")
+        }
+    }
+
+
+</script>

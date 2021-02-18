@@ -1,0 +1,25 @@
+<table class="table table-bordered ">
+    <input type="hidden" name="userId" :value="userId">
+    <tr>
+        <td width="20%">用户名</td>
+        <td width="80%">
+            <input name="userName" class="form-control" type="text">
+        </td>
+    </tr>
+    <tr>
+        <td width="20%">密码</td>
+        <td width="80%">
+            <input name="passwd" class="form-control" type="text">
+        </td>
+    </tr>
+    <tr>
+        <td width="20%">昵称</td>
+        <td width="80%">
+            <input name="nickName" class="form-control" type="text">
+        </td>
+    </tr>
+    </table>
+<script>
+    //这个名称是固定的,在frame.js里需要用到
+    var updateData=$html.json($user)
+</script>

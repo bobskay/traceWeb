@@ -1,0 +1,25 @@
+<table class="list">
+    <tr>
+        <th>id</th>
+        <th>name</th>
+        <th>priority</th>
+        <th>isAlive</th>
+        <th>isDaemon</th>
+        <th>state</th>
+    </tr>
+    #foreach($thread in $threadList)
+    <tr>
+        <td>$thread.id</td>
+        <td align="left" style="text-align: left"><a href="javascript:" onclick="showStack('$thread.name')">$thread.name</a></td>
+        <td>$thread.priority</td>
+        <td>$thread.alive</td>
+        <td>$thread.daemon</td>
+        <td>$thread.state</td>
+    </tr>
+    #end
+</table>
+<script>
+    function showStack(name) {
+        dialog.html(name,"$path/stackTraces","name="+name);
+    }
+</script>

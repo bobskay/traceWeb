@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>${title}</title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <link rel="stylesheet" href="${staticRoot}/plugins/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="${staticRoot}/plugins/bootstrap-table/css/bootstrap-table.min.css">
+    <link rel="stylesheet" href="${staticRoot}/plugins/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="${staticRoot}/plugins/Ionicons/css/ionicons.min.css">
+    <link rel="stylesheet" href="${staticRoot}/css/AdminLTE.css">
+    <link rel="stylesheet" href="${staticRoot}/css/skins/_all-skins.min.css">
+    <link rel="stylesheet" href="${staticRoot}/css/googleFont.css">
+    <link rel="stylesheet" href="${staticRoot}/css/index.css">
+    <link rel="stylesheet" href="${staticRoot}/plugins/ztree/demo.css" rel="stylesheet">
+    <link rel="stylesheet" href="${staticRoot}/plugins/ztree/zTreeStyle/zTreeStyle.css" rel="stylesheet">
+</head>
+<body class="hold-transition skin-blue sidebar-mini ">
+<div id="mainApp">
+
+    <header class="main-header">
+        <a href="$webRoot" class="logo">
+            <span class="logo-mini">--</span>
+            <span class="logo-lg">${title}</span>
+        </a>
+        <nav class="navbar navbar-static-top">
+            <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
+                <span class="sr-only">Toggle navigation</span>
+            </a>
+
+            <div class="navbar-custom-menu">
+                <ul class="nav navbar-nav">
+                    <li>
+                        #if($user)
+                        <a href="JavaScript:" onclick="logout()">退出</a>
+                        #end
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+    <aside class="main-sidebar">
+        <form action="#" method="get" class="sidebar-form">
+            <input type="text" onkeyup="leftMenu.search(this.value)" class="form-control" placeholder="search...">
+        </form>
+
+        <section class="sidebar">
+            <ul class="sidebar-menu">
+                #foreach($menu in $menus)
+                <li class="treeview">
+                    <a href="javscript:" onclick="leftMenu.load('$!menu.url',this)" url="$!menu.url" text="$menu.text">
+                        <i class="$menu.icon"></i> <span>$menu.text</span>
+                        #if($menu && $menu.children && $!menu.children.size()>0)
+                        <span class="pull-right-container">
+                          <i class="fa fa-angle-left pull-right"></i>
+                        </span>
+                        #end
+                    </a>
+                    #if($menu && $menu.children && $menu.children.size()>0)
+                    <ul class="treeview-menu">
+                        #foreach($secMenu in $menu.children)
+                        <li class="treeview">
+                            <a href="javscript:" onclick="leftMenu.load('$!secMenu.url',this)" url="$!secMenu.url"
+                               text="$secMenu.text">
+                                <i class="$secMenu.icon"></i> <span>$secMenu.text</span>
+                                #if($secMenu && $secMenu.children && $secMenu.children.size()>0)
+                                    <span class="pull-right-container">
+                                      <i class="fa fa-angle-left pull-right"></i>
+                                    </span>
+                                #end
+                            </a>
+                            #if($secMenu && $secMenu.children && $secMenu.children.size()>0)
+                            <ul class="treeview-menu">
+                                #foreach($third in $secMenu.children)
+                                <li>
+                                    <a href="javscript:" onclick="leftMenu.load('$!third.url',this)" url="$!third.url"
+                                       text="$third.text">
+                                        <i class="$third.icon"></i> <span>$third.text</span>
+                                    </a>
+                                </li>
+                                #end
+                            </ul>
+                            #end
+                        </li>
+                        #end
+                    </ul>
+                    #end
+                </li>
+                #end
+            </ul>
+        </section>
+    </aside>
+
+    <!--页面主体内容,通过ajax获取-->
+    <div class="content-wrapper" style="background-color: white">
+        <section class="content-header">
+            <h1 id="contentTitle"></h1>
+        </section>
+
+        <section class="content" id="main-content">
+        </section>
+    </div>
+
+</div>
+<script src="${staticRoot}/plugins/jquery/jquery.min.js"></script>
+<script src="${staticRoot}/plugins/jquery-ui/jquery-ui.min.js"></script>
+<script>
+    var staticRoot = "${staticRoot}";
+    var webRoot = "${webRoot}";
+    $.widget.bridge('uibutton', $.ui.button);
+</script>
+<script src="${staticRoot}/plugins/bootstrap/js/bootstrap.min.js"></script>
+<script src="${staticRoot}/plugins/bootstrap-table/js/bootstrap-table.min.js"></script>
+<script src="${staticRoot}/plugins/bootstrap-table/js/bootstrap-table-zh_CN.min.js"></script>
+<script src="${staticRoot}/plugins/ztree/jquery.ztree.all.min.js"></script>
+<script src="${staticRoot}/js/adminlte.js"></script>
+<script src="${staticRoot}/plugins/vue/vue.min.js"></script>
+<script src="${staticRoot}/plugins/vue/vee-validate.min.js"></script>
+<script src="${staticRoot}/plugins/vue/vue-i18n.min.js"></script>
+
+<script src="${staticRoot}/js/utils.js"></script>
+<script src="${staticRoot}/js/dialog.js"></script>
+<script src="${staticRoot}/js/ajaxUtil.js"></script>
+<script src="${staticRoot}/js/vueUtil.js"></script>
+<script src="${staticRoot}/js/tableUtil.js"></script>
+<script src="${staticRoot}/js/frame.js"></script>
+<script src="${staticRoot}/js/myTree.js"></script>
+<script src="${staticRoot}/js/echarts.min.js"></script>
+
+</body>
+
+<script>
+    var ctrlPressed = false;
+    var tree = $('.sidebar-menu').tree().data("lte.tree");
+    $(window).keydown(function (evt) {
+        if (evt.which == 17) { // ctrl
+            ctrlPressed = true;
+        }
+    }).keyup(function (evt) {
+        if (evt.which == 17) { // ctrl
+            ctrlPressed = false;
+        }
+    });
+
+    function LeftMenu() {
+
+    }
+
+    LeftMenu.prototype.expandAll = function () {
+        tree.expandAll()
+    };
+
+    LeftMenu.prototype.collapse = function (el) {
+        tree.collapse(el, el.parent());
+    };
+
+    //查找菜单
+    LeftMenu.prototype.search = function (value) {
+        this.expandAll();
+        if (!value) {
+            $(".sidebar-menu a").each(function (idx, el) {
+                $(el).parent().show();
+            });
+            return;
+        }
+        var dir = null;
+        var find = 0;
+        $(".sidebar-menu a").each(function (idx, el) {
+            var url = $(el).attr("url");
+            if (!url) {
+                if (dir != null) {
+                    if (find == 0) {
+                        $(dir).parent().hide();
+                    } else {
+                        $(dir).parent().show();
+                    }
+                }
+                dir = $(el);
+                find = 0;
+                return;
+            }
+            url += $(el).attr("text");
+            if (url.search(value) != -1) {
+                $(el).parent().show();
+                find++;
+            } else {
+                $(el).parent().hide();
+            }
+        });
+
+        if (dir != null) {
+            if (find == 0) {
+                $(dir).parent().hide();
+            } else {
+                $(dir).parent().show();
+            }
+        }
+    }
+    //ajax获取页面内容并加载到main-content
+    //@param aLine 单击的链接,需要通过这个链接获取title,并设为选中
+    LeftMenu.prototype.load = function (url, aLink) {
+        if (!url) {
+            return;
+        }
+        if (ctrlPressed) {
+            window.open("/?forward=" + url);
+            return;
+        }
+
+        var treeView = $(".treeview");
+        for (var i = 0; i < treeView.length; i++) {
+            $(treeView[i]).removeClass('active');
+        }
+        $(".sidebar-menu a").each(function (idx, el) {
+            if ($(el).attr("url")) {
+                $(el).parent().removeClass('menu-open');
+            }
+        });
+
+        if (aLink) {
+            var parent = $(aLink).parent();
+            for (var i = 0; i < 3; i++) {
+                if (!parent) {
+                    break;
+                }
+                if (parent.hasClass("treeview")) {
+                    parent.addClass("active");
+                }
+                parent = parent.parent();
+            }
+        }
+
+        var aLink = $("a[url='" + url + "']");
+        //如果url里带了参数就截取?前的
+        if (!aLink) {
+            var location = url.split('?')[0]
+            aLink = $("a[url='" + location + "']");
+        }
+
+
+        //避免死循环如果转发到首页,直接跳过
+        if (!url || url == "/index") {
+            return;
+        }
+        var newUrl = window.location.href.split('?')[0] + "?forward=" + url;
+        window.history.pushState({}, 0, newUrl);
+        ajaxUtil.html(url, "", function (html) {
+            //如果返回的内容带有html标签就放到iframe里
+            if (html.indexOf("<html>") != -1) {
+                // var header = $(".main-header").height();
+                // var height = document.documentElement.clientHeight - header - 1;
+                // var iframe='<iframe style="border: 0" id="contentIframe" width="100%"  src="'+url+'"></iframe>'
+                // $("#main-content").html(iframe);
+                // $("#contentIframe").css("height", height);
+                self.location.href = url;
+            } else {
+                $("#main-content").html(html);
+                window.scroll(0,0)
+            }
+        })
+
+        //暂时不显示title
+        var title = aLink.attr("text");
+        $("#contentTitle").text(title);
+        $(".content-header").hide();
+    }
+    var leftMenu = new LeftMenu();
+
+    $(function () {
+        var exp="$!indexPageProperties.expandAll";
+        if(exp=="true"){
+            leftMenu.expandAll()
+        }
+        var forward = "$!forward"
+        if (forward) {
+            leftMenu.load(forward);
+        }
+    })
+
+    function logout() {
+        window.location.href = "/login/logout";
+    }
+
+    var timeOutFunction=null;
+
+    function updateByTimeOut(){
+        if(timeOutFunction){
+            timeOutFunction();
+        }
+        setTimeout(updateByTimeOut,1000);
+    }
+
+    updateByTimeOut();
+</script>
+</html>

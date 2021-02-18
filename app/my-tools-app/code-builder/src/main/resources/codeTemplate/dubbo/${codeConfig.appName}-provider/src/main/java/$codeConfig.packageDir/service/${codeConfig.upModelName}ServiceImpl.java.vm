@@ -1,0 +1,29 @@
+package ${codeConfig.packageName}.service;
+
+import com.alibaba.dubbo.config.annotation.Service;
+import wang.wangby.dao.BaseDao;
+import ${codeConfig.packageName}.model.${codeConfig.upModelName};
+import wang.wangby.service.BaseService;
+import wang.wangby.utils.IdWorker;
+
+import java.util.Date;
+
+@Service
+public class ${codeConfig.upModelName}ServiceImpl extends BaseService<${codeConfig.upModelName}> implements ${codeConfig.upModelName}Service {
+    @Override
+    public BaseDao defaultDao() {
+        return null;
+    }
+
+    @Override
+    public ${codeConfig.upModelName} newModel() {
+        return new ${codeConfig.upModelName}();
+    }
+
+    @Override
+    public ${codeConfig.upModelName} get(${codeConfig.upModelName} ${codeConfig.modelName}){
+        ${codeConfig.upModelName} retValue=new ${codeConfig.upModelName}();
+        retValue.set${codeCreateResult.upPkName}(IdWorker.nextLong());
+        return retValue;
+    }
+}

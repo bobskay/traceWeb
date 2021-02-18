@@ -1,0 +1,14 @@
+#foreach($monitorData in $monitorDataList)
+<div class="box">
+    <div class="box-title"><h4>$monitorData.name</h4></div>
+    <table class="list">
+        #foreach($en in $monitorData.dataMap.entrySet())
+        <tr>
+            <td width="10%">$en.key</td>
+            <td width="90%" style="text-align: left">$en.value</td>
+        </tr>
+        #end
+    </table>
+</div>
+ #end
+

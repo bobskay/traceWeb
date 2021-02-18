@@ -1,0 +1,16 @@
+#trimAll()
+#foreach($i in $list)
+    $i
+#end
+#end
+
+日期: $data.date
+时间: $data.dateTime
+是/否: $boolValue.yesOrNo
+---------------
+pojo= $pojo
+pojo.str= $pojo.str
+pojo.str.sub= $pojo.str.substring(2)
+pojo.time= $pojo.time
+pojo.time.dateTime= $pojo.time.dateTime
+pojo.no= $pojo.no

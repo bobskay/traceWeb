@@ -1,0 +1,75 @@
+<div class="row" id="contentDiv" style="width: 100%;height: 90%;display: none">
+    <pre id="content" class="form-control" style="height: 90%;"></pre>
+</div>
+<table class="form">
+    <tr>
+        <td width="80%">
+            <input class="form-control" id="fileName" value="${fileName}"/>
+        </td>
+        <td>
+            <button onclick="showFile()" id="startBtn" class="btn-success">开始</button>
+            <button onclick="stop()" id="stopBtn" style="display: none" class="btn-danger">停止</button>
+            <button onclick="clearContent()" id="clearBtn"  class="btn-info">清空</button>
+        </td>
+    </tr>
+</table>
+<br/>
+<script>
+    var url=window.location.href+"";//http://127.0.0.1:8080/?forward=/filePush/index
+    var start=url.indexOf("//");
+    url=url.substring(start+2);//127.0.0.1:8080/?forward=/filePush/index
+    var end=url.indexOf("/");
+    url=url.substring(0,end);//127.0.0.1:8080
+    url="ws://"+url+"/ws";//ws://127.0.0.1:8080/ws
+
+    var ws = new WebSocket(url)
+    var fileCotnent="";
+    var loadingText="";
+    var running=false;
+    ws.onmessage = function (event) {
+        loadingText="";
+        var data = event.data;
+        fileCotnent=fileCotnent+data;
+        $("#content").html(fileCotnent+"\n");
+        $("#contentDiv").show();
+        window.scrollTo(0,document.body.scrollHeight)
+    };
+    //已经建立连接
+    ws.onopen = function (event) {
+        ws.send("hello")
+    };
+
+    function showFile() {
+        var fileName=$("#fileName").val();
+        $("#stopBtn").show();
+        $("#startBtn").hide();
+        fileCotnent="";
+        ws.send("file:"+fileName);
+        running=true;
+    }
+
+    function stop() {
+        running=false;
+        $("#startBtn").show();
+        $("#stopBtn").hide();
+        ws.send("stop:"+fileName);
+    }
+
+    function clearContent() {
+        fileCotnent="";
+        $("#content").html(fileCotnent+"\n");
+    }
+
+    function showLoading() {
+        window.setTimeout(showLoading,2000)
+        if(!running||!fileCotnent){
+            return;
+        }
+        $("#content").html(fileCotnent+loadingText);
+        loadingText=loadingText+".";
+    }
+    showLoading();
+</script>
+
+
+
