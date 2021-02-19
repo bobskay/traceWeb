@@ -77,9 +77,11 @@ public class Rule {
             return new BigDecimal(sell);
         }
         if (quantity.intValue() == 2) {
-            return new BigDecimal(3);
+            int sell = currentPrice.intValue() +4;
+            return new BigDecimal(sell);
         }
-        return new BigDecimal(2);
+        int sell = currentPrice.intValue() + 3;
+        return new BigDecimal(4);
     }
 
     //超过某个值就不下单了

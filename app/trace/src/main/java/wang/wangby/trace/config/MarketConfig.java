@@ -12,9 +12,9 @@ public class MarketConfig {
     public static String PASSWORD;
 
     @Remark("最大持仓")
-    private int maxHold = 35;
+    private int maxHold = 40;
     @Remark("最小持仓")
-    private int base = 20;
+    private int base = 15;
     @Remark("卖出价格")
     private int sellPlus = 5;
 

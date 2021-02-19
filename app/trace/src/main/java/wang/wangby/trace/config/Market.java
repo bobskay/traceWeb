@@ -171,7 +171,7 @@ public class Market {
 
         //无买单
         if (currentBuy == null) {
-            marketService.buy(price);
+            marketService.buy(price,null);
             lastBuyTime = System.currentTimeMillis();
             return;
         }
@@ -179,7 +179,7 @@ public class Market {
         //价格高与下单价好多
         if (rule.isCancel(price, currentBuy)) {
             marketService.cancel(currentBuy);
-            marketService.buy(price);
+            marketService.buy(price,currentBuy.getClientOrderId());
             lastBuyTime = System.currentTimeMillis();
             return;
         }

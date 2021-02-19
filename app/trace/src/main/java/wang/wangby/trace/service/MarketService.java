@@ -12,6 +12,7 @@ import wang.wangby.trace.config.Market;
 import wang.wangby.trace.config.Rule;
 import wang.wangby.trace.model.Stock;
 import wang.wangby.trace.model.StockOrder;
+import wang.wangby.trace.utils.OrderId;
 import wang.wangby.trace.vo.CurrentOrder;
 import wang.wangby.utils.DateTime;
 import wang.wangby.utils.StringUtil;
@@ -96,28 +97,31 @@ public class MarketService {
 
     /**
      * @param currentPrice    当前价格
+     * @param cancelId 取消后重新下单传远来的id
      */
-    public String buy(BigDecimal currentPrice) {
+    public String buy(BigDecimal currentPrice,String cancelId) {
         if(market.isTest()){
             return "测试环境不下单";
         }
-        String id = newId(OrderSide.BUY.code, currentPrice.intValue());
+        String id = null;
+        if(StringUtil.isNotEmpty(cancelId)){
+            id=OrderId.cancelId(cancelId);
+        }else{
+            id=OrderId.newId(OrderSide.BUY,currentPrice.intValue());
+        }
         BigDecimal buyPrice=rule.buyPrice(currentPrice);
         BigDecimal quantity=rule.quantity(currentPrice);
         exchange.order(OrderSide.BUY, buyPrice, quantity, id);
         return id;
     }
 
-    private static String newId(String pix, int price) {
-        return pix + DateTime.current().toString(DateTime.Format.YEAR_TO_SECOND_STRING) + "-" + price;
-    }
 
     public String sell(BigDecimal currentPrice,BigDecimal quantity) {
         if (market.isTest()) {
             return "测试环境不下单";
         }
 
-        String id = newId(OrderSide.SELL.code, currentPrice.intValue());
+        String id = OrderId.newId(OrderSide.SELL, currentPrice.intValue());
         BigDecimal sellPrice=rule.sellPrice(currentPrice,quantity);
         exchange.order(OrderSide.SELL, sellPrice, quantity, id);
         return id;

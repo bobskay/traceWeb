@@ -14,7 +14,7 @@ public class ShowUtil {
         List<OpenOrder> sells=new ArrayList<>(stock.sells());
         Collections.sort(sells,(Comparator.comparing(OpenOrder::getPrice)));
         for (OpenOrder op : sells) {
-            Integer price=OrderId.getPrice(op.getClientOrderId()).intValue();
+            Integer price=op.getPrice().intValue();
             price=price/10*10;
             List<OpenOrder> ods= areaMap.get(price);
             if(ods==null){
