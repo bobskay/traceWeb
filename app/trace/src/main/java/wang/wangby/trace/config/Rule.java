@@ -8,6 +8,7 @@ import wang.wangby.exchange.enums.CandlestickInterval;
 import wang.wangby.trace.model.Stock;
 import wang.wangby.trace.service.KlineService;
 import wang.wangby.trace.service.StockService;
+import wang.wangby.trace.utils.OrderId;
 
 import java.math.BigDecimal;
 
@@ -120,8 +121,9 @@ public class Rule {
         Stock stock = stockService.getStock();
         int count=0;
         for (OpenOrder order : stock.sells()) {
-            int price =order.getPrice().intValue();
-            int diff = Math.abs(price - currentPrice.intValue()-marketConfig.getSellPlus());
+            //当初的买入价
+            int price = OrderId.getPrice(order.getClientOrderId()).intValue();
+            int diff = Math.abs(price - currentPrice.intValue()-marketConfig.getBuySubtract());
             if (diff < 10) {
                 count += order.getOrigQty().intValue();
             }
