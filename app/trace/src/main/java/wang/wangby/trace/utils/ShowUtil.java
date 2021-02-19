@@ -27,7 +27,9 @@ public class ShowUtil {
         areaMap.forEach(((price, openOrders) -> {
             StringBuilder temp=new StringBuilder();
             for(OpenOrder op:openOrders){
-                temp.append(op.getPrice());
+                int buyPrice=OrderId.getPrice(op.getClientOrderId()).intValue();
+                int diff=(op.getPrice().intValue()-buyPrice);
+                temp.append(buyPrice+"+"+diff);
                 if (op.getOrigQty().compareTo(BigDecimal.ONE) != 0) {
                     temp.append("(" + op.getOrigQty() + ")");
                 }
@@ -37,6 +39,26 @@ public class ShowUtil {
             sellDetail.append("<br>");
         }));
 
+        return sellDetail.toString();
+    }
+
+    public static String bayDetail(Stock stock,BigDecimal current) {
+        List<OpenOrder> sells=new ArrayList<>(stock.sells());
+        Collections.sort(sells,(Comparator.comparing(OpenOrder::getPrice)));
+
+        StringBuilder sellDetail = new StringBuilder();
+        for(OpenOrder op:sells){
+            int buyPrice=OrderId.getPrice(op.getClientOrderId()).intValue();
+            int diff=(op.getPrice().intValue()-buyPrice);
+            if(Math.abs(buyPrice-current.intValue())<10){
+                sellDetail.append(buyPrice+"+"+diff);
+                if (op.getOrigQty().compareTo(BigDecimal.ONE) != 0) {
+                    sellDetail.append("(" + op.getOrigQty() + ")");
+                }
+                sellDetail.append("&nbsp;&nbsp;&nbsp;");
+            }
+
+        }
         return sellDetail.toString();
     }
 }

@@ -117,14 +117,13 @@ public class Rule {
     }
 
     //10个价位内只能买8个
-    public int currentRemain(BigDecimal currentPrice) {
+    public int currentRemain(BigDecimal current) {
         Stock stock = stockService.getStock();
         int count=0;
         for (OpenOrder order : stock.sells()) {
             //当初的买入价
-            int price = OrderId.getPrice(order.getClientOrderId()).intValue();
-            int diff = Math.abs(price - currentPrice.intValue()-marketConfig.getBuySubtract());
-            if (diff < 10) {
+            int buyPrice=OrderId.getPrice(order.getClientOrderId()).intValue();
+            if(Math.abs(buyPrice-current.intValue())<10){
                 count += order.getOrigQty().intValue();
             }
         }

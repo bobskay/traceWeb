@@ -128,7 +128,7 @@ public class TraceController extends BaseController {
             klineVo.setWallet("未初始化");
         }
 
-        String stopInfo=klineService.getHigh(CandlestickInterval.HALF_HOURLY)+"-->"+rule.stopPrice();
+        String stopInfo=klineService.getHigh(CandlestickInterval.HALF_HOURLY)+" --> "+rule.stopPrice();
         klineVo.setStopPrice(stopInfo);
         //当前价位附近可买数量
         String buyable=rule.currentRemain(current)+"";
@@ -137,6 +137,7 @@ public class TraceController extends BaseController {
         if( stock.buyPrice()!=null) {
             klineVo.setCancelPrice(rule.cancelPrice(current,stock.buyPrice()) + "");
         }
+        klineVo.setBuyDetail(ShowUtil.bayDetail(stock,current));
         return json(klineVo);
     }
 

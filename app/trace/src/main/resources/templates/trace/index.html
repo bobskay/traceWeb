@@ -29,9 +29,14 @@
         <td >余额</td>
         <td colspan="3"><spen id="wallet"></spen></td>
     </tr>
+
     <tr>
         <td >卖出</td>
         <td colspan="5"><spen id="sellDetail"></spen></td>
+    </tr>
+    <tr>
+        <td>10挡挂单</td>
+        <td colspan="5"><spen id="buyDetail"></spen></td>
     </tr>
     <tr>
         <td colspan="6">
@@ -244,9 +249,10 @@ function updateChart(kline){
         $("#hold").html(line.hold);
         $("#wallet").html(line.wallet);
         $("#stopPrice").html(line.stopPrice);
-         $("#cancelPrice").html(line.cancelPrice);
+        $("#cancelPrice").html(line.cancelPrice);
         $("#totalRemain").html(line.totalRemain);
         $("#currentRemain").html(line.currentRemain);
+        $("#buyDetail").html(line.buyDetail);
 
         document.title=line.current;
 }

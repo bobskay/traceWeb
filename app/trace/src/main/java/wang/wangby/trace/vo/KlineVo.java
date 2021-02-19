@@ -30,6 +30,6 @@ public class KlineVo {
     private String cancelPrice;
 
     private String sellDetail;
-
+    private String buyDetail;
 
 }
