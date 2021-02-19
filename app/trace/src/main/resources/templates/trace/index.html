@@ -18,9 +18,9 @@
     <tr>
         <td >卖出加价</td>
         <td >$marketConfig.sellPlus</td>
-        <td >买入减价</td>
-        <td >$marketConfig.buyMinutes</td>
-        <td >停止价格</td>
+        <td >重新挂单价</td>
+        <td ><spen id="cancelPrice"></spen></td>
+        <td >暂停挂单价</td>
         <td ><spen id="stopPrice"></spen></td>
     </tr>
     <tr>
@@ -244,6 +244,7 @@ function updateChart(kline){
         $("#hold").html(line.hold);
         $("#wallet").html(line.wallet);
         $("#stopPrice").html(line.stopPrice);
+         $("#cancelPrice").html(line.cancelPrice);
         $("#totalRemain").html(line.totalRemain);
         $("#currentRemain").html(line.currentRemain);
 

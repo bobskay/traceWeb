@@ -134,6 +134,9 @@ public class TraceController extends BaseController {
         String buyable=rule.currentRemain(current)+"";
         klineVo.setCurrentRemain(buyable);
         klineVo.setTotalRemain(rule.totalRemain()+"");
+        if( stock.buyPrice()!=null) {
+            klineVo.setCancelPrice(rule.cancelPrice(current,stock.buyPrice()) + "");
+        }
         return json(klineVo);
     }
 

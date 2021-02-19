@@ -26,7 +26,10 @@ public class KlineVo {
     //当前价位可以买数量
     private String totalRemain;
     private String currentRemain;
+    //取消买入价格
+    private String cancelPrice;
 
     private String sellDetail;
+
 
 }

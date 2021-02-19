@@ -185,6 +185,6 @@ public class Market {
         }
         log.info("当前价格:" + price +
                 ",等待买入:" + currentBuy.getPrice() +
-                ",取消价格：" + rule.cancelPrice(currentBuy));
+                ",取消价格：" + rule.cancelPrice(price,currentBuy));
     }
 }

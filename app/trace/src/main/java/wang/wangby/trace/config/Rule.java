@@ -8,7 +8,6 @@ import wang.wangby.exchange.enums.CandlestickInterval;
 import wang.wangby.trace.model.Stock;
 import wang.wangby.trace.service.KlineService;
 import wang.wangby.trace.service.StockService;
-import wang.wangby.trace.utils.OrderId;
 
 import java.math.BigDecimal;
 
@@ -28,14 +27,17 @@ public class Rule {
         if (current == null) {
             return false;
         }
-        return current.intValue() > cancelPrice(lastBuy);
+        return current.intValue() > cancelPrice(current,lastBuy);
     }
 
-    public int cancelPrice(OpenOrder lastBuy) {
+    public int cancelPrice(BigDecimal current,OpenOrder lastBuy) {
+        int remain=currentRemain(current);
+        if(remain>5){
+           return lastBuy.getPrice().intValue()+ marketConfig.getBuySubtract()+1;
+        }
         Stock stock = stockService.getStock();
         int hasBuy = stock.getHolds() - marketConfig.getBase();
-        //当前价格>上次下单价+买加价格+已买/2
-        int maxCancel = lastBuy.getPrice().intValue() + marketConfig.getBuyMinutes() + hasBuy / 2;
+        int maxCancel = lastBuy.getPrice().intValue() + marketConfig.getBuySubtract() + hasBuy / 2;
         return maxCancel;
     }
 
@@ -44,7 +46,12 @@ public class Rule {
         Stock stock = stockService.getStock();
         int hasBuy = stock.getHolds() - marketConfig.getBase();
         //买入价格=当前价格-买入差价-已买/3
-        int price = currentPrice.intValue() - marketConfig.getBuyMinutes() - hasBuy / 4;
+        int remain=currentRemain(currentPrice);
+        if(remain>5){
+            int price = currentPrice.intValue() - marketConfig.getBuySubtract();
+            return new BigDecimal(price);
+        }
+        int price = currentPrice.intValue() - marketConfig.getBuySubtract() - hasBuy / 4;
         return new BigDecimal(price);
     }
 
@@ -114,7 +121,7 @@ public class Rule {
         int count=0;
         for (OpenOrder order : stock.sells()) {
             int price =order.getPrice().intValue();
-            int diff = Math.abs(price - currentPrice.intValue());
+            int diff = Math.abs(price - currentPrice.intValue()+marketConfig.getSellPlus());
             if (diff < 10) {
                 count += order.getOrigQty().intValue();
             }

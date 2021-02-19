@@ -22,7 +22,7 @@ public class MarketConfig {
     private int quantity = 1;
 
     @Remark("买入价格")
-    private int buyMinutes = 2;
+    private int buySubtract = 2;
 
     @Remark("买入间隔")
     private long buyInterval = 30 * 1000L;
