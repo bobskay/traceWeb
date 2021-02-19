@@ -118,7 +118,7 @@ public class MarketService {
         }
 
         String id = newId(OrderSide.SELL.code, currentPrice.intValue());
-        BigDecimal sellPrice=rule.sellPrice(currentPrice);
+        BigDecimal sellPrice=rule.sellPrice(currentPrice,quantity);
         exchange.order(OrderSide.SELL, sellPrice, quantity, id);
         return id;
     }

@@ -14,13 +14,18 @@ public class KlineVo {
     private String sellCount;
     private String hold;
 
+    //K线价格显示区间
     private String max;
     private String min;
 
     private String wallet;
     private List<List> data;
 
+    //暂停交易价格
     private String stopPrice;
+    //当前价位可以买数量
+    private String totalRemain;
+    private String currentRemain;
 
     private String sellDetail;
 

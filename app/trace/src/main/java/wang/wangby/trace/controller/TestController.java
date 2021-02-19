@@ -12,10 +12,9 @@ import java.io.IOException;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("abc")
-public class AbcController extends BaseController {
+@RequestMapping("test")
+public class TestController extends BaseController {
 
-    @Menu("test")
     @RequestMapping("index")
     public String index() {
         return $("index");

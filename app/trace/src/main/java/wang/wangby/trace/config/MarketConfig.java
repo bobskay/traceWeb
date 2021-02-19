@@ -9,6 +9,7 @@ import wang.wangby.annotation.Remark;
 public class MarketConfig {
     public static String API_KEY;
     public static String SECRET_KEY;
+    public static String PASSWORD;
 
     @Remark("最大持仓")
     private int maxHold = 35;

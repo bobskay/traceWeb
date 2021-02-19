@@ -99,7 +99,6 @@ public class Market {
     }
 
     private String doSell(StockOrder order) {
-
         return marketService.sell(order.getPrice(), order.getQuantity());
     }
 
@@ -134,26 +133,36 @@ public class Market {
 
     @Scheduled(cron = "0/3 * * * * ? ")
     public void doTrace() {
+        BigDecimal price = marketService.getPrice();
+        Stock stock = stockService.getStock();
+        if(price==null||stock==null){
+            log.info("等待系统启动");
+            return;
+        }
 
         if (System.currentTimeMillis() - lastBuyTime < marketConfig.getBuyInterval()) {
             log.info("短时间内成交过，跳过买入判断："
                     + (System.currentTimeMillis() - lastBuyTime) / 1000);
             return;
         }
-        Stock stock = stockService.getStock();
+
         if (stock == null) {
             log.info("账户信息未初始化");
             return;
         }
 
-        if ((stock.getHolds() + stock.buyQuantity()) >= marketConfig.getMaxHold()) {
+        if (rule.totalRemain()<=0) {
             log.info("已到达最大持仓，请求注意风险：" + stock.getHolds());
             return;
         }
 
-        BigDecimal price = marketService.getPrice();
+
         if (rule.isTooHigh(price)) {
             log.info("价格过高：交易暂停" + price);
+            return;
+        }
+        if (rule.isTooMany(price)) {
+            log.info("当前价位买入太集中：交易暂停" + price);
             return;
         }
 

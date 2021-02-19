@@ -8,6 +8,7 @@ import wang.wangby.exchange.enums.CandlestickInterval;
 import wang.wangby.trace.model.Stock;
 import wang.wangby.trace.service.KlineService;
 import wang.wangby.trace.service.StockService;
+import wang.wangby.trace.utils.OrderId;
 
 import java.math.BigDecimal;
 
@@ -48,35 +49,86 @@ public class Rule {
     }
 
     public BigDecimal quantity(BigDecimal currentPrice) {
-        Stock stock = stockService.getStock();
-        int hasBuy = stock.getHolds() - marketConfig.getBase();
-        if (hasBuy > 5 && hasBuy < 10) {
-            return new BigDecimal(2);
+        //高价区只买1
+        if (isTooHigh(currentPrice)) {
+            return BigDecimal.ONE;
         }
-        return new BigDecimal(1);
+
+        Stock stock = stockService.getStock();
+        //如果10个价位内没有买单就买3
+        //5个价位内没有买单就买2
+        //其他买1个
+        for (OpenOrder order : stock.sells()) {
+            int price = OrderId.getPrice(order.getClientOrderId()).intValue();
+            int diff = Math.abs(price - currentPrice.intValue());
+            if (diff < 5) {
+                return BigDecimal.ONE;
+            }
+            if (diff < 10) {
+                return new BigDecimal(2);
+            }
+        }
+        return new BigDecimal(3);
     }
 
-    public BigDecimal sellPrice(BigDecimal currentPrice) {
-        int sell = currentPrice.intValue() + marketConfig.getSellPlus();
-        return new BigDecimal(sell);
+    public BigDecimal sellPrice(BigDecimal currentPrice, BigDecimal quantity) {
+        if (quantity.intValue() == 1) {
+            int sell = currentPrice.intValue() + marketConfig.getSellPlus();
+            return new BigDecimal(sell);
+        }
+        if (quantity.intValue() == 2) {
+            return new BigDecimal(3);
+        }
+        return new BigDecimal(2);
     }
 
     //超过某个值就不下单了
     public BigDecimal stopPrice() {
-        BigDecimal price= klineService.getHigh(CandlestickInterval.HALF_HOURLY);
-        Double d=price.doubleValue();
-        d=d*0.99;
-        return  new BigDecimal(d.intValue());
+        BigDecimal price = klineService.getHigh(CandlestickInterval.HALF_HOURLY);
+        Double d = price.doubleValue();
+        d = d * 0.99;
+        return new BigDecimal(d.intValue());
     }
 
     //价格过高，并且已经持有了
     public boolean isTooHigh(BigDecimal price) {
-       //如果持仓小于2就买点
+        //如果持仓小于2就买点
         Stock stock = stockService.getStock();
         int hasBuy = stock.getHolds() - marketConfig.getBase();
-        if(hasBuy<2){
+        if (hasBuy == 0) {
             return false;
         }
-        return price.compareTo(stopPrice())>0;
+        return price.compareTo(stopPrice()) > 0;
+    }
+
+    //当前价位是否已经买太多
+    //5个价位内只能买3个，10个价位内只能买7个
+    public boolean isTooMany(BigDecimal currentPrice) {
+        return currentRemain(currentPrice) <0;
+    }
+
+    public int currentRemain(BigDecimal currentPrice) {
+        Stock stock = stockService.getStock();
+        int p5 = 0;
+        int p10 = 0;
+        for (OpenOrder order : stock.sells()) {
+            int price = OrderId.getPrice(order.getClientOrderId()).intValue();
+            int diff = Math.abs(price - currentPrice.intValue());
+            if (diff < 5) {
+                p5 += order.getOrigQty().intValue();
+            }
+            if (diff < 10) {
+                p10 += order.getOrigQty().intValue();
+            }
+        }
+
+        int p5Remain = 3 - p5;
+        int p10Remain = 8 - p10;
+        return Math.min(p5Remain, p10Remain);
+    }
+
+    public int totalRemain() {
+        Stock stock = stockService.getStock();
+        return marketConfig.getMaxHold() - stock.getHolds() - stock.buyQuantity();
     }
 }

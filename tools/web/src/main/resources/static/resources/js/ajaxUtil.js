@@ -14,7 +14,8 @@ AjaxUtil.prototype.html = function(url,param, callback) {
 			var text=request.responseText;
 			console.log(text);
 			if(devModel){
-				window.prompt("ajaxError:"+request.status+","+request.readyState+","+textStatus,url);
+			    console.log("ajaxError:"+request.status+","+request.readyState+","+textStatus,url)
+			//	window.prompt();
 			}else{
 				throw url+":"+textStatus;
 			}
@@ -53,7 +54,7 @@ AjaxUtil.prototype.json = function(url, data, fun) {
 				return;
 			}
 			if(devModel){
-				window.prompt("ajaxError:"+request.status+","+request.readyState+","+textStatus,url);
+				 console.log("ajaxError:"+request.status+","+request.readyState+","+textStatus,url)
 			}else{
 				throw url+":"+textStatus;
 			}
@@ -97,7 +98,7 @@ AjaxUtil.prototype.post = function(url, data, fun) {
 				return;
 			}
 			if(devModel){
-				window.prompt("ajaxError:"+request.status+","+request.readyState+","+textStatus,url);
+				 console.log("ajaxError:"+request.status+","+request.readyState+","+textStatus,url)
 			}else{
 				throw url+":"+textStatus;
 			}

@@ -28,6 +28,7 @@ public class TraceApp implements CommandLineRunner {
         String[] keys=text.trim().split("\n");
         MarketConfig.API_KEY=keys[0].trim();
         MarketConfig.SECRET_KEY=keys[1].trim();
+        MarketConfig.PASSWORD=keys[2].trim();
 
         SpringApplication.run(TraceApp.class, args);
     }

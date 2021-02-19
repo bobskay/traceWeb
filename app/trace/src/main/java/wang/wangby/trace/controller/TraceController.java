@@ -17,6 +17,7 @@ import wang.wangby.trace.model.Stock;
 import wang.wangby.trace.service.KlineService;
 import wang.wangby.trace.service.MarketService;
 import wang.wangby.trace.service.StockService;
+import wang.wangby.trace.utils.ShowUtil;
 import wang.wangby.trace.vo.KlineVo;
 import wang.wangby.utils.DateTime;
 import wang.wangby.utils.StringUtil;
@@ -63,10 +64,11 @@ public class TraceController extends BaseController {
             type = CandlestickInterval.ONE_MINUTE.code;
         }
 
+        BigDecimal current=marketService.getPrice();
 
         Stock stock = stockService.getStock();
         KlineVo klineVo = new KlineVo();
-        klineVo.setCurrent(marketService.getPrice() + "");
+        klineVo.setCurrent(current + "");
         if (stock.buyPrice() != null) {
             klineVo.setBuy(stock.buyPrice().getPrice() + "");
         }
@@ -74,19 +76,7 @@ public class TraceController extends BaseController {
             klineVo.setSell(stock.sellPrice().getPrice() + "");
         }
 
-        StringBuilder sellDetail = new StringBuilder();
-        List<OpenOrder> sells=new ArrayList<>(stock.sells());
-        Collections.sort(sells,(Comparator.comparing(OpenOrder::getPrice)));
-        for (OpenOrder op : sells) {
-            sellDetail.append(op.getPrice());
-            if (op.getOrigQty().compareTo(BigDecimal.ONE) != 0) {
-                sellDetail.append("(" + op.getOrigQty() + ")");
-            }
-            sellDetail.append("&nbsp;&nbsp;");
-        }
-        klineVo.setSellDetail(sellDetail.toString());
-
-
+        klineVo.setSellDetail(ShowUtil.sellDetail(stock));
         klineVo.setBuyCount(stock.buyQuantity() + "");
         klineVo.setSellCount(stock.sellQuantity() + "");
         klineVo.setHold(stock.getHolds() + "");
@@ -138,7 +128,14 @@ public class TraceController extends BaseController {
             klineVo.setWallet("未初始化");
         }
 
-        klineVo.setStopPrice(rule.stopPrice()+"");
+        String stopInfo=klineService.getHigh(CandlestickInterval.HALF_HOURLY)+"-->"+rule.stopPrice();
+        klineVo.setStopPrice(stopInfo);
+        //当前价位附近可买数量
+        String buyable=rule.currentRemain(current)+"";
+        klineVo.setCurrentRemain(buyable);
+        klineVo.setTotalRemain(rule.totalRemain()+"");
         return json(klineVo);
     }
+
+
 }

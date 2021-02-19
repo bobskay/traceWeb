@@ -8,6 +8,14 @@
         <td width="23%">$marketConfig.base</td>
     </tr>
     <tr>
+        <td >持仓</td>
+        <td ><spen id="hold"></spen></td>
+        <td >还可买入</td>
+        <td ><spen id="totalRemain"></spen></td>
+        <td >当前价位可买</td>
+        <td ><spen id="currentRemain"></spen></td>
+    </tr>
+    <tr>
         <td >卖出加价</td>
         <td >$marketConfig.sellPlus</td>
         <td >买入减价</td>
@@ -18,10 +26,8 @@
     <tr>
         <td >买入</td>
         <td ><spen id="buyAmount"></spen></td>
-        <td >持仓</td>
-        <td ><spen id="hold"></spen></td>
         <td >余额</td>
-        <td ><spen id="wallet"></spen></td>
+        <td colspan="3"><spen id="wallet"></spen></td>
     </tr>
     <tr>
         <td >卖出</td>
@@ -238,6 +244,8 @@ function updateChart(kline){
         $("#hold").html(line.hold);
         $("#wallet").html(line.wallet);
         $("#stopPrice").html(line.stopPrice);
+        $("#totalRemain").html(line.totalRemain);
+        $("#currentRemain").html(line.currentRemain);
 
         document.title=line.current;
 }
