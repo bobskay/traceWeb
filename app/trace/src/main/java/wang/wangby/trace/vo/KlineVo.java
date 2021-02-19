@@ -32,4 +32,6 @@ public class KlineVo {
     private String sellDetail;
     private String buyDetail;
 
+    private String high;
+
 }

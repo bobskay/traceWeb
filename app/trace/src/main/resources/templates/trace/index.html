@@ -72,6 +72,7 @@ var yMin;
 var data0;
 var zoomStart=80;
 var lineType="1m";
+var stopPrice="";
 
 function zoomAdd(add){
     zoomStart+=add;
@@ -192,6 +193,14 @@ option = {
                               formatter:current
                         },
                         yAxis:current
+                    },
+                    {
+                        name: 'stop',
+                        label:{
+                              position:'end',
+                              formatter:"暂停交易"
+                        },
+                        yAxis:stopPrice
                     }
                 ]
             }
@@ -248,12 +257,15 @@ function updateChart(kline){
         $("#sellDetail").html(line.sellDetail);
         $("#hold").html(line.hold);
         $("#wallet").html(line.wallet);
-        $("#stopPrice").html(line.stopPrice);
+        $("#stopPrice").html(line.high+" --> "+line.stopPrice);
         $("#cancelPrice").html(line.cancelPrice);
         $("#totalRemain").html(line.totalRemain);
         $("#currentRemain").html(line.currentRemain);
         $("#buyDetail").html(line.buyDetail);
 
+        if(line.current>line.stopPrice){
+            stopPrice=line.stopPrice;
+        }
         document.title=line.current;
 }
 
