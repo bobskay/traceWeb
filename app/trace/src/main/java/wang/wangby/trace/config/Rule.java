@@ -121,7 +121,7 @@ public class Rule {
         int count=0;
         for (OpenOrder order : stock.sells()) {
             int price =order.getPrice().intValue();
-            int diff = Math.abs(price - currentPrice.intValue()+marketConfig.getSellPlus());
+            int diff = Math.abs(price - currentPrice.intValue()-marketConfig.getSellPlus());
             if (diff < 10) {
                 count += order.getOrigQty().intValue();
             }
