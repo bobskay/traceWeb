@@ -56,11 +56,10 @@ public class Rule {
 
         Stock stock = stockService.getStock();
         //如果10个价位内没有买单就买3
-        //5个价位内没有买单就买2
         //其他买1个
         for (OpenOrder order : stock.sells()) {
-            int price = OrderId.getPrice(order.getClientOrderId()).intValue();
-            int diff = Math.abs(price - currentPrice.intValue());
+            int price =order.getPrice().intValue();
+            int diff = Math.abs(price - currentPrice.intValue()-marketConfig.getSellPlus());
             if (diff < 5) {
                 return BigDecimal.ONE;
             }
@@ -81,7 +80,7 @@ public class Rule {
             return new BigDecimal(sell);
         }
         int sell = currentPrice.intValue() + 3;
-        return new BigDecimal(4);
+        return new BigDecimal(sell);
     }
 
     //超过某个值就不下单了
@@ -109,24 +108,18 @@ public class Rule {
         return currentRemain(currentPrice) <0;
     }
 
+    //10个价位内只能买8个
     public int currentRemain(BigDecimal currentPrice) {
         Stock stock = stockService.getStock();
-        int p5 = 0;
-        int p10 = 0;
+        int count=0;
         for (OpenOrder order : stock.sells()) {
-            int price = OrderId.getPrice(order.getClientOrderId()).intValue();
+            int price =order.getPrice().intValue();
             int diff = Math.abs(price - currentPrice.intValue());
-            if (diff < 5) {
-                p5 += order.getOrigQty().intValue();
-            }
             if (diff < 10) {
-                p10 += order.getOrigQty().intValue();
+                count += order.getOrigQty().intValue();
             }
         }
-
-        int p5Remain = 3 - p5;
-        int p10Remain = 8 - p10;
-        return Math.min(p5Remain, p10Remain);
+        return 8-count;
     }
 
     public int totalRemain() {
