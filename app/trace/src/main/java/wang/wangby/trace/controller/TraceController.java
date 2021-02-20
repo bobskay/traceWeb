@@ -82,8 +82,8 @@ public class TraceController extends BaseController {
         klineVo.setHold(stock.getHolds() + "");
 
         List<List> datas = new ArrayList<>();
-        int max = 0;
-        int min = Integer.MAX_VALUE;
+        int max = current.intValue()+2;
+        int min = current.intValue()-2;
 
         //根据最后80%设置最大和最小值
         List<Kline> lines = klineService.getLines(type);
@@ -116,6 +116,7 @@ public class TraceController extends BaseController {
         if (stock.buyPrice() != null && stock.buyPrice().getPrice().intValue() < min) {
             min = stock.buyPrice().getPrice().intValue();
         }
+
 
         klineVo.setData(datas);
         klineVo.setMin(min + "");

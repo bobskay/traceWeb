@@ -46,6 +46,11 @@ public class Rule {
     public BigDecimal buyPrice(BigDecimal currentPrice) {
         Stock stock = stockService.getStock();
         int hasBuy = stock.getHolds() - marketConfig.getBase();
+        if(hasBuy==0){
+            int price = currentPrice.intValue() - 1;
+            return new BigDecimal(price);
+        }
+
         //买入价格=当前价格-买入差价-已买/3
         int remain=currentRemain(currentPrice);
         if(remain>5){
