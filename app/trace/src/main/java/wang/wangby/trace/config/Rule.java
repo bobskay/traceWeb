@@ -67,8 +67,12 @@ public class Rule {
             return BigDecimal.ONE;
         }
 
+        if(currentRemain(currentPrice)<5){
+            return BigDecimal.ONE;
+        }
+
         Stock stock = stockService.getStock();
-        //如果10个价位内没有买单就买3
+        //如果10个价位内没有买单就买2
         //其他买1个
         for (OpenOrder order : stock.sells()) {
             int price =order.getPrice().intValue();
@@ -89,10 +93,10 @@ public class Rule {
             return new BigDecimal(sell);
         }
         if (quantity.intValue() == 2) {
-            int sell = currentPrice.intValue() +4;
+            int sell = currentPrice.intValue() +5;
             return new BigDecimal(sell);
         }
-        int sell = currentPrice.intValue() + 3;
+        int sell = currentPrice.intValue() + 2;
         return new BigDecimal(sell);
     }
 
@@ -121,7 +125,7 @@ public class Rule {
         return currentRemain(currentPrice) <0;
     }
 
-    //10个价位内只能买8个
+    //10个价位内只能买5个
     public int currentRemain(BigDecimal current) {
         Stock stock = stockService.getStock();
         int count=0;
@@ -132,7 +136,7 @@ public class Rule {
                 count += order.getOrigQty().intValue();
             }
         }
-        return 8-count;
+        return 5-count;
     }
 
     public int totalRemain() {
