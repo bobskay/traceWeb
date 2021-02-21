@@ -67,8 +67,12 @@ public class Rule {
             return BigDecimal.ONE;
         }
 
-        if(currentRemain(currentPrice)<5){
+        if(currentRemain(currentPrice)<6){
             return BigDecimal.ONE;
+        }
+
+        if(currentRemain(currentPrice)<15){
+            return new BigDecimal(2);
         }
 
         Stock stock = stockService.getStock();
