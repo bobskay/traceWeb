@@ -51,6 +51,19 @@ public class Rule {
             return new BigDecimal(price);
         }
 
+        int count=0;
+        for (OpenOrder order : stock.sells()) {
+            //当初的买入价
+            int buyPrice=OrderId.getPrice(order.getClientOrderId()).intValue();
+            if(Math.abs(buyPrice-currentPrice.intValue())<15){
+                count += order.getOrigQty().intValue();
+            }
+        }
+        //如果15挡内没有就立即买1个
+        if(count==0){
+            return new BigDecimal(currentPrice.intValue());
+        }
+
         //买入价格=当前价格-买入差价-已买/3
         int remain=currentRemain(currentPrice);
         if(remain>5){
