@@ -133,7 +133,7 @@ public class TraceController extends BaseController {
         klineVo.setStopPrice(rule.stopPrice()+"");
         klineVo.setHigh(klineService.getHigh(CandlestickInterval.HALF_HOURLY)+"");
         //当前价位附近可买数量
-        String buyable=rule.currentRemain(current)+"";
+        String buyable="0.1";
         klineVo.setCurrentRemain(buyable+"*"+rule.quantity(current));
         klineVo.setTotalRemain(rule.totalRemain()+"");
         if( stock.buyPrice()!=null) {

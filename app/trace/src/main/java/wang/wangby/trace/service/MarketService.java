@@ -107,7 +107,7 @@ public class MarketService {
         if(StringUtil.isNotEmpty(cancelId)){
             id=OrderId.cancelId(cancelId);
         }else{
-            id=OrderId.newId(OrderSide.BUY,currentPrice.intValue());
+            id=OrderId.newId(OrderSide.BUY,currentPrice);
         }
         BigDecimal buyPrice=rule.buyPrice(currentPrice);
         BigDecimal quantity=rule.quantity(currentPrice);
@@ -121,7 +121,7 @@ public class MarketService {
             return "测试环境不下单";
         }
 
-        String id = OrderId.newId(OrderSide.SELL, currentPrice.intValue());
+        String id = OrderId.newId(OrderSide.SELL, currentPrice);
         BigDecimal sellPrice=rule.sellPrice(currentPrice,quantity);
         exchange.order(OrderSide.SELL, sellPrice, quantity, id);
         return id;

@@ -28,93 +28,27 @@ public class Rule {
         if (current == null) {
             return false;
         }
-        return current.intValue() > cancelPrice(current,lastBuy);
+        return current.compareTo( cancelPrice(current,lastBuy))>0;
     }
 
-    public int cancelPrice(BigDecimal current,OpenOrder lastBuy) {
-        int remain=currentRemain(current);
-        if(remain>5){
-           return lastBuy.getPrice().intValue()+ marketConfig.getBuySubtract()+1;
-        }
-        Stock stock = stockService.getStock();
-        int hasBuy = stock.getHolds() - marketConfig.getBase();
-        int maxCancel = lastBuy.getPrice().intValue() + marketConfig.getBuySubtract() + hasBuy / 2;
-        return maxCancel;
+    public BigDecimal cancelPrice(BigDecimal current,OpenOrder lastBuy) {
+       if(lastBuy==null){
+           return current;
+       }
+       return lastBuy.getPrice().add(new BigDecimal(5));
     }
 
 
     public BigDecimal buyPrice(BigDecimal currentPrice) {
-        Stock stock = stockService.getStock();
-        int hasBuy = stock.getHolds() - marketConfig.getBase();
-        if(hasBuy==0){
-            int price = currentPrice.intValue() - 1;
-            return new BigDecimal(price);
-        }
-
-        int count=0;
-        for (OpenOrder order : stock.sells()) {
-            //当初的买入价
-            int buyPrice=OrderId.getPrice(order.getClientOrderId()).intValue();
-            if(Math.abs(buyPrice-currentPrice.intValue())<15){
-                count += order.getOrigQty().intValue();
-            }
-        }
-        //如果15挡内没有就立即买1个
-        if(count==0){
-            return new BigDecimal(currentPrice.intValue());
-        }
-
-        //买入价格=当前价格-买入差价-已买/3
-        int remain=currentRemain(currentPrice);
-        if(remain>5){
-            int price = currentPrice.intValue() - marketConfig.getBuySubtract();
-            return new BigDecimal(price);
-        }
-        int price = currentPrice.intValue() - marketConfig.getBuySubtract() - hasBuy / 4;
-        return new BigDecimal(price);
+        return currentPrice.subtract(new BigDecimal(4));
     }
 
     public BigDecimal quantity(BigDecimal currentPrice) {
-        //高价区只买1
-        if (isTooHigh(currentPrice)) {
-            return BigDecimal.ONE;
-        }
-
-        if(currentRemain(currentPrice)<6){
-            return BigDecimal.ONE;
-        }
-
-        if(currentRemain(currentPrice)<15){
-            return new BigDecimal(2);
-        }
-
-        Stock stock = stockService.getStock();
-        //如果10个价位内没有买单就买2
-        //其他买1个
-        for (OpenOrder order : stock.sells()) {
-            int price =order.getPrice().intValue();
-            int diff = Math.abs(price - currentPrice.intValue()-marketConfig.getSellPlus());
-            if (diff < 5) {
-                return BigDecimal.ONE;
-            }
-            if (diff < 10) {
-                return new BigDecimal(2);
-            }
-        }
-        return new BigDecimal(3);
+        return new BigDecimal("0.1");
     }
 
     public BigDecimal sellPrice(BigDecimal currentPrice, BigDecimal quantity) {
-        if (quantity.intValue() == 1) {
-            int sell = currentPrice.intValue() + marketConfig.getSellPlus();
-            return new BigDecimal(sell);
-        }
-        if (quantity.intValue() == 2) {
-            int sell = currentPrice.intValue() +5;
-            return new BigDecimal(sell);
-        }
-        int sell = currentPrice.intValue() + 2;
-        return new BigDecimal(sell);
+        return currentPrice.add(new BigDecimal(5));
     }
 
     //超过某个值就不下单了
@@ -125,36 +59,6 @@ public class Rule {
         return new BigDecimal(d.intValue());
     }
 
-    //价格过高，并且已经持有了
-    public boolean isTooHigh(BigDecimal price) {
-        //如果持仓小于2就买点
-        Stock stock = stockService.getStock();
-        int hasBuy = stock.getHolds() - marketConfig.getBase();
-        if (hasBuy == 0) {
-            return false;
-        }
-        return price.compareTo(stopPrice()) > 0;
-    }
-
-    //当前价位是否已经买太多
-    //5个价位内只能买3个，10个价位内只能买7个
-    public boolean isTooMany(BigDecimal currentPrice) {
-        return currentRemain(currentPrice) <0;
-    }
-
-    //10个价位内只能买5个
-    public int currentRemain(BigDecimal current) {
-        Stock stock = stockService.getStock();
-        int count=0;
-        for (OpenOrder order : stock.sells()) {
-            //当初的买入价
-            int buyPrice=OrderId.getPrice(order.getClientOrderId()).intValue();
-            if(Math.abs(buyPrice-current.intValue())<10){
-                count += order.getOrigQty().intValue();
-            }
-        }
-        return 5-count;
-    }
 
     public int totalRemain() {
         Stock stock = stockService.getStock();

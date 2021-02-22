@@ -14,16 +14,17 @@ public class OrderId {
     }
 
     public static BigDecimal getPrice(String clientOrderId) {
-        String[] str = clientOrderId.split("-");
+        String[] str = clientOrderId.split("_");
         if (str.length > 1) {
             return new BigDecimal(str[1]);
         }
+        log.error("订单号不正确，无法获取价格:"+clientOrderId);
         return null;
     }
 
     public static Date getOrderTime(String clientOrderId) {
         try {
-            String[] str = clientOrderId.split("-");
+            String[] str = clientOrderId.split("_");
             if (str.length > 1) {
                 String time = str[0].substring(1);
                 DateTime dateTime = new DateTime(time, DateTime.Format.YEAR_TO_SECOND_STRING);
@@ -37,13 +38,13 @@ public class OrderId {
     }
 
 
-    public static String newId(OrderSide side, int price) {
+    public static String newId(OrderSide side, BigDecimal price) {
         String pix=side.code;
-        return pix + DateTime.current().toString(DateTime.Format.YEAR_TO_SECOND_STRING) + "-" + price;
+        return pix + DateTime.current().toString(DateTime.Format.YEAR_TO_SECOND_STRING) + "_" + price;
     }
 
     public static String cancelId(String cancelId) {
-        String[] str=cancelId.split("-");
+        String[] str=cancelId.split("_");
         if(str.length==2){
             return cancelId+"-"+1;
         }

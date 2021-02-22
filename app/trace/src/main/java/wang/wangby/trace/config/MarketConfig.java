@@ -4,6 +4,8 @@ import lombok.Data;
 import org.springframework.stereotype.Component;
 import wang.wangby.annotation.Remark;
 
+import java.math.BigDecimal;
+
 @Component
 @Data
 public class MarketConfig {
@@ -12,17 +14,17 @@ public class MarketConfig {
     public static String PASSWORD;
 
     @Remark("最大持仓")
-    private int maxHold = 45;
+    private int maxHold = 3;
     @Remark("最小持仓")
-    private int base = 20;
+    private int base = 0;
     @Remark("卖出价格")
-    private int sellPlus = 5;
+    private BigDecimal sellPlus = new BigDecimal(5);
 
     @Remark("交易数量")
-    private int quantity = 1;
+    private BigDecimal quantity = new BigDecimal(0.1);
 
     @Remark("买入价格")
-    private int buySubtract = 2;
+    private BigDecimal buySubtract = new BigDecimal(5);
 
     @Remark("买入间隔")
     private long buyInterval = 30 * 1000L;

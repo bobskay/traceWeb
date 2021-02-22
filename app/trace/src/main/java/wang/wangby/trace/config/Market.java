@@ -157,16 +157,6 @@ public class Market {
         }
 
 
-        if (rule.isTooHigh(price)) {
-            log.info("价格过高：交易暂停" + price);
-            return;
-        }
-        if (rule.isTooMany(price)) {
-            log.info("当前价位买入太集中：交易暂停" + price);
-            return;
-        }
-
-
         OpenOrder currentBuy = stock.buyPrice();
 
         //无买单
