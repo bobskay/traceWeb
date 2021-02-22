@@ -151,7 +151,7 @@ public class Market {
             return;
         }
 
-        if (rule.totalRemain()<=0) {
+        if (rule.totalRemain().compareTo(BigDecimal.ZERO)<=0) {
             log.info("已到达最大持仓，请求注意风险：" + stock.getHolds());
             return;
         }

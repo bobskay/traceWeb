@@ -10,6 +10,7 @@ import wang.wangby.exchange.dto.OpenOrder;
 import wang.wangby.trace.model.Stock;
 import wang.wangby.trace.utils.OrderId;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -39,12 +40,12 @@ public class StockService implements CommandLineRunner {
 
         Collections.sort(list, Comparator.comparing(OpenOrder::getClientOrderId));
 
-        int hold = 0;
+        BigDecimal hold = BigDecimal.ZERO;
         Account account = exchange.account();
         for (Account.PositionsDTO positionsDTO : account.getPositions()) {
             if (positionsDTO.getSymbol().equalsIgnoreCase(exchange.getSymbol())) {
                 //持有
-                hold = positionsDTO.getPositionAmt().intValue();
+                hold .add( positionsDTO.getPositionAmt());
                 break;
             }
         }

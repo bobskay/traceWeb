@@ -28,18 +28,22 @@ public class Rule {
         if (current == null) {
             return false;
         }
-        return current.compareTo( cancelPrice(current,lastBuy))>0;
+        return current.compareTo(cancelPrice(current, lastBuy)) > 0;
     }
 
-    public BigDecimal cancelPrice(BigDecimal current,OpenOrder lastBuy) {
-       if(lastBuy==null){
-           return current;
-       }
-       return lastBuy.getPrice().add(new BigDecimal(5));
+    public BigDecimal cancelPrice(BigDecimal current, OpenOrder lastBuy) {
+        if (lastBuy == null) {
+            return current;
+        }
+        return lastBuy.getPrice().add(new BigDecimal(5));
     }
 
 
     public BigDecimal buyPrice(BigDecimal currentPrice) {
+        Stock stock = stockService.getStock();
+        if (stock.getHolds().compareTo(new BigDecimal(1)) < 0) {
+            return new BigDecimal(2);
+        }
         return currentPrice.subtract(new BigDecimal(4));
     }
 
@@ -60,8 +64,8 @@ public class Rule {
     }
 
 
-    public int totalRemain() {
+    public BigDecimal totalRemain() {
         Stock stock = stockService.getStock();
-        return marketConfig.getMaxHold() - stock.getHolds() - stock.buyQuantity();
+        return new BigDecimal(marketConfig.getMaxHold()).subtract(stock.getHolds()).subtract(stock.buyQuantity());
     }
 }

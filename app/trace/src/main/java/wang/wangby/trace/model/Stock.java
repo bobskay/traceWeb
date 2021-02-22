@@ -11,7 +11,7 @@ import java.util.*;
 
 @Data
 public class Stock {
-    private int holds;
+    private BigDecimal holds;
     private List<OpenOrder> openOrders;
 
     public List<OpenOrder> buys() {
@@ -24,12 +24,12 @@ public class Stock {
         return ops;
     }
 
-    public int buyQuantity(){
+    public BigDecimal buyQuantity(){
         return MarketService.quantity(buys());
     }
 
 
-    public int sellQuantity(){
+    public BigDecimal sellQuantity(){
         return MarketService.quantity(sells());
     }
 

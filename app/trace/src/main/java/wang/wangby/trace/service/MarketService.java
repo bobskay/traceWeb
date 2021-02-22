@@ -37,10 +37,10 @@ public class MarketService {
     @Autowired
     AggTradeListener aggTradeListener;
 
-    public static int quantity(List<OpenOrder> orders) {
-        int count=0;
+    public static BigDecimal quantity(List<OpenOrder> orders) {
+        BigDecimal count=BigDecimal.ZERO;
         for (OpenOrder order:orders){
-            count+=order.getOrigQty().intValue();
+           count.add(order.getOrigQty());
         }
         return count;
     }
