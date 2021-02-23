@@ -41,11 +41,12 @@ public class Rule {
 
     public int buyPrice(BigDecimal currentPrice) {
         Stock stock = stockService.getStock();
-
-        if (stock.getHolds().compareTo(new BigDecimal(1)) < 0) {
+        OpenOrder o=stockService.getStock().sellPrice();
+        if(o==null){
             return currentPrice.intValue()-2;
         }
-        return currentPrice.intValue()-4;
+
+        return o.getPrice().subtract(new BigDecimal(10)).intValue();
     }
 
     public BigDecimal quantity(BigDecimal currentPrice) {
