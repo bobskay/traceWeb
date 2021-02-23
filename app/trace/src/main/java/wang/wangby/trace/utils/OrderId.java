@@ -14,11 +14,16 @@ public class OrderId {
     }
 
     public static BigDecimal getPrice(String clientOrderId) {
-        String[] str = clientOrderId.split("_");
-        if (str.length > 1) {
-            return new BigDecimal(str[1]);
+        try{
+            String[] str = clientOrderId.split("_");
+            if (str.length > 1) {
+                return new BigDecimal(str[1]);
+            }
+
+
+        }catch (Exception ex){
+            log.error("订单号不正确，无法获取价格:"+clientOrderId);
         }
-        log.error("订单号不正确，无法获取价格:"+clientOrderId);
         return null;
     }
 
@@ -46,9 +51,9 @@ public class OrderId {
     public static String cancelId(String cancelId) {
         String[] str=cancelId.split("_");
         if(str.length==2){
-            return cancelId+"-"+1;
+            return cancelId+"_"+1;
         }
         int count=Integer.parseInt(str[2]);
-        return str[0]+"-"+str[1]+"-"+(count+1);
+        return str[0]+"_"+str[1]+"_"+(count+1);
     }
 }

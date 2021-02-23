@@ -28,23 +28,24 @@ public class Rule {
         if (current == null) {
             return false;
         }
-        return current.compareTo(cancelPrice(current, lastBuy)) > 0;
+        return current.intValue()>cancelPrice(current,lastBuy);
     }
 
-    public BigDecimal cancelPrice(BigDecimal current, OpenOrder lastBuy) {
+    public int cancelPrice(BigDecimal current, OpenOrder lastBuy) {
         if (lastBuy == null) {
-            return current;
+            return current.intValue();
         }
-        return lastBuy.getPrice().add(new BigDecimal(5));
+        return lastBuy.getPrice().intValue()+6;
     }
 
 
-    public BigDecimal buyPrice(BigDecimal currentPrice) {
+    public int buyPrice(BigDecimal currentPrice) {
         Stock stock = stockService.getStock();
+
         if (stock.getHolds().compareTo(new BigDecimal(1)) < 0) {
-            return new BigDecimal(2);
+            return currentPrice.intValue()-2;
         }
-        return currentPrice.subtract(new BigDecimal(4));
+        return currentPrice.intValue()-4;
     }
 
     public BigDecimal quantity(BigDecimal currentPrice) {

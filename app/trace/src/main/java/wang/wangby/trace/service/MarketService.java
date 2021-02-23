@@ -109,7 +109,7 @@ public class MarketService {
         }else{
             id=OrderId.newId(OrderSide.BUY,currentPrice);
         }
-        BigDecimal buyPrice=rule.buyPrice(currentPrice);
+        BigDecimal buyPrice=new BigDecimal(rule.buyPrice(currentPrice));
         BigDecimal quantity=rule.quantity(currentPrice);
         exchange.order(OrderSide.BUY, buyPrice, quantity, id);
         return id;
