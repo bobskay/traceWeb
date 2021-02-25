@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.RestController;
 import wang.wangby.annotation.web.Menu;
 import wang.wangby.entity.request.Response;
 import wang.wangby.exchange.Exchange;
+import wang.wangby.exchange.dto.OpenOrder;
+import wang.wangby.exchange.enums.OrderSide;
 import wang.wangby.exchange.socket.listener.AccountUpdateListener;
 import wang.wangby.exchange.vo.BalanceVo;
 import wang.wangby.trace.config.MarketConfig;
@@ -13,6 +15,7 @@ import wang.wangby.trace.config.Rule;
 import wang.wangby.trace.model.Stock;
 import wang.wangby.trace.service.MarketService;
 import wang.wangby.trace.service.StockService;
+import wang.wangby.trace.utils.OrderId;
 import wang.wangby.trace.vo.TraceVo;
 import wang.wangby.web.controller.BaseController;
 
@@ -40,7 +43,11 @@ public class OrderController extends BaseController {
     public String index() {
         Stock stock = stockService.getStock();
         Map map = new HashMap<>();
-        map.put("openOrders", stock.getOpenOrders());
+        List<OpenOrder> opens=stock.getOpenOrders();
+        Collections.sort(opens,((o1, o2) -> {
+            return o2.getPrice().compareTo(o1.getPrice());
+        }));
+        map.put("openOrders", opens);
         map.put("traceVo", getTraceVo());
         return $("index", map);
     }

@@ -27,7 +27,7 @@ public class MarketConfig {
     private BigDecimal buySubtract = new BigDecimal(5);
 
     @Remark("买入间隔")
-    private long buyInterval = 30 * 1000L;
+    private long buyInterval = 15 * 1000L;
 
     private String accountSymbol="usdt";
 
