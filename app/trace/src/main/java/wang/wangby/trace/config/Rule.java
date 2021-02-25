@@ -35,7 +35,7 @@ public class Rule {
         if (lastBuy == null) {
             return current.intValue();
         }
-        return lastBuy.getPrice().intValue()+6;
+        return lastBuy.getPrice().intValue()+4;
     }
 
 
@@ -45,7 +45,7 @@ public class Rule {
             return currentPrice.intValue()-2;
         }
 
-        return o.getPrice().subtract(new BigDecimal(10)).intValue();
+        return o.getPrice().subtract(new BigDecimal(6)).intValue();
     }
 
     public BigDecimal quantity(BigDecimal currentPrice) {
@@ -53,7 +53,7 @@ public class Rule {
     }
 
     public BigDecimal sellPrice(BigDecimal currentPrice, BigDecimal quantity) {
-        return currentPrice.add(new BigDecimal(5));
+        return currentPrice.add(new BigDecimal(3));
     }
 
     //超过某个值就不下单了
