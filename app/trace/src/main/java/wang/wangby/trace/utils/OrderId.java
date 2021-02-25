@@ -45,7 +45,7 @@ public class OrderId {
 
     public static String newId(OrderSide side, BigDecimal price) {
         String pix=side.code;
-        return pix + DateTime.current().toString(DateTime.Format.YEAR_TO_SECOND_STRING) + "_" + price;
+        return pix + DateTime.current().toString(DateTime.Format.YEAR_TO_SECOND_STRING) + "_" + price.intValue();
     }
 
     public static String cancelId(String cancelId) {

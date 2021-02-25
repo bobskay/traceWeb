@@ -40,7 +40,6 @@ public class Rule {
 
 
     public int buyPrice(BigDecimal currentPrice) {
-        Stock stock = stockService.getStock();
         OpenOrder o=stockService.getStock().sellPrice();
         if(o==null){
             return currentPrice.intValue()-2;

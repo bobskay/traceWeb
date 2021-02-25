@@ -45,7 +45,7 @@ public class StockService implements CommandLineRunner {
         for (Account.PositionsDTO positionsDTO : account.getPositions()) {
             if (positionsDTO.getSymbol().equalsIgnoreCase(exchange.getSymbol())) {
                 //持有
-                hold .add( positionsDTO.getPositionAmt());
+                hold= positionsDTO.getPositionAmt();
                 break;
             }
         }
