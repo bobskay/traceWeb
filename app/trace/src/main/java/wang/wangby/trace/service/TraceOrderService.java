@@ -21,8 +21,7 @@ public class TraceOrderService {
         List<TraceOrder> list = new ArrayList<>();
         for (TraceOrder o : all) {
             if(o.getFinishAt()==null){
-                //未完成的不记录
-                //list.add(o);
+                list.add(o);
                 continue;
             }
 
