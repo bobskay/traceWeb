@@ -1,3 +1,18 @@
+<div id="main" style="width: 1200px;height:400px;"></div>
+
+<button type="button" class="btn-xs btn-default" onclick="zoomAdd(-10)">
+    <span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
+</button>
+
+<button  type="button" class="btn-xs btn-default" onclick="zoomAdd(10)">
+    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+</button>
+
+<button  type="button" class="btn-xs btn-default" onclick="changeType('1m')">1m</button>
+<button  type="button" class="btn-xs btn-default" onclick="changeType('30m')">30m</button>
+<br/>
+
+
 <table class="form">
     <tr>
         <td width="10%">当前价格</td>
@@ -47,18 +62,6 @@
 
 </table>
 <br/>
-<div id="main" style="width: 1200px;height:400px;"></div>
-
-<button type="button" class="btn-xs btn-default" onclick="zoomAdd(-10)">
-    <span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
-</button>
-
-<button  type="button" class="btn-xs btn-default" onclick="zoomAdd(10)">
-    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-</button>
-
-<button  type="button" class="btn-xs btn-default" onclick="changeType('1m')">1m</button>
-<button  type="button" class="btn-xs btn-default" onclick="changeType('30m')">30m</button>
 
 
 <script>
