@@ -1,3 +1,26 @@
+
+<table class="form">
+    <tr>
+        <td width="10%">持仓</td>
+        <td width="40%" align="left"><span id="hold">${traceVo.hold}</span></td>
+        <td width="10%">钱包</td>
+        <td width="40%" align="left"><span id="wallet">$traceVo.wallet</span></td>
+    </tr>
+    <tr>
+        <td>当前价格</td>
+        <td><span id="price">$traceVo.price</span></td>
+        <td>最高价</td>
+        <td><span id="high">$traceVo.high</span></td>
+    </tr>
+    <tr>
+        <td>等待买入</td>
+        <td><span id="buy"></span>$traceVo.buy</td>
+        <td>等待卖出</td>
+        <td><span id="sell"></span>$traceVo.sell</td>
+    </tr>
+
+</table>
+
 <table class="list">
     <tr>
         <th>序号</th>
@@ -21,27 +44,6 @@
     #end
 </table>
 
-<table class="form">
-    <tr>
-        <td width="10%">持仓</td>
-        <td width="40%" align="left"><span id="hold">${traceVo.hold}</span></td>
-        <td width="10%">钱包</td>
-        <td width="40%" align="left"><span id="wallet">$traceVo.wallet</span></td>
-    </tr>
-    <tr>
-        <td>当前价格</td>
-        <td><span id="price">$traceVo.price</span></td>
-        <td>最高价</td>
-        <td><span id="high">$traceVo.high</span></td>
-    </tr>
-    <tr>
-        <td>等待买入</td>
-        <td><span id="buy"></span>$traceVo.buy</td>
-        <td>等待卖出</td>
-        <td><span id="sell"></span>$traceVo.sell</td>
-    </tr>
-
-</table>
 
 
 <script>

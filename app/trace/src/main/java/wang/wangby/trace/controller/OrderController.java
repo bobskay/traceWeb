@@ -45,7 +45,7 @@ public class OrderController extends BaseController {
         Map map = new HashMap<>();
         List<OpenOrder> opens=stock.getOpenOrders();
         Collections.sort(opens,((o1, o2) -> {
-            return o2.getPrice().compareTo(o1.getPrice());
+            return o1.getPrice().compareTo(o2.getPrice());
         }));
         map.put("openOrders", opens);
         map.put("traceVo", getTraceVo());

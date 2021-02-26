@@ -14,10 +14,7 @@ import wang.wangby.utils.DateTime;
 import wang.wangby.utils.StringUtil;
 import wang.wangby.web.controller.BaseController;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 @RequestMapping("traceOrder")
@@ -41,14 +38,19 @@ public class TraceOrderController extends BaseController {
             order.setDate(TimeUtil.today());
         }
 
-        List<TraceOrder> list= traceOrderService.query(order);
+
+        List<TraceOrder> queryResult= traceOrderService.query(order);
+
+        List<TraceOrder> list=new ArrayList();
+
+        for(TraceOrder o:queryResult){
+            if(o.getFinishAt()==null){
+                continue;
+            }
+            list.add(o);
+        }
+
         Collections.sort(list,((o1, o2) -> {
-            if(o1.getFinishAt()==null){
-                return -1;
-            }
-            if(o2.getFinishAt()==null){
-                return 1;
-            }
             return o2.getFinishAt().compareTo(o1.getFinishAt());
         }));
         return respone(list);
