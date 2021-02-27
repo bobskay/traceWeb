@@ -31,7 +31,7 @@ public class ProfitController extends BaseController {
     @RequestMapping("index")
     public String index() {
         Map map = new HashMap<>();
-        map.put("start", DateTime.current().toString(DateTime.Format.YEAR_TO_DAY) + "00:00:00");
+        map.put("start", DateTime.current().toString(DateTime.Format.YEAR_TO_DAY) + " 00:00:00");
         map.put("end", DateTime.current().toString(DateTime.Format.YEAR_TO_SECOND));
         return $("index", map);
     }
