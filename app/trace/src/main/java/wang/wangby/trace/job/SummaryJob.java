@@ -31,17 +31,20 @@ public class SummaryJob {
     @Autowired
     Repository repository;
 
-    @Scheduled(cron = "0 0 * * * ?")
-  // @Scheduled(cron = "0 * * * * ?")
-    public void addProfit() {
-        DateTime end = DateTime.current(DateTime.Format.YEAR_TO_HOUR);
-        DateTime start = end.addHour(-1);
+    @Scheduled(cron = "0 * * * * ?")
+    public void addProfit() throws Exception {
+        DateTime start = DateTime.current(DateTime.Format.YEAR_TO_HOUR);
+        DateTime end = DateTime.current();
+
+         Profit profit = profitService.getByTime(start);
+         if(profit==null){
+             profit=new Profit();
+             profit.setDate(start);
+             repository.insert(profit);
+         }
 
         Account account = exchange.account();
 
-
-        Profit profit = new Profit();
-        profit.setDate(end.toDate());
         profit.setPrice(marketService.getPrice());
         profit.setAccount(account.getTotalMarginBalance());
 
@@ -55,7 +58,7 @@ public class SummaryJob {
         }
         profit.setExchangeQuantity(quantity);
         profit.setProfitAmount(amount);
-        repository.insert(profit);
+        repository.update(profit);
     }
 }
 

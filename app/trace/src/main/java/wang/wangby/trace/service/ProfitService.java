@@ -40,6 +40,15 @@ public class ProfitService {
         return list;
     }
 
+    public Profit getByTime(DateTime end) {
+        List<Profit> all = repository.select(new Profit(), 0, 10000);
+        for(Profit p:all){
+            if(p.getDate().getTime()==end.getTime()){
+                return p;
+            }
+        }
+        return  null;
+    }
 }
 
 
