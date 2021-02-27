@@ -20,20 +20,20 @@ public class TraceOrderService {
         List<TraceOrder> all = repository.select(new TraceOrder(), 0, 10000);
         List<TraceOrder> list = new ArrayList<>();
         for (TraceOrder o : all) {
-            if(o.getFinishAt()==null){
+            if (o.getFinishAt() == null) {
                 list.add(o);
                 continue;
             }
 
-            String time=new DateTime(o.getFinishAt()).toString(DateTime.Format.YEAR_TO_DAY);
-            if(time.equalsIgnoreCase(query.getDate())){
+            String time = new DateTime(o.getFinishAt()).toString(DateTime.Format.YEAR_TO_DAY);
+            if (time.equalsIgnoreCase(query.getDate())) {
                 list.add(o);
             }
         }
         return list;
     }
 
-    public TraceOrder getBySellId(String sellId)  {
+    public TraceOrder getBySellId(String sellId) {
         for (TraceOrder tr : query(new TraceOrderDto())) {
             if (tr.getSellOrderId().equalsIgnoreCase(sellId)) {
                 return tr;
@@ -43,6 +43,21 @@ public class TraceOrderService {
     }
 
     public void deleteById(long i) throws Exception {
-        repository.delete(TraceOrder.class,i);
+        repository.delete(TraceOrder.class, i);
+    }
+
+    public List<TraceOrder> query(DateTime start, DateTime end) {
+        List<TraceOrder> all = repository.select(new TraceOrder(), 0, 10000);
+        List<TraceOrder> list = new ArrayList<>();
+        for (TraceOrder o : all) {
+            if (o.getFinishAt() == null) {
+                continue;
+            }
+            long time = o.getFinishAt().getTime();
+            if (time > start.getTime() && time <= end.getTime()) {
+                list.add(o);
+            }
+        }
+        return list;
     }
 }

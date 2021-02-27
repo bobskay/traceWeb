@@ -71,7 +71,7 @@ public class Account extends ApiResponse {
     private String totalMaintMargin;
     private String totalWalletBalance;
     private String totalUnrealizedProfit;
-    private String totalMarginBalance;
+    private BigDecimal totalMarginBalance;
     private String totalPositionInitialMargin;
     private String totalOpenOrderInitialMargin;
     private String totalCrossWalletBalance;

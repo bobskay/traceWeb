@@ -27,6 +27,7 @@ public class StockOrder implements Entity {
     private Date createdAt;
     @Remark("原始信息")
     private String ori;
+    @Remark("完成")
     private BigDecimal finish;
 
     public OrderSide getSide() {
