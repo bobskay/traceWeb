@@ -2,11 +2,9 @@ package wang.wangby.trace.config;
 
 
 import com.alibaba.fastjson.JSONObject;
-import com.sun.deploy.config.Config;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import wang.wangby.exchange.dto.OpenOrder;
 import wang.wangby.exchange.enums.OrderSide;
