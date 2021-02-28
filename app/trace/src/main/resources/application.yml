@@ -6,6 +6,10 @@ my:
       expandAll: false
   webfilter:
     permission: false
+  persistence:
+    file:
+      async: true
+
 
 test: false
 
