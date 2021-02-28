@@ -31,7 +31,7 @@ public class SummaryJob {
     @Autowired
     Repository repository;
 
-    @Scheduled(cron = "0 * * * * ?")
+    @Scheduled(cron = "0 0/30 * * * ?")
     public void addProfit() throws Exception {
         DateTime start = DateTime.current(DateTime.Format.YEAR_TO_HOUR);
         DateTime end = DateTime.current();
