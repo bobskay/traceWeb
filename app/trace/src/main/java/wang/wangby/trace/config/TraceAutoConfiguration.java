@@ -6,6 +6,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import wang.wangby.annotation.persistence.Id;
 import wang.wangby.config.BaseToolAutoConfiguration;
 import wang.wangby.config.Beans;
 import wang.wangby.config.FileRepositoryAutoConfiguration;
@@ -17,6 +18,7 @@ import wang.wangby.persistence.file.DataSerializer;
 import wang.wangby.persistence.file.FileRepository;
 import wang.wangby.persistence.file.config.MyFileProperties;
 import wang.wangby.repostory.Repository;
+import wang.wangby.utils.IdWorker;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -66,6 +68,11 @@ public class TraceAutoConfiguration {
         accountListeners.add(new OrderTradeUpdateListener(market));
         accountListeners.add(accountUpdateListener);
         return new SocketClient(exchange, messageListeners, accountListeners);
+    }
+
+    @Bean
+    public IdWorker idWorker(){
+        return new IdWorker();
     }
 
 }
