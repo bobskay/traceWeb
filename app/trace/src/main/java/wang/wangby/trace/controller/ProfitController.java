@@ -45,6 +45,9 @@ public class ProfitController extends BaseController {
             query.setEnd(DateTime.current());
         }
         List<Profit> queryResult = profitService.query(query);
+        Collections.sort(queryResult,((o1, o2) -> {
+            return o2.getDate().compareTo(o1.getDate());
+        }));
         return respone(queryResult);
     }
 
