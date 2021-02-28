@@ -2,6 +2,7 @@ package wang.wangby.trace.config;
 
 
 import com.alibaba.fastjson.JSONObject;
+import com.sun.deploy.config.Config;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,9 +29,8 @@ import java.util.Set;
 
 @Slf4j
 public class Market {
-    @Value("${test}")
     @Getter
-    private boolean test;
+    private boolean test= MarketConfig.test;
 
     JsonUtil jsonUtil = JsonUtil.INSTANCE;
 

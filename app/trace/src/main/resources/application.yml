@@ -7,9 +7,6 @@ my:
   webfilter:
     permission: false
 
-
-test: false
-
 server:
    port: 9999
 

@@ -16,19 +16,15 @@ import java.io.File;
 @Slf4j
 public class TraceApp implements CommandLineRunner {
 
-    @Value("${test}")
-    private boolean test;
 
     public static void main(String[] args) {
-
-
         SpringApplication.run(TraceApp.class, args);
     }
 
 
     @Override
     public void run(String... args) throws Exception {
-        if(test){
+        if(MarketConfig.test){
             log.info("当前是测试环境不会下单");
         }
     }

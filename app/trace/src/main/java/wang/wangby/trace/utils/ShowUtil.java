@@ -44,7 +44,9 @@ public class ShowUtil {
 
     public static String bayDetail(Stock stock,BigDecimal current) {
         List<OpenOrder> sells=new ArrayList<>(stock.sells());
-        Collections.sort(sells,(Comparator.comparing(OpenOrder::getPrice)));
+        Collections.sort(sells,((o1, o2) -> {
+            return o2.getPrice().compareTo(o1.getPrice());
+        }));
 
         StringBuilder sellDetail = new StringBuilder();
         for(OpenOrder op:sells){

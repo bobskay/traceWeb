@@ -40,7 +40,7 @@ public class MarketService {
     public static BigDecimal quantity(List<OpenOrder> orders) {
         BigDecimal count=BigDecimal.ZERO;
         for (OpenOrder order:orders){
-           count.add(order.getOrigQty());
+            count=count.add(order.getOrigQty());
         }
         return count;
     }
