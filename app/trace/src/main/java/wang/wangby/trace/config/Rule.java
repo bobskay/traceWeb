@@ -49,7 +49,7 @@ public class Rule {
     }
 
     public BigDecimal quantity(BigDecimal currentPrice) {
-        return new BigDecimal("0.1");
+        return marketConfig.getQuantity();
     }
 
     public BigDecimal sellPrice(BigDecimal currentPrice, BigDecimal quantity) {

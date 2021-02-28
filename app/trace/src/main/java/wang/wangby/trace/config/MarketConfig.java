@@ -35,7 +35,7 @@ public class MarketConfig {
     private BigDecimal sellPlus = new BigDecimal(5);
 
     @Remark("交易数量")
-    private BigDecimal quantity = new BigDecimal(0.1);
+    private BigDecimal quantity = new BigDecimal("0.2");
 
     @Remark("买入价格")
     private BigDecimal buySubtract = new BigDecimal(5);
