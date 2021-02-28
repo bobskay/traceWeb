@@ -26,6 +26,8 @@ public class TraceApp implements CommandLineRunner {
     public void run(String... args) throws Exception {
         if(MarketConfig.test){
             log.info("当前是测试环境不会下单");
+        }else{
+            log.info("当前是正式环境！！！！");
         }
     }
 }
