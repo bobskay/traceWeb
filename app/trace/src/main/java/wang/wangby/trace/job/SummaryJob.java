@@ -54,7 +54,8 @@ public class SummaryJob {
         BigDecimal amount = BigDecimal.ZERO;
         for (TraceOrder o : traceOrderList) {
             quantity = quantity.add(o.getQuantity());
-            amount = amount.add(o.getSell().subtract(o.getBuy()));
+            BigDecimal currentAmount=o.getSell().subtract(o.getBuy()).multiply(o.getQuantity());
+            amount = amount.add(currentAmount);
         }
         profit.setExchangeQuantity(quantity);
         profit.setProfitAmount(amount);
