@@ -25,7 +25,7 @@ public class ProfitService {
     }
 
     public void deleteById(long i) throws Exception {
-        repository.delete(TraceOrder.class, i);
+        repository.delete(Profit.class, i);
     }
 
     public List<Profit> query(Date start, Date end) {

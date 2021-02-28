@@ -17,12 +17,12 @@ public class Profit implements Entity {
     private Date date;
     @Remark("账户余额")
     private BigDecimal account;
+    @Remark("当前价格")
+    private BigDecimal price;
     @Remark("成交数据量")
     private int exchangeCount;
     @Remark("成交数据量")
     private BigDecimal exchangeQuantity;
     @Remark("利润总额")
     private BigDecimal profitAmount;
-    @Remark("当前价格")
-    private BigDecimal price;
 }

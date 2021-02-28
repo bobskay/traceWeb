@@ -8,4 +8,5 @@ import java.util.Date;
 public class ProfitDto {
     private Date stat;
     private Date end;
+    private String type;
 }
