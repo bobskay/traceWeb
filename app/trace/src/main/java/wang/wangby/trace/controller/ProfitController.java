@@ -40,8 +40,8 @@ public class ProfitController extends BaseController {
 
     @RequestMapping("data")
     public String data(ProfitDto query) {
-        if(query.getStat()==null){
-            query.setStat(DateTime.current(DateTime.Format.YEAR_TO_DAY));
+        if(query.getStart()==null){
+            query.setStart(DateTime.current(DateTime.Format.YEAR_TO_DAY));
         }
         if(query.getEnd()==null){
             query.setEnd(DateTime.current(DateTime.Format.YEAR_TO_DAY).addDay(1).addSecond(-1));

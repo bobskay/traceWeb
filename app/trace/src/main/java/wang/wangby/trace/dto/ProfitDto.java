@@ -6,7 +6,7 @@ import java.util.Date;
 
 @Data
 public class ProfitDto {
-    private Date stat;
+    private Date start;
     private Date end;
     private String type;
 }

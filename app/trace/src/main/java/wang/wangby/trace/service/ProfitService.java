@@ -23,24 +23,44 @@ public class ProfitService {
     TraceOrderService traceOrderService;
 
     public List<Profit> query(ProfitDto query) {
-        return query(query.getStat(), query.getEnd());
+        return query(query.getStart(), query.getEnd(),query.getType());
     }
 
     public void deleteById(long i) throws Exception {
         repository.delete(Profit.class, i);
     }
 
-    public List<Profit> query(Date start, Date end) {
+    public List<Profit> query(Date start, Date end,String type) {
         List<Profit> all = repository.select(new Profit(), 0, 10000);
         List<Profit> list = new ArrayList<>();
 
         for (Profit o : all) {
+            if("day".equals(type)){
+                String day=new DateTime(o.getDate(), DateTime.Format.YEAR_TO_DAY).toString(DateTime.Format.YEAR_TO_SECOND);
+                String hour=new DateTime(o.getDate(), DateTime.Format.YEAR_TO_HOUR).toString(DateTime.Format.YEAR_TO_SECOND);
+                if(!day.equals(hour)){
+                    continue;
+                }
+            }
+
+            if("hour".equals(type)){
+                String mint=new DateTime(o.getDate(), DateTime.Format.YEAR_TO_MINUTE).toString(DateTime.Format.YEAR_TO_SECOND);
+                String hour=new DateTime(o.getDate(), DateTime.Format.YEAR_TO_HOUR).toString(DateTime.Format.YEAR_TO_SECOND);
+                if(!mint.equals(hour)){
+                    continue;
+                }
+            }
+
             long time = o.getDate().getTime();
             if (time > start.getTime() && time <= end.getTime()) {
                 list.add(o);
             }
         }
-        Collections.sort(all, (o1, o2) -> {
+        if(list.size()==0){
+            return list;
+        }
+
+        Collections.sort(list, (o1, o2) -> {
             return o1.getDate().compareTo(o2.getDate());
         });
 
@@ -49,11 +69,17 @@ public class ProfitService {
             return o1.getFinishAt().compareTo(o2.getFinishAt());
         }));
 
-        for (Profit po : all) {
+
+        Date last=all.get(0).getDate();
+        for (Profit po : list) {
             int count=0;
             BigDecimal proAmount=BigDecimal.ZERO;
             BigDecimal excAmount=BigDecimal.ZERO;
             for (TraceOrder to : orders) {
+                if(to.getFinishAt().compareTo(last)<0){
+                    continue;
+                }
+
                 if(to.getFinishAt().compareTo(po.getDate())<=0){
                     count++;
                     excAmount=excAmount.add(to.getQuantity());
@@ -64,6 +90,7 @@ public class ProfitService {
             po.setExchangeCount(count);
             po.setProfitAmount(proAmount);
             po.setExchangeQuantity(excAmount);
+            last=po.getDate();
         }
 
         return list;

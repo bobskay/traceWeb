@@ -4,7 +4,14 @@
     <tr>
         <td width="20%"> <input id="startTime" value="${start}"></td>
         <td width="20%"> <input id="endTime" value="${end}"></td>
-        <td width="60%">
+        <td width="20%">
+            <select id="type">
+                <option>汇总</option>
+                <option value="hour" selected>小时</option>
+                <option value="day">天</option>
+            </select>
+        </td>
+        <td width="40%">
             <button class="btn-success" onclick="doQuery()">查询</button>
         </td>
     </tr>
@@ -31,7 +38,8 @@ function updateProfit(){
 
 function doQuery(){
   var param="start="+$("#startTime").val();
-  param+="end="+$("#endTime").val();
+  param+="&end="+$("#endTime").val();
+  param+="&type="+$("#type").val();
   ajaxUtil.json("$path/data",param,function(data){
         var profitVo=JSON.parse(data)
         show(profitVo);
