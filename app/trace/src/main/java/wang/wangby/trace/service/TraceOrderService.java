@@ -8,6 +8,7 @@ import wang.wangby.trace.model.TraceOrder;
 import wang.wangby.utils.DateTime;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -46,7 +47,7 @@ public class TraceOrderService {
         repository.delete(TraceOrder.class, i);
     }
 
-    public List<TraceOrder> query(DateTime start, DateTime end) {
+    public List<TraceOrder> query(Date start, Date end) {
         List<TraceOrder> all = repository.select(new TraceOrder(), 0, 10000);
         List<TraceOrder> list = new ArrayList<>();
         for (TraceOrder o : all) {

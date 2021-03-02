@@ -1,94 +1,76 @@
-<div class="panel-body" style="padding-bottom:0px;">
-    <div class="panel panel-default">
-        <div class="panel-heading">盈亏汇总</div>
-        <form id="searchForm" >
-            <table class="form">
-                <tr>
-                    <td width="20%"> <input name="start" value="${start}"></td>
-                    <td width="20%"> <input name="end" value="${end}"></td>
-                    <td width="20%">
-                    <select name="type">
-                        <option>汇总</option>
-                        <option value="hour" selected>小时</option>
-                        <option value="day">天</option>
-                    </select>
-                    </td>
-                    <td width="40%"></td>
-                </tr>
-            </table>
-        </form>
-    </div>
+<div id="main" style="width: 1200px;height:400px;"></div>
 
-    <div id="toolbar" class="btn-group">
-        <button id="btnQuery" type="button" class="btn btn-default">
-            <span class="glyphicon glyphicon-search" aria-hidden="true"></span>查询
-        </button>
-        <button id="btnDelete" type="button" class="btn btn-default">
-            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>删除
-        </button>
-    </div>
-
-    <table id="queryResult"></table>
-</div>
+<table class="form">
+    <tr>
+        <td width="20%"> <input id="startTime" value="${start}"></td>
+        <td width="20%"> <input id="endTime" value="${end}"></td>
+        <td width="60%">
+            <button class="btn-success" onclick="doQuery()">查询</button>
+        </td>
+    </tr>
+</table>
 
 <script>
-    var tableDiv = 'queryResult';
-    var searchForm = 'searchForm';
+var myChart = echarts.init(document.getElementById('main'));
 
-    tableEvents = {
-        "click #btnOperate": function (e, value, row, index) {
-            var data = "";
-            ajaxUtil.json("$path/xxx", data, function (ret) {
-                if (!ret.success) {
-                    dialog.alert(ret.message);
-                } else {
-                    dialog.alert("操作成功");
-                }
-            })
-        },
-    };
-
-    btnOperate = function (value, row, index) {
-        return [
-            '<button id="btnOperate" class="btn-small btn-primary">操作</button>'
-        ].join("")
-    };
-
-    dateToString=function(value, row, index){
-        if(!value){
-            return "";
-        }
-        var d=new Date(value);
-        return d.format("yyyy-MM-dd hh:mm:ss");
+timeOutFunction=function(){
+    var main=$("#main").html();
+    if(!main){
+        return;
     }
+    updateProfit();
+}
+var i=-1;
+function updateProfit(){
+    i++;
+    if(i%100!=0){
+        return;
+    }
+    doQuery();
+}
 
-    $(function () {
-        var columns = [
-            {checkbox: true},
-            {field:'date',title:'时间',formatter:dateToString},
-            {field:'account',title:'账户余额'},
-            {field:'price',title:'当前价格'},
-            {field:'exchangeCount',title:'成交笔数'},
-            {field:'exchangeQuantity',title:'成交量'},
-            {field:'profitAmount',title:'成交额'}
-        ]
-        tableUtil.init(tableDiv, columns, '', function (config) {
-            config.uniqueId = 'id';
-        });
-        tableUtil.load('$path/query')
-    });
-
-
-    $("#btnDelete").click(function () {
-        frame.delete('id', '$path/deleteById',function () {
-            self.location.href="/?forward=$path/index"
-        });
-    });
-
-    $("#btnQuery").click(function () {
-        tableUtil.loadByForm("searchForm","$path/query");
-    });
+function doQuery(){
+  var param="start="+$("#startTime").val();
+  param+="end="+$("#endTime").val();
+  ajaxUtil.json("$path/data",param,function(data){
+        var profitVo=JSON.parse(data)
+        show(profitVo);
+    })
+}
 
 
-
+function show(profitVo){
+    option = {
+        title: {
+            text: '利润统计'
+        },
+        tooltip: {
+            trigger: 'axis'
+        },
+        legend: {
+            data: profitVo.names
+        },
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+        },
+        toolbox: {
+            feature: {
+                saveAsImage: {}
+            }
+        },
+        xAxis: {
+            type: 'category',
+            boundaryGap: false,
+            data: profitVo.times
+        },
+        yAxis: {
+            type: 'value'
+        },
+        series:profitVo.data
+    };
+    myChart.setOption(option);
+}
 </script>

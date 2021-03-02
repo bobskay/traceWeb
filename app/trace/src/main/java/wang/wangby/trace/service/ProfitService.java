@@ -6,12 +6,12 @@ import wang.wangby.repostory.Repository;
 import wang.wangby.trace.dto.ProfitDto;
 import wang.wangby.trace.dto.TraceOrderDto;
 import wang.wangby.trace.model.Profit;
+import wang.wangby.trace.model.StockOrder;
 import wang.wangby.trace.model.TraceOrder;
 import wang.wangby.utils.DateTime;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.math.BigDecimal;
+import java.util.*;
 
 @Service
 public class ProfitService {
@@ -19,9 +19,11 @@ public class ProfitService {
 
     @Autowired
     Repository repository;
+    @Autowired
+    TraceOrderService traceOrderService;
 
     public List<Profit> query(ProfitDto query) {
-       return query(query.getStat(),query.getEnd());
+        return query(query.getStat(), query.getEnd());
     }
 
     public void deleteById(long i) throws Exception {
@@ -31,23 +33,40 @@ public class ProfitService {
     public List<Profit> query(Date start, Date end) {
         List<Profit> all = repository.select(new Profit(), 0, 10000);
         List<Profit> list = new ArrayList<>();
+
         for (Profit o : all) {
             long time = o.getDate().getTime();
             if (time > start.getTime() && time <= end.getTime()) {
                 list.add(o);
             }
         }
-        return list;
-    }
+        Collections.sort(all, (o1, o2) -> {
+            return o1.getDate().compareTo(o2.getDate());
+        });
 
-    public Profit getByTime(DateTime end) {
-        List<Profit> all = repository.select(new Profit(), 0, 10000);
-        for(Profit p:all){
-            if(p.getDate().getTime()==end.getTime()){
-                return p;
+        List<TraceOrder> orders = traceOrderService.query(start, end);
+        Collections.sort(orders, ((o1, o2) -> {
+            return o1.getFinishAt().compareTo(o2.getFinishAt());
+        }));
+
+        for (Profit po : all) {
+            int count=0;
+            BigDecimal proAmount=BigDecimal.ZERO;
+            BigDecimal excAmount=BigDecimal.ZERO;
+            for (TraceOrder to : orders) {
+                if(to.getFinishAt().compareTo(po.getDate())<=0){
+                    count++;
+                    excAmount=excAmount.add(to.getQuantity());
+                    BigDecimal profit=to.getQuantity().multiply(to.getSell().subtract(to.getBuy()));
+                    proAmount=proAmount.add(profit);
+                }
             }
+            po.setExchangeCount(count);
+            po.setProfitAmount(proAmount);
+            po.setExchangeQuantity(excAmount);
         }
-        return  null;
+
+        return list;
     }
 }
 

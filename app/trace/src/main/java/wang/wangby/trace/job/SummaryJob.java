@@ -15,6 +15,7 @@ import wang.wangby.trace.service.TraceOrderService;
 import wang.wangby.utils.DateTime;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 @Component
@@ -25,41 +26,19 @@ public class SummaryJob {
     @Autowired
     MarketService marketService;
     @Autowired
-    TraceOrderService traceOrderService;
-    @Autowired
     ProfitService profitService;
     @Autowired
     Repository repository;
 
-    @Scheduled(cron = "0 0/30 * * * ?")
+  //  @Scheduled(cron = "0 0/10 * * * ?")
+  @Scheduled(cron = "0 0/1 * * * ?")
     public void addProfit() throws Exception {
-        DateTime start = DateTime.current(DateTime.Format.YEAR_TO_HOUR);
-        DateTime end = DateTime.current();
-
-         Profit profit = profitService.getByTime(start);
-         if(profit==null){
-             profit=new Profit();
-             profit.setDate(start);
-             repository.insert(profit);
-         }
-
+         Profit profit = new Profit();
         Account account = exchange.account();
-
         profit.setPrice(marketService.getPrice());
         profit.setAccount(account.getTotalMarginBalance());
-
-        List<TraceOrder> traceOrderList = traceOrderService.query(start, end);
-        profit.setExchangeCount(traceOrderList.size());
-        BigDecimal quantity = BigDecimal.ZERO;
-        BigDecimal amount = BigDecimal.ZERO;
-        for (TraceOrder o : traceOrderList) {
-            quantity = quantity.add(o.getQuantity());
-            BigDecimal currentAmount=o.getSell().subtract(o.getBuy()).multiply(o.getQuantity());
-            amount = amount.add(currentAmount);
-        }
-        profit.setExchangeQuantity(quantity);
-        profit.setProfitAmount(amount);
-        repository.update(profit);
+        profit.setDate(new Date());
+        repository.insert(profit);
     }
 }
 
