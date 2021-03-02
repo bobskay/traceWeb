@@ -30,8 +30,7 @@ public class SummaryJob {
     @Autowired
     Repository repository;
 
-  //  @Scheduled(cron = "0 0/10 * * * ?")
-  @Scheduled(cron = "0 0/1 * * * ?")
+   @Scheduled(cron = "0 0/10 * * * ?")
     public void addProfit() throws Exception {
          Profit profit = new Profit();
         Account account = exchange.account();
