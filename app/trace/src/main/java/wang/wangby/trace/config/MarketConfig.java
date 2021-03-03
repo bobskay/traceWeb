@@ -48,7 +48,7 @@ public class MarketConfig {
     private BigDecimal quantity = new BigDecimal("0.2");
 
     @Remark("最后一个卖价减去6，挂买单")
-    private BigDecimal buySubtract = new BigDecimal(6);
+    private BigDecimal buySubtract = new BigDecimal(7);
 
     @Remark("买入间隔")
     private long buyInterval = 10 * 1000L;
@@ -57,4 +57,6 @@ public class MarketConfig {
 
     @Remark("当前几个超过买价多少后重新申请")
     public int buyCancel=6;
+
+
 }
