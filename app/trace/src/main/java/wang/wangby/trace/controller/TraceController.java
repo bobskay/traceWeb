@@ -1,6 +1,7 @@
 package wang.wangby.trace.controller;
 
 
+import cn.hutool.core.bean.BeanUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -142,4 +143,9 @@ public class TraceController extends BaseController {
     }
 
 
+    @RequestMapping("updateConfig")
+    public String updateConfig(MarketConfig marketConfig){
+        BeanUtil.copyProperties(marketConfig,this.marketConfig);
+        return jsonUtil.toFormatString(this.marketConfig);
+    }
 }

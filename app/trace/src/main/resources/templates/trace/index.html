@@ -18,25 +18,35 @@
         <td width="10%">当前价格</td>
         <td width="23%"><span id="currentPrice">$price</span></td>
         <td width="10%">最大持仓</td>
-        <td width="23%">$marketConfig.maxHold</td>
-        <td width="10%">最小持仓</td>
-        <td width="23%">$marketConfig.base</td>
+        <td width="23%">
+            <input id="maxHold" value="${marketConfig.maxHold}">
+        </td>
+        <td width="10%">每单数量</td>
+        <td width="23%">
+            <input id="quantity" value="${marketConfig.quantity}">
+        </td>
     </tr>
     <tr>
         <td >持仓</td>
         <td ><spen id="hold"></spen></td>
         <td >还可买入</td>
         <td ><spen id="totalRemain"></spen></td>
-        <td >当前价位可买</td>
-        <td ><spen id="currentRemain"></spen></td>
+        <td >买入减价</td>
+        <td >
+            <input id="buySubtract" value="${marketConfig.buySubtract}">
+        </td>
     </tr>
     <tr>
-        <td >卖出加价</td>
-        <td >$marketConfig.sellPlus</td>
         <td >重新挂单价</td>
         <td ><spen id="cancelPrice"></spen></td>
-        <td >暂停挂单价</td>
-        <td ><spen id="stopPrice"></spen></td>
+        <td >最大买入差额</td>
+        <td >
+            <input id="buyCancel" value="${marketConfig.buyCancel}">
+        </td>
+        <td >卖出加价</td>
+        <td >
+            <input id="sellPlus" value="${marketConfig.sellPlus}">
+        </td>
     </tr>
     <tr>
         <td >买入</td>
@@ -57,7 +67,7 @@
     <tr>
         <td colspan="6">
             <button class="btn-success" onclick="stopKline()">停止</button>
-            <button class="btn-success" onclick="syncKline()">同步</button>
+            <button class="btn-success" onclick="updateConfig()">更新配置</button>
         </td>
     </tr>
 
@@ -271,6 +281,23 @@ function updateChart(kline){
             stopPrice=line.stopPrice;
         }
         document.title=line.current;
+}
+
+function updateConfig(){
+    var param="1=1";
+    $("input").each(function(idx,el){
+        var id=el.id;
+        if(id&&el.value){
+            param+="&"+id+"="+el.value
+        }
+    })
+    ajaxUtil.json("$path/updateConfig",param,function(data){
+        var json=utils.jsonToStr(data)
+        json="<pre>"+json+"</pre>";
+        dialog.pop("更新后配置",json,function(){
+               self.location.reload();
+        })
+    })
 }
 
 </script>

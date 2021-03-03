@@ -1,6 +1,7 @@
 package wang.wangby.trace.vo;
 
 import lombok.Data;
+import wang.wangby.trace.config.MarketConfig;
 
 import java.util.List;
 
@@ -33,5 +34,7 @@ public class KlineVo {
     private String buyDetail;
 
     private String high;
+
+    private MarketConfig config;
 
 }
