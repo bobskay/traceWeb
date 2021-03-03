@@ -21,8 +21,10 @@ public class ProfitVo {
         data=new LinkedHashMap<>();
         data.put("价格",ProfitDetailVo.newInstance("价格"));
         data.put("账户余额",ProfitDetailVo.newInstance("账户余额"));
+        data.put("交易次数",ProfitDetailVo.newInstance("交易次数"));
         data.put("交易金额",ProfitDetailVo.newInstance("交易金额"));
         data.put("交易数量",ProfitDetailVo.newInstance("交易数量"));
+
     }
 
 
@@ -40,6 +42,7 @@ public class ProfitVo {
         data.get("价格").getData().add(profit.getPrice().toString());
         data.get("账户余额").getData().add(profit.getAccount().toString());
         data.get("交易金额").getData().add(profit.getProfitAmount().toString());
-        data.get("交易数量").getData().add(profit.getExchangeCount()+"");
+        data.get("交易次数").getData().add(profit.getExchangeCount()+"");
+        data.get("交易数量").getData().add(profit.getExchangeQuantity()+"");
     }
 }
