@@ -35,17 +35,18 @@ public class Rule {
         if (lastBuy == null) {
             return current.intValue();
         }
-        return lastBuy.getPrice().intValue()+4;
+        return lastBuy.getPrice().intValue()+marketConfig.getBuyCancel();
     }
 
 
     public int buyPrice(BigDecimal currentPrice) {
         OpenOrder o=stockService.getStock().sellPrice();
+        //如果一个卖单都没有，说明当前空仓，当前价格减1就买
         if(o==null){
-            return currentPrice.intValue()-2;
+            return currentPrice.intValue()-1;
         }
 
-        return o.getPrice().subtract(new BigDecimal(6)).intValue();
+        return o.getPrice().subtract(marketConfig.getBuySubtract()).intValue();
     }
 
     public BigDecimal quantity(BigDecimal currentPrice) {
@@ -53,7 +54,7 @@ public class Rule {
     }
 
     public BigDecimal sellPrice(BigDecimal currentPrice, BigDecimal quantity) {
-        return currentPrice.add(new BigDecimal(3));
+        return currentPrice.add(marketConfig.getSellPlus());
     }
 
     //超过某个值就不下单了
