@@ -9,7 +9,12 @@
 </button>
 
 <button  type="button" class="btn-xs btn-default" onclick="changeType('1m')">1m</button>
+<button  type="button" class="btn-xs btn-default" onclick="changeType('5m')">5m</button>
+<button  type="button" class="btn-xs btn-default" onclick="changeType('15m')">15m</button>
 <button  type="button" class="btn-xs btn-default" onclick="changeType('30m')">30m</button>
+<button  type="button" class="btn-xs btn-default" onclick="changeType('1h')">1h</button>
+<button  type="button" class="btn-xs btn-default" onclick="changeType('4h')">4h</button>
+<button  type="button" class="btn-xs btn-default" onclick="changeType('1d')">1d</button>
 <br/>
 
 
@@ -19,11 +24,11 @@
         <td width="23%"><span id="currentPrice">$price</span></td>
         <td width="10%">最大持仓</td>
         <td width="23%">
-            <input id="maxHold" value="${marketConfig.maxHold}">
+            ${marketConfig.maxHold}
         </td>
         <td width="10%">每单数量</td>
         <td width="23%">
-            <input id="quantity" value="${marketConfig.quantity}">
+            ${marketConfig.quantity}
         </td>
     </tr>
     <tr>
@@ -33,7 +38,7 @@
         <td ><spen id="totalRemain"></spen></td>
         <td >买入减价</td>
         <td >
-            <input id="buySubtract" value="${marketConfig.buySubtract}">
+            ${marketConfig.buySubtract}
         </td>
     </tr>
     <tr>
@@ -41,11 +46,11 @@
         <td ><spen id="cancelPrice"></spen></td>
         <td >最大买入差额</td>
         <td >
-            <input id="buyCancel" value="${marketConfig.buyCancel}">
+            ${marketConfig.buyCancel}
         </td>
         <td >卖出加价</td>
         <td >
-            <input id="sellPlus" value="${marketConfig.sellPlus}">
+            ${marketConfig.sellPlus}
         </td>
     </tr>
     <tr>
@@ -67,7 +72,6 @@
     <tr>
         <td colspan="6">
             <button class="btn-success" onclick="stopKline()">停止</button>
-            <button class="btn-success" onclick="updateConfig()">更新配置</button>
         </td>
     </tr>
 
@@ -283,21 +287,5 @@ function updateChart(kline){
         document.title=line.current;
 }
 
-function updateConfig(){
-    var param="1=1";
-    $("input").each(function(idx,el){
-        var id=el.id;
-        if(id&&el.value){
-            param+="&"+id+"="+el.value
-        }
-    })
-    ajaxUtil.json("$path/updateConfig",param,function(data){
-        var json=utils.jsonToStr(data)
-        json="<pre>"+json+"</pre>";
-        dialog.pop("更新后配置",json,function(){
-               self.location.reload();
-        })
-    })
-}
 
 </script>
