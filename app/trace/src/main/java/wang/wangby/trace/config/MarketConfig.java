@@ -38,17 +38,17 @@ public class MarketConfig {
     }
 
     @Remark("最大持仓")
-    private int maxHold = 10;
+    private int maxHold = 20;
     @Remark("最小持仓")
     private int base = 0;
-    @Remark("买入后加价4卖出")
-    private BigDecimal sellPlus = new BigDecimal(4);
+    @Remark("买入后加价卖出")
+    private BigDecimal sellPlus = new BigDecimal(3);
 
     @Remark("交易数量")
-    private BigDecimal quantity = new BigDecimal("0.2");
+    private BigDecimal quantity = new BigDecimal("0.5");
 
-    @Remark("最后一个卖价减去6，挂买单")
-    private BigDecimal buySubtract = new BigDecimal(7);
+    @Remark("最后一个卖价减去这个价格，挂买单")
+    private BigDecimal buySubtract = new BigDecimal(10);
 
     @Remark("买入间隔")
     private long buyInterval = 10 * 1000L;
@@ -56,7 +56,8 @@ public class MarketConfig {
     private String accountSymbol="usdt";
 
     @Remark("当前几个超过买价多少后重新申请")
-    public int buyCancel=6;
+    public int buyCancel=10;
+
 
 
 }
