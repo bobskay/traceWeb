@@ -97,7 +97,7 @@ public class Market {
                 String sellId=order.getClientOrderId().replace(OrderSide.CLOSE.code,OrderSide.SELL.code);
                 TraceOrder traceOrder = traceOrderService.getBySellId(sellId);
                 if (traceOrder == null) {
-                    log.error("找不到对应买单：" + order.getClientOrderId());
+                    log.error("找不到对应买单：" + sellId);
                     traceOrder = new TraceOrder();
                     traceOrder.setBuyOrderId(clientId);
                     traceOrder.setBuyOrderId(order.getClientOrderId());

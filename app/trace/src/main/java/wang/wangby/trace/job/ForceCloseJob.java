@@ -34,7 +34,7 @@ public class ForceCloseJob {
     MarketService marketService;
 
 
-    @Scheduled(cron = "0/5 * * * * ?")
+    @Scheduled(cron = "0 0/1 * * * ?")
     public void forceClose() throws Exception {
         OpenOrder order= rule.forceCloseOrder();
         if(order==null){
