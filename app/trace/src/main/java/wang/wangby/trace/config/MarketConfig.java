@@ -38,7 +38,7 @@ public class MarketConfig {
     }
 
     @Remark("最大持仓")
-    private int maxHold = 20;
+    private BigDecimal maxHold = new BigDecimal(20);
     @Remark("最小持仓")
     private int base = 0;
     @Remark("买入后加价卖出")

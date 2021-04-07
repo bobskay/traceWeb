@@ -12,6 +12,7 @@ import wang.wangby.exchange.dto.Account;
 import wang.wangby.exchange.dto.OpenOrder;
 import wang.wangby.exchange.enums.OrderSide;
 import wang.wangby.trace.config.Market;
+import wang.wangby.trace.config.MarketConfig;
 import wang.wangby.trace.config.Rule;
 import wang.wangby.trace.model.Profit;
 import wang.wangby.trace.service.MarketService;
@@ -33,13 +34,18 @@ public class ForceCloseJob {
     MarketService marketService;
 
 
-    @Scheduled(cron = "0 0 * * * ?")
+    @Scheduled(cron = "0/5 * * * * ?")
     public void forceClose() throws Exception {
         OpenOrder order= rule.forceCloseOrder();
         if(order==null){
             return;
         }
         log.info("资金不足，强平订单："+order.getClientOrderId());
+        if(MarketConfig.test){
+            log.info("测试环境假装强平："+order.getClientOrderId().replace(OrderSide.SELL.code,OrderSide.CLOSE.code));
+            return;
+        }
+
         exchange.cancel(order.getClientOrderId());
         BigDecimal currentPrice=marketService.getPrice();
         BigDecimal sellPrice=currentPrice.subtract(new BigDecimal(100));

@@ -70,7 +70,7 @@ public class Rule {
     //还可以买入多少
     public BigDecimal totalRemain() {
         Stock stock = stockService.getStock();
-        return new BigDecimal(marketConfig.getMaxHold()).subtract(stock.getHolds()).subtract(stock.buyQuantity());
+        return marketConfig.getMaxHold().subtract(stock.getHolds()).subtract(stock.buyQuantity());
     }
 
     //如果可买数量小于0，就将最早的单子强平

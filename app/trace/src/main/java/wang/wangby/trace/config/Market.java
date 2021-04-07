@@ -169,7 +169,7 @@ public class Market {
         }
 
         if (rule.totalRemain().compareTo(BigDecimal.ZERO)<=0) {
-            log.info("已到达最大持仓，请求注意风险：" + stock.getHolds());
+            log.info("已到达最大持仓，请注意风险：" + stock.getHolds());
             return;
         }
 
