@@ -8,7 +8,8 @@ import lombok.Getter;
 
 public enum OrderSide {
   BUY("B","买"),
-  SELL("S","卖");
+  SELL("S","卖"),
+  CLOSE("C","强平");
 
   @Getter
   public final String code;

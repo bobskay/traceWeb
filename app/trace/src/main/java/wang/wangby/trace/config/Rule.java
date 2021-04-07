@@ -11,6 +11,8 @@ import wang.wangby.trace.service.StockService;
 import wang.wangby.trace.utils.OrderId;
 
 import java.math.BigDecimal;
+import java.util.Collections;
+import java.util.List;
 
 @Component
 @Slf4j
@@ -65,9 +67,38 @@ public class Rule {
         return new BigDecimal(d.intValue());
     }
 
-
+    //还可以买入多少
     public BigDecimal totalRemain() {
         Stock stock = stockService.getStock();
         return new BigDecimal(marketConfig.getMaxHold()).subtract(stock.getHolds()).subtract(stock.buyQuantity());
+    }
+
+    //如果可买数量小于0，就将最早的单子强平
+    public OpenOrder forceCloseOrder(){
+        //还有可以买的
+        BigDecimal total=totalRemain();
+        if(total.compareTo(BigDecimal.ZERO)>0){
+            return null;
+        }
+        Stock stock = stockService.getStock();
+        //还有挂着的买单
+        if(stock.buyQuantity().compareTo(BigDecimal.ZERO)>0){
+            return null;
+        }
+
+        //持仓已经超过最大可以买的了，将最早的强平
+        List<OpenOrder> opens=stock.sells();
+        if(opens.size()==0){
+            log.error("可以买的数量<0,但挂着的买单为0");
+            return null;
+        }
+
+        OpenOrder order=opens.get(0);
+        for(int i=1;i<opens.size();i++){
+            if(opens.get(i).getPrice().compareTo(order.getPrice())>0){
+                order=opens.get(i);
+            }
+        }
+        return order;
     }
 }

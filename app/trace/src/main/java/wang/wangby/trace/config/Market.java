@@ -91,7 +91,26 @@ public class Market {
                 traceOrder.setSell(order.getPrice());
                 traceOrder.setFinishAt(new Date());
                 repository.update(traceOrder);
+            }
 
+            if(order.getSide() == OrderSide.CLOSE){
+                String sellId=order.getClientOrderId().replace(OrderSide.CLOSE.code,OrderSide.SELL.code);
+                TraceOrder traceOrder = traceOrderService.getBySellId(sellId);
+                if (traceOrder == null) {
+                    log.error("找不到对应买单：" + order.getClientOrderId());
+                    traceOrder = new TraceOrder();
+                    traceOrder.setBuyOrderId(clientId);
+                    traceOrder.setBuyOrderId(order.getClientOrderId());
+                    traceOrder.setCreatedAt(order.getCreatedAt());
+                    traceOrder.setQuantity(order.getQuantity());
+                    traceOrder.setBuy(OrderId.getPrice(order.getClientOrderId()));
+                    traceOrder.setStart(OrderId.getPrice(order.getClientOrderId()));
+                    traceOrder.setSellOrderId(clientId);
+                    repository.insert(traceOrder);
+                }
+                traceOrder.setSell(order.getPrice());
+                traceOrder.setFinishAt(new Date());
+                repository.update(traceOrder);
             }
         }
     }

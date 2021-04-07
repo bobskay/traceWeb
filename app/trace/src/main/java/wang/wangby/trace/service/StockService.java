@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 import wang.wangby.exchange.Exchange;
 import wang.wangby.exchange.dto.Account;
 import wang.wangby.exchange.dto.OpenOrder;
+import wang.wangby.trace.config.MarketConfig;
+import wang.wangby.trace.config.Rule;
 import wang.wangby.trace.model.Stock;
 import wang.wangby.trace.utils.OrderId;
 
@@ -23,6 +25,7 @@ public class StockService implements CommandLineRunner {
     Exchange exchange;
 
     private Stock stock;
+
 
     public Stock getStock(){
         return stock;
@@ -52,6 +55,7 @@ public class StockService implements CommandLineRunner {
         stock=new Stock();
         stock.setHolds(hold);
         stock.setOpenOrders(list);
+
     }
 
     @Override
