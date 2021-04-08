@@ -123,7 +123,7 @@ public class Market {
     private StockOrder addOrderStock(JSONObject orderJs) {
         String type = orderJs.getString("X");
         String orderId = orderJs.getString("c");
-        BigDecimal price = orderJs.getBigDecimal("p");
+        BigDecimal price = orderJs.getBigDecimal("ap");
         BigDecimal quantity = orderJs.getBigDecimal("q");
         BigDecimal finish = orderJs.getBigDecimal("z");
 
