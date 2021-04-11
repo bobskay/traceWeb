@@ -47,10 +47,8 @@ public class ForceCloseJob {
         }
 
         exchange.cancel(order.getClientOrderId());
-        BigDecimal currentPrice=marketService.getPrice();
-        BigDecimal sellPrice=currentPrice.subtract(new BigDecimal(100));
         String id= order.getClientOrderId().replace(OrderSide.SELL.code,OrderSide.CLOSE.code);
-        exchange.order(OrderSide.SELL,sellPrice,order.getOrigQty(),id);
+        exchange.order(OrderSide.SELL,BigDecimal.ZERO,order.getOrigQty(),id);
     }
 
 

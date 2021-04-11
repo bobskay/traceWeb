@@ -100,6 +100,9 @@ public class Exchange {
     }
 
 
+    /**
+     * @param price 下单价，如果为0说明是市价单
+     * */
     public Order order(OrderSide orderSide, BigDecimal price, BigDecimal quantity, String id) {
         BigDecimal newPrice = price.setScale(scale, RoundingMode.HALF_DOWN);
         if (newPrice.compareTo(price) != 0) {
