@@ -158,8 +158,8 @@ public class Market {
         }
 
         if (System.currentTimeMillis() - lastBuyTime < marketConfig.getBuyInterval()) {
-            log.info("短时间内成交过，跳过买入判断："
-                    + (System.currentTimeMillis() - lastBuyTime) / 1000);
+            long remain=marketConfig.getBuyInterval()-(System.currentTimeMillis() - lastBuyTime);
+            log.info("短时间内成交过，还需等待："+remain);
             return;
         }
 

@@ -90,7 +90,7 @@ public class ForceCloseJob {
             if(MarketConfig.test){
                 return stock;
             }
-            String id= maxPrice.getClientOrderId().replace(OrderSide.SELL.code,OrderSide.CLOSE.code);
+            String id= OrderId.newId(OrderSide.SELL,maxPrice.getPrice());
             exchange.order(OrderSide.SELL,maxPrice.getPrice().add(BigDecimal.ONE),tooMany,id);
             Thread.sleep(1000*10);
         }
