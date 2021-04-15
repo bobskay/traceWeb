@@ -29,7 +29,7 @@ public class Exchange {
     public Exchange() {
         client = new HttpClient();
         symbol = "ETHUSDT";
-        scale = 3;
+        scale = 2;
     }
 
     public Ticker ticker() {
