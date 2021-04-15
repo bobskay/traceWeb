@@ -190,8 +190,8 @@ public class Market {
             lastBuyTime = System.currentTimeMillis();
             return;
         }
-        log.info("当前价格:" + price +
-                ",等待买入:" + currentBuy.getPrice() +
-                ",取消价格：" + rule.cancelPrice(price,currentBuy));
+//        log.info("当前价格:" + price +
+//                ",等待买入:" + currentBuy.getPrice() +
+//                ",取消价格：" + rule.cancelPrice(price,currentBuy));
     }
 }
