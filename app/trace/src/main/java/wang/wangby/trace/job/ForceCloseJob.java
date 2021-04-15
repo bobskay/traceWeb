@@ -41,7 +41,7 @@ public class ForceCloseJob {
 
     @Scheduled(cron = "0 0/5 * * * ?")
     public void forceClose() throws Exception {
-        Stock stock = stockService.getStock();
+        Stock stock = check();
         if(stock==null){
             return;
         }
@@ -65,7 +65,7 @@ public class ForceCloseJob {
         check();
     }
 
-    private Stock check() {
+    private Stock check() throws InterruptedException {
         Stock stock=stockService.getStock();
         if(stock==null){
             return null;
@@ -92,8 +92,9 @@ public class ForceCloseJob {
             }
             String id= maxPrice.getClientOrderId().replace(OrderSide.SELL.code,OrderSide.CLOSE.code);
             exchange.order(OrderSide.SELL,maxPrice.getPrice().add(BigDecimal.ONE),tooMany,id);
+            Thread.sleep(1000*10);
         }
-        return stock;
+        return stockService.getStock();
     }
 
 
