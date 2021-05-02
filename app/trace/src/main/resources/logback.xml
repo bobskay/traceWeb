@@ -26,7 +26,7 @@
 
     <logger name="wang.wangby" level="info" addtivity="false"/>
     <logger name="wang.wangby.utils" level="info" addtivity="false"/>
-    <logger name="wang.wangby.exchange.utils.HttpClient" level="info" addtivity="false"/>
+    <logger name="wang.wangby.exchange.utils.HttpClient" level="warn" addtivity="false"/>
     <logger name="wang.wangby.web.webfilter" level="info" addtivity="false"/>
 
 
