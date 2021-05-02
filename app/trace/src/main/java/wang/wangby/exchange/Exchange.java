@@ -105,7 +105,6 @@ public class Exchange {
      * @param price 下单价，如果为0说明是市价单
      * */
     public Order order(OrderSide orderSide, BigDecimal price, BigDecimal quantity, String id) {
-        new Exception(MarketConfig.test+"").printStackTrace();
         if(MarketConfig.test){
             log.error("测试环境",new Exception());
             return null;
