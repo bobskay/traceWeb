@@ -31,7 +31,7 @@ public class SummaryJob {
     @Autowired
     Repository repository;
 
-   @Scheduled(cron = "0 0/1 * * * ?")
+   @Scheduled(cron = "0 0/30 * * * ?")
     public void addProfit() throws Exception {
 
          Profit profit = new Profit();
