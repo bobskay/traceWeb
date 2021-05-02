@@ -12,6 +12,7 @@ import wang.wangby.exchange.response.Ticker;
 import wang.wangby.exchange.utils.HttpClient;
 import wang.wangby.exchange.utils.OrderBuilder;
 import wang.wangby.exchange.utils.UrlParamsBuilder;
+import wang.wangby.trace.config.MarketConfig;
 import wang.wangby.utils.DateTime;
 
 import java.math.BigDecimal;
@@ -104,6 +105,12 @@ public class Exchange {
      * @param price 下单价，如果为0说明是市价单
      * */
     public Order order(OrderSide orderSide, BigDecimal price, BigDecimal quantity, String id) {
+        new Exception(MarketConfig.test+"").printStackTrace();
+        if(MarketConfig.test){
+            log.error("测试环境",new Exception());
+            return null;
+        }
+
         BigDecimal newPrice = price.setScale(scale, RoundingMode.HALF_DOWN);
         if (newPrice.compareTo(price) != 0) {
             log.info("小数点过多，修改价格：" + price + "-->" + newPrice);

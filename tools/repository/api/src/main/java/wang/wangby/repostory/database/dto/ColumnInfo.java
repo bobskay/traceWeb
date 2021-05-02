@@ -23,10 +23,17 @@ public class ColumnInfo {
 	@Remark("是否是主键")
 	private Boolean isPk;
 
+	private Integer decimal;
+
 	public String getDataTypeStr(){
 		if(maxLength==null){
 			return dataType;
 		}
-		return dataType+"("+maxLength+")";
+		if(decimal!=null){
+			return dataType+"("+maxLength+","+decimal+")";
+		}else{
+			return dataType+"("+maxLength+")";
+		}
+
 	}
 }

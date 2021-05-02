@@ -2,6 +2,7 @@ package wang.wangby;
 
 import cn.hutool.core.io.FileUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -14,6 +15,7 @@ import java.io.File;
 @SpringBootApplication
 @EnableScheduling
 @Slf4j
+@MapperScan({"wang.wangby.trace"})
 public class TraceApp implements CommandLineRunner {
 
 

@@ -35,9 +35,10 @@
             <artifactId>Java-WebSocket</artifactId>
             <version>1.4.1</version>
         </dependency>
+
         <dependency>
             <groupId>wang.wangby</groupId>
-            <artifactId>tools-repostory-file</artifactId>
+            <artifactId>tools-repostory-jdbc</artifactId>
             <version>1</version>
             <scope>compile</scope>
         </dependency>

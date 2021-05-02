@@ -16,6 +16,7 @@ import wang.wangby.utils.Dictionary;
 import wang.wangby.utils.*;
 
 import java.lang.reflect.Field;
+import java.math.BigDecimal;
 import java.util.*;
 
 @Slf4j
@@ -37,7 +38,7 @@ public class DDLUtil {
         Table t= ClassUtil.getAnnotation(clazz, Table.class);
         List columns=new ArrayList<>();
         if(t==null){
-            info.setTableName(clazz.getSimpleName());
+            info.setTableName("t_"+clazz.getSimpleName());
         }else{
             info.setTableName(t.value());
         }
@@ -55,6 +56,14 @@ public class DDLUtil {
             Length length= ClassUtil.getAnnotation(f, Length.class);
             if(length!=null){
                 col.setMaxLength(length.value());
+            }else{
+                if(col.getDataType().equalsIgnoreCase("varchar")){
+                    col.setMaxLength(255);
+                }
+                if(col.getDataType().equalsIgnoreCase("decimal")){
+                    col.setMaxLength(12);
+                    col.setDecimal(4);
+                }
             }
             Id id= ClassUtil.getAnnotation(f, Id.class);
             if(id!=null){
@@ -84,6 +93,9 @@ public class DDLUtil {
         }
         if(ClassUtil.isInstance(f.getType(), Dictionary.class)){
             return "tinyint";
+        }
+        if(ClassUtil.isInstance(f.getType(), BigDecimal.class)){
+            return "decimal";
         }
         throw new RuntimeException("无法获取对应的数据库类型:"+f.getType());
     }

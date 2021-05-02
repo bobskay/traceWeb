@@ -7,6 +7,7 @@ import wang.wangby.exchange.Exchange;
 import wang.wangby.exchange.dto.OpenOrder;
 import wang.wangby.exchange.enums.OrderSide;
 import wang.wangby.exchange.socket.listener.AggTradeListener;
+import wang.wangby.trace.config.MarketConfig;
 import wang.wangby.trace.dto.StockOrderDto;
 import wang.wangby.trace.config.Market;
 import wang.wangby.trace.config.Rule;
@@ -129,6 +130,10 @@ public class MarketService {
 
     //取消订单
     public void cancel(OpenOrder currentBuy) {
+        if(MarketConfig.test){
+            log.info("测试环境不能取消");
+            return;
+        }
         exchange.cancel(currentBuy.getClientOrderId());
     }
 

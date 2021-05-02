@@ -7,6 +7,7 @@ import wang.wangby.exchange.Exchange;
 import wang.wangby.exchange.dto.Account;
 import wang.wangby.repostory.Repository;
 import wang.wangby.serialize.json.JsonUtil;
+import wang.wangby.trace.config.MarketConfig;
 import wang.wangby.trace.model.Profit;
 import wang.wangby.trace.model.TraceOrder;
 import wang.wangby.trace.service.MarketService;
@@ -30,8 +31,9 @@ public class SummaryJob {
     @Autowired
     Repository repository;
 
-   @Scheduled(cron = "0 0/10 * * * ?")
+   @Scheduled(cron = "0 0/1 * * * ?")
     public void addProfit() throws Exception {
+
          Profit profit = new Profit();
         Account account = exchange.account();
         profit.setPrice(marketService.getPrice());

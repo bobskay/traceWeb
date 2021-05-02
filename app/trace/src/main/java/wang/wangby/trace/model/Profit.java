@@ -20,7 +20,7 @@ public class Profit implements Entity {
     @Remark("当前价格")
     private BigDecimal price;
     @Remark("交易次数")
-    private int exchangeCount;
+    private Integer exchangeCount;
     @Remark("成交数据量")
     private BigDecimal exchangeQuantity;
     @Remark("利润总额")

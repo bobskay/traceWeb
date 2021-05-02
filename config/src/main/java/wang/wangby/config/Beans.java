@@ -110,6 +110,7 @@ public class Beans implements InitializingBean {
 
     public void initEntityDao() {
         Collection<EntityDao> entityDaos = applicationContext.getBeansOfType(EntityDao.class).values();
+        log.info("初始化dao："+entityDaos);
         entityDaos.forEach(entityDao -> {
             Class clazz = getModel(entityDao.getClass());
             if (clazz == null) {

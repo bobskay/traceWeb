@@ -41,6 +41,10 @@ public class ForceCloseJob {
 
     @Scheduled(cron = "0 0/5 * * * ?")
     public void forceClose() throws Exception {
+        if(MarketConfig.test){
+            return;
+        }
+
         Stock stock = check();
         if(stock==null){
             return;

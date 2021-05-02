@@ -52,6 +52,10 @@ public class Rule {
     }
 
     public BigDecimal quantity(BigDecimal currentPrice) {
+        if(stockService.getStock().sells().size()<=3){
+            return new BigDecimal(1);
+        }
+
         return marketConfig.getQuantity();
     }
 
