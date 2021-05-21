@@ -64,13 +64,9 @@ public class MyOrder implements Entity {
         UpInfo upInfo = new UpInfo();
         upInfo.setUpgradePrice(reOrderPrice);
         BigDecimal reorder=reOrderPrice(step);
-
+        upInfo.setReOrderPrice(reorder);
 
         if (isBuy()) {
-            if(price.subtract(reorder).compareTo(minStop)<0){
-                reorder=price.subtract(minStop);
-            }
-
             if (price.compareTo(reOrderPrice) >= 0) {
                 upInfo.setUp(true);
                 upInfo.setDiff(BigDecimal.ZERO);
@@ -79,10 +75,6 @@ public class MyOrder implements Entity {
                 upInfo.setDiff(reOrderPrice.subtract(price));
             }
         } else {
-            if(reorder.subtract(price).compareTo(minStop)<0){
-                reorder=price.add(minStop);
-            }
-
             if (reOrderPrice.compareTo(price) >= 0) {
                 upInfo.setUp(true);
                 upInfo.setDiff(BigDecimal.ZERO);
@@ -91,7 +83,7 @@ public class MyOrder implements Entity {
                 upInfo.setDiff(reOrderPrice.subtract(price));
             }
         }
-        upInfo.setReOrderPrice(reorder);
+
         return upInfo;
     }
 
