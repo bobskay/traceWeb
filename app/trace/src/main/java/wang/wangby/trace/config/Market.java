@@ -114,8 +114,8 @@ public class Market {
         if(openOrders.size()>0){
             if(upgrade){
                 myOrderService.newOrder(openOrders.get(0));
-                return;
             }
+            return;
         }
 
         if (price.subtract(runningInfo.getBasePrice()).compareTo(orderConfig.getUpgradePrice()) > 0) {
