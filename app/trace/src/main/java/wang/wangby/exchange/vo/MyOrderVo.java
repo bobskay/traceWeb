@@ -50,7 +50,7 @@ public class MyOrderVo {
     }
 
     public String getUpPrice() {
-        UpInfo up = myOrder.getUpInfo(currentPrice, orderConfig.getUpgradePrice(), orderConfig.getStep());
+        UpInfo up = myOrder.getUpInfo(currentPrice, orderConfig);
         return up.getUpgradePrice()+"("+up.getDiff()+")";
     }
 }
