@@ -99,9 +99,9 @@ public class OrderController extends BaseController {
         if(tr.getBase()==null){
             return tr;
         }
-        BigDecimal buy=tr.getBase().add(orderConfig.getUpgradePrice());
+        BigDecimal buy=tr.getBase().add(orderConfig.getStep().multiply(new BigDecimal(2)));
         tr.setBuy(buy+"("+buy.subtract(tr.getPrice())+")");
-        BigDecimal sell=tr.getBase().subtract(orderConfig.getUpgradePrice());
+        BigDecimal sell=tr.getBase().subtract(orderConfig.getStep().multiply(new BigDecimal(2)));
         tr.setSell(sell+"("+sell.subtract(tr.getPrice())+")");
         BalanceVo vo = accountUpdateListener.getBalance(marketConfig.getAccountSymbol());
         if (vo != null) {

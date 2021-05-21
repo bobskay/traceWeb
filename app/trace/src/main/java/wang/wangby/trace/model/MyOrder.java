@@ -43,30 +43,29 @@ public class MyOrder implements Entity {
     private BigDecimal reOrderPrice(BigDecimal addPrice) {
         if (isBuy()) {
             if (isActive()) {
-                return sellPrice.add(addPrice);
+                BigDecimal diff=sellPrice.add(addPrice).subtract(buyPrice).multiply(new BigDecimal(2));
+                return buyPrice.add(diff);
             }
             return buyPrice.add(addPrice);
         } else {
             if (isActive()) {
-                return buyPrice.subtract(addPrice);
+                BigDecimal dff=sellPrice.add(addPrice).subtract(buyPrice).multiply(new BigDecimal(2));
+                return sellPrice.subtract(dff);
             }
             return sellPrice.subtract(addPrice);
         }
     }
 
     public UpInfo getUpInfo(BigDecimal price,OrderConfig orderConfig ) {
-
-        BigDecimal openPrice=orderConfig.getUpgradePrice();
-        BigDecimal step=orderConfig.getStep();
-        BigDecimal minStop=orderConfig.getMinStop();
-
+        BigDecimal openPrice=orderConfig.getStep();
         BigDecimal reOrderPrice = reOrderPrice(openPrice);
         UpInfo upInfo = new UpInfo();
         upInfo.setUpgradePrice(reOrderPrice);
-        BigDecimal reorder=reOrderPrice(step);
-        upInfo.setReOrderPrice(reorder);
 
         if (isBuy()) {
+            BigDecimal profit=reOrderPrice.subtract(this.buyPrice).divide(new BigDecimal(2));
+            upInfo.setReOrderPrice(buyPrice.add(profit));
+
             if (price.compareTo(reOrderPrice) >= 0) {
                 upInfo.setUp(true);
                 upInfo.setDiff(BigDecimal.ZERO);
@@ -75,6 +74,8 @@ public class MyOrder implements Entity {
                 upInfo.setDiff(reOrderPrice.subtract(price));
             }
         } else {
+            BigDecimal profit=this.sellPrice.subtract(reOrderPrice).divide(new BigDecimal(2));
+            upInfo.setReOrderPrice(sellPrice.subtract(profit));
             if (reOrderPrice.compareTo(price) >= 0) {
                 upInfo.setUp(true);
                 upInfo.setDiff(BigDecimal.ZERO);
