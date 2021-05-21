@@ -98,7 +98,7 @@ public class Market {
                 }else{
                     runningInfo.setBasePrice(order.getSellPrice());
                 }
-
+                return;
             }
         }
 
