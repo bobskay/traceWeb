@@ -10,15 +10,20 @@ import wang.wangby.exchange.dto.OpenOrder;
 import wang.wangby.exchange.enums.OrderSide;
 import wang.wangby.exchange.socket.listener.AccountUpdateListener;
 import wang.wangby.exchange.vo.BalanceVo;
+import wang.wangby.exchange.vo.MyOrderVo;
 import wang.wangby.trace.config.MarketConfig;
+import wang.wangby.trace.config.OrderConfig;
 import wang.wangby.trace.config.Rule;
+import wang.wangby.trace.config.RunningInfo;
+import wang.wangby.trace.model.MyOrder;
 import wang.wangby.trace.model.Stock;
 import wang.wangby.trace.service.MarketService;
+import wang.wangby.trace.service.MyOrderService;
 import wang.wangby.trace.service.StockService;
-import wang.wangby.trace.utils.OrderId;
 import wang.wangby.trace.vo.TraceVo;
 import wang.wangby.web.controller.BaseController;
 
+import java.math.BigDecimal;
 import java.util.*;
 
 @RestController
@@ -28,8 +33,6 @@ public class OrderController extends BaseController {
     @Autowired
     StockService stockService;
     @Autowired
-    MarketService marketService;
-    @Autowired
     Exchange exchange;
     @Autowired
     Rule rule;
@@ -37,18 +40,38 @@ public class OrderController extends BaseController {
     AccountUpdateListener accountUpdateListener;
     @Autowired
     MarketConfig marketConfig;
+    @Autowired
+    MyOrderService myOrderService;
+    @Autowired
+    OrderConfig orderConfig;
+    @Autowired
+    MarketService marketService;
+    @Autowired
+    RunningInfo runningInfo;
 
     @Menu("挂单")
     @RequestMapping("index")
     public String index() {
-        Stock stock = stockService.getStock();
+        List<MyOrder> orders = myOrderService.openOrders();
         Map map = new HashMap<>();
-        List<OpenOrder> opens=stock.getOpenOrders();
-        Collections.sort(opens,((o1, o2) -> {
-            return o1.getPrice().compareTo(o2.getPrice());
+        Collections.sort(orders,((o1, o2) -> {
+            return o1.getBuyPrice().compareTo(o2.getBuyPrice());
         }));
-        map.put("openOrders", opens);
-        map.put("traceVo", getTraceVo());
+
+        List<MyOrderVo> openOrders=new ArrayList<>();
+        for(MyOrder order:orders){
+            MyOrderVo vo=new MyOrderVo(order,orderConfig,marketService.getPrice());
+            openOrders.add(vo);
+        }
+
+        TraceVo traceVo=getTraceVo();
+        BigDecimal profit=new BigDecimal(0);
+        for(MyOrder o:orders){
+            profit=profit.add(o.getProfit());
+        }
+        traceVo.setProfit(profit);
+        map.put("openOrders", openOrders);
+        map.put("traceVo",traceVo );
         return $("index", map);
     }
 
@@ -67,17 +90,19 @@ public class OrderController extends BaseController {
     private TraceVo getTraceVo() {
         Stock stock = stockService.getStock();
         TraceVo tr = new TraceVo();
-        tr.setPrice(marketService.getPrice() + "");
+        tr.setPrice(marketService.getPrice());
         tr.setHold(stock.getHolds() + "");
-        tr.setHigh(rule.stopPrice() + "");
-
-        if(stock.sellPrice()!=null){
-            tr.setSell(stock.sellPrice().getPrice()+"");
+        tr.setBase(runningInfo.getBasePrice());
+        if(tr.getBase()==null){
+            tr.setBase(tr.getPrice());
         }
-        if(stock.buyPrice()!=null){
-            tr.setBuy(stock.buyPrice().getPrice()+"");
+        if(tr.getBase()==null){
+            return tr;
         }
-
+        BigDecimal buy=tr.getBase().add(orderConfig.getUpgradePrice());
+        tr.setBuy(buy+"("+buy.subtract(tr.getPrice())+")");
+        BigDecimal sell=tr.getBase().subtract(orderConfig.getUpgradePrice());
+        tr.setSell(sell+"("+sell.subtract(tr.getPrice())+")");
         BalanceVo vo = accountUpdateListener.getBalance(marketConfig.getAccountSymbol());
         if (vo != null) {
             tr.setWallet(vo.getTotal() + "");

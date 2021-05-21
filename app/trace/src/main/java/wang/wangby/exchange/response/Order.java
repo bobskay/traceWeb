@@ -1,6 +1,7 @@
 package wang.wangby.exchange.response;
 
 import lombok.Data;
+import wang.wangby.annotation.Remark;
 import wang.wangby.exchange.enums.OrderState;
 
 import java.math.BigDecimal;
@@ -42,9 +43,10 @@ public class Order extends ApiResponse {
     private String cumQuote;
     private BigDecimal executedQty;
     private Long orderId;
+    @Remark("成交价格")
     private BigDecimal avgPrice;
     private BigDecimal origQty;
-    private String price;
+    private BigDecimal price;
     private Boolean reduceOnly;
     private String side;
     private String positionSide;
@@ -60,4 +62,8 @@ public class Order extends ApiResponse {
     private Long updateTime;
     private String workingType;
     private Boolean priceProtect;
+
+    public boolean isFinish() {
+        return status==OrderState.FILLED;
+    }
 }

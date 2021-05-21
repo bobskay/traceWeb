@@ -2,9 +2,7 @@ package wang.wangby.trace.model;
 
 import lombok.Data;
 import wang.wangby.exchange.dto.OpenOrder;
-import wang.wangby.exchange.dto.OpenOrders;
 import wang.wangby.exchange.enums.OrderSide;
-import wang.wangby.trace.service.MarketService;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -25,12 +23,12 @@ public class Stock {
     }
 
     public BigDecimal buyQuantity(){
-        return MarketService.quantity(buys());
+        return quantity(buys());
     }
 
 
     public BigDecimal sellQuantity(){
-        return MarketService.quantity(sells());
+        return quantity(sells());
     }
 
     public List<OpenOrder> sells() {
@@ -44,10 +42,45 @@ public class Stock {
     }
 
     public OpenOrder sellPrice() {
-       return MarketService.min(OrderSide.SELL,openOrders);
+       return min(OrderSide.SELL,openOrders);
     }
 
     public OpenOrder buyPrice() {
-        return MarketService.max(OrderSide.BUY,openOrders);
+        return max(OrderSide.BUY,openOrders);
     }
+
+    public static OpenOrder max(OrderSide side, List<OpenOrder> openOrders) {
+        OpenOrder max = null;
+        for (OpenOrder o : openOrders) {
+            if (o.getSide() != side) {
+                continue;
+            }
+            if (max == null || max.getPrice().compareTo(o.getPrice()) < 0) {
+                max = o;
+            }
+        }
+        return max;
+    }
+
+    public static OpenOrder min(OrderSide side, List<OpenOrder> openOrders) {
+        OpenOrder min = null;
+        for (OpenOrder o : openOrders) {
+            if (o.getSide() != side) {
+                continue;
+            }
+            if (min == null || min.getPrice().compareTo(o.getPrice()) > 0) {
+                min = o;
+            }
+        }
+        return min;
+    }
+
+    public static BigDecimal quantity(List<OpenOrder> orders) {
+        BigDecimal count=BigDecimal.ZERO;
+        for (OpenOrder order:orders){
+            count=count.add(order.getOrigQty());
+        }
+        return count;
+    }
+
 }

@@ -34,15 +34,6 @@ public class TraceOrderService {
         return list;
     }
 
-    public TraceOrder getBySellId(String sellId) {
-        for (TraceOrder tr : query(new TraceOrderDto())) {
-            if (tr.getSellOrderId().equalsIgnoreCase(sellId)) {
-                return tr;
-            }
-        }
-        return null;
-    }
-
     public void deleteById(long i) throws Exception {
         repository.delete(TraceOrder.class, i);
     }

@@ -63,4 +63,11 @@ public class MarketConfig {
 
     @Remark("小于这个持仓时的买入")
     public BigDecimal minQuantity=new BigDecimal(1);
+
+    @Remark("重新挂单间隔")
+    private BigDecimal step=new BigDecimal(10);
+
+    public BigDecimal getActivePrice(){
+        return step.multiply(new BigDecimal(2));
+    }
 }

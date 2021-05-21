@@ -9,14 +9,20 @@
     <tr>
         <td>当前价格</td>
         <td><span id="price">$traceVo.price</span></td>
-        <td>最高价</td>
-        <td><span id="high">$traceVo.high</span></td>
+        <td>基准价格</td>
+        <td><span id="base">$traceVo.base</span></td>
     </tr>
     <tr>
-        <td>等待买入</td>
-        <td><span id="buy"></span>$traceVo.buy</td>
-        <td>等待卖出</td>
-        <td><span id="sell"></span>$traceVo.sell</td>
+        <td>买入</td>
+        <td><span id="buy">$traceVo.buy</span></td>
+        <td>卖出</td>
+        <td><span id="sell">$traceVo.sell</span></td>
+    </tr>
+    <tr>
+        <td>未实现利润</td>
+        <td>$traceVo.profit</td>
+        <td></td>
+        <td></td>
     </tr>
 
 </table>
@@ -24,22 +30,26 @@
 <table class="list">
     <tr>
         <th>序号</th>
-        <th>id</th>
+        <th>订单号</th>
         <th>时间</th>
         <th>方向</th>
-        <th>成本</th>
-        <th>下单价</th>
         <th>数量</th>
+        <th>买入</th>
+        <th>卖出</th>
+        <th>未实现利润</th>
+        <th>升级价格</th>
     </tr>
     #foreach($order in $openOrders)
     <tr>
         <td>$velocityCount</td>
-        <td>$order.clientOrderId</td>
-        <td>$order.orderTime</td>
+        <td>$order.billNo</td>
+        <td>$order.createdAt</td>
         <td>$order.side.name</td>
-        <td>$order.orderPrice</td>
-        <td>$order.price</td>
-        <td>$order.origQty</td>
+        <td>$order.quantity</td>
+        <td>$order.buyPrice</td>
+        <td>$order.sellPrice</td>
+        <td>$order.profit</td>
+        <td>$order.upPrice</td>
     </tr>
     #end
 </table>
@@ -65,14 +75,16 @@ timeOutFunction=function(){
         resp=JSON.parse(resp)
         var trace=resp.data;
         $("#price").html(trace.price);
-        $("#high").html(trace.high);
+        $("#base").html(trace.base);
+        $("#buy").html(trace.buy);
+        $("#sell").html(trace.sell);
         $("#wallet").html(trace.wallet);
         document.title=trace.price;
         if(!last){
             last=trace;
             return;
         }
-        if(last.buy!=trace.buy||last.sell!=trace.sell){
+        if(last.hold!=trace.hold){
              self.location.reload();
         }
     });

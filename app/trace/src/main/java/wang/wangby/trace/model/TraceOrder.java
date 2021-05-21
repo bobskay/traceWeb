@@ -38,19 +38,10 @@ public class TraceOrder  implements Entity {
     private BigDecimal quantity;
 
 
-    public String getBuyUsed(){
-        return TimeUtil.showTime(createdAt,buyFinish);
+    public String getProfit(){
+        return sell.subtract(buy).multiply(quantity)+"";
     }
 
-    public String getSellUsed(){
-        if(buyFinish==null||finishAt==null){
-            return "-";
-        }
-        return TimeUtil.showTime(buyFinish,finishAt);
-    }
-    public String getTotalUsed(){
-        return TimeUtil.showTime(createdAt,finishAt);
-    }
 
 
 

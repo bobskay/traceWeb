@@ -9,6 +9,7 @@ import wang.wangby.annotation.web.Menu;
 
 import wang.wangby.trace.config.MarketConfig;
 
+import wang.wangby.trace.config.OrderConfig;
 import wang.wangby.trace.service.MarketService;
 
 import wang.wangby.web.controller.BaseController;
@@ -23,20 +24,20 @@ public class RuleConfigController extends BaseController {
     @Autowired
     MarketService marketService;
     @Autowired
-    MarketConfig marketConfig;
+    OrderConfig orderConfig;
 
     @Menu("参数配置")
     @RequestMapping("index")
     public String index() {
         Map map = new HashMap<>();
         map.put("price", marketService.getPrice());
-        map.put("marketConfig", marketConfig);
+        map.put("orderConfig", orderConfig);
         return $("index", map);
     }
 
     @RequestMapping("updateConfig")
-    public String updateConfig(MarketConfig marketConfig){
-        BeanUtil.copyProperties(marketConfig,this.marketConfig);
-        return jsonUtil.toFormatString(this.marketConfig);
+    public String updateConfig(OrderConfig orderConfig){
+        BeanUtil.copyProperties(orderConfig,this.orderConfig);
+        return jsonUtil.toFormatString(this.orderConfig);
     }
 }

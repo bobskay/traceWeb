@@ -18,6 +18,7 @@ public enum Api {
     OPEN_ORDER("挂单信息","/fapi/v1/openOrder", OpenOrder.class),
     OPEN_ORDERS("所有挂单","/fapi/v1/openOrders", OpenOrders.class),
     KLINE("k线","/fapi/v1/klines", Kline.class),
+    GET_ORDER("查询","/fapi/v1/order", Order.class),
 
     LISTEN_KEY("获取webSocket的token",Constants.API_BASE_URL+"/fapi/v1/listenKey", UserDataStream.class),
 

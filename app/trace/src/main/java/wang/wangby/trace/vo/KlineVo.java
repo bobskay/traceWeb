@@ -30,9 +30,6 @@ public class KlineVo {
     //取消买入价格
     private String cancelPrice;
 
-    private String sellDetail;
-    private String buyDetail;
-
     private String high;
 
     private MarketConfig config;

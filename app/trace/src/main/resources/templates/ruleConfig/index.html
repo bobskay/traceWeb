@@ -1,37 +1,23 @@
 <table class="form">
     <tr>
-        <td width="20%">最大持仓</td>
+        <td width="20%">单次买入数量</td>
         <td width="80%">
-            <input id="maxHold" value="${marketConfig.maxHold}">
+            <input id="openQuantity" value="${orderConfig.openQuantity}">
         </td>
     </tr>
     <tr>
-        <td>每单数量</td>
+        <td>开仓价格</td>
         <td>
-            <input id="quantity" value="${marketConfig.quantity}">
+            <input id="upgradePrice" value="${orderConfig.upgradePrice}">
         </td>
     </tr>
     <tr>
-        <td >重新挂单价</td>
+        <td >止盈价格</td>
         <td >
-            <input id="buyCancel" value="${marketConfig.buyCancel}">
+            <input id="step" value="${orderConfig.step}">
         </td>
 
     </tr>
-    <tr>
-        <td >买入减价</td>
-        <td >
-            <input id="buySubtract" value="${marketConfig.buySubtract}">
-        </td>
-    </tr>
-    <tr>
-        <td >卖出加价</td>
-        <td >
-            <input id="sellPlus" value="${marketConfig.sellPlus}">
-        </td>
-    </tr>
-
-
     <tr>
         <td colspan="6">
             <button class="btn-success" onclick="updateConfig()">更新配置</button>

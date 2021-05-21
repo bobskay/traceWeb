@@ -18,7 +18,6 @@ import wang.wangby.trace.model.Stock;
 import wang.wangby.trace.service.KlineService;
 import wang.wangby.trace.service.MarketService;
 import wang.wangby.trace.service.StockService;
-import wang.wangby.trace.utils.ShowUtil;
 import wang.wangby.trace.vo.KlineVo;
 import wang.wangby.utils.DateTime;
 import wang.wangby.utils.StringUtil;
@@ -77,7 +76,6 @@ public class TraceController extends BaseController {
             klineVo.setSell(stock.sellPrice().getPrice() + "");
         }
 
-        klineVo.setSellDetail(ShowUtil.sellDetail(stock));
         klineVo.setBuyCount(stock.buyQuantity() + "");
         klineVo.setSellCount(stock.sellQuantity() + "");
         klineVo.setHold(stock.getHolds() + "");
@@ -138,7 +136,6 @@ public class TraceController extends BaseController {
         if( stock.buyPrice()!=null) {
             klineVo.setCancelPrice(rule.cancelPrice(current,stock.buyPrice()) + "");
         }
-        klineVo.setBuyDetail(ShowUtil.bayDetail(stock,current));
         return json(klineVo);
     }
 

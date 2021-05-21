@@ -8,10 +8,8 @@ import wang.wangby.exchange.enums.CandlestickInterval;
 import wang.wangby.trace.model.Stock;
 import wang.wangby.trace.service.KlineService;
 import wang.wangby.trace.service.StockService;
-import wang.wangby.trace.utils.OrderId;
 
 import java.math.BigDecimal;
-import java.util.Collections;
 import java.util.List;
 
 @Component

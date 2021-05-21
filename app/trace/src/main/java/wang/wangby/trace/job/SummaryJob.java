@@ -34,7 +34,7 @@ public class SummaryJob {
    @Scheduled(cron = "0 0/30 * * * ?")
     public void addProfit() throws Exception {
 
-         Profit profit = new Profit();
+       Profit profit = new Profit();
         Account account = exchange.account();
         profit.setPrice(marketService.getPrice());
         profit.setAccount(account.getTotalMarginBalance());

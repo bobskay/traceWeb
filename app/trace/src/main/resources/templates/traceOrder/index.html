@@ -56,17 +56,12 @@
     $(function () {
         var columns = [
             {checkbox: true},
-            {field:'buyOrderId',title:'订单id'},
-            {field:'createdAt',title:'开始买入',formatter:dateToString},
-            {field:'buyFinish',title:'开始卖出',formatter:dateToString},
+            {field:'sellOrderId',title:'订单id'},
             {field:'finishAt',title:'完成',formatter:dateToString},
-            {field:'start',title:'起始价'},
             {field:'buy',title:'买入价'},
             {field:'sell',title:'卖出价'},
             {field:'quantity',title:'数量'},
-            {field:'buyUsed',title:'买入用时'},
-            {field:'sellUsed',title:'卖出用时'},
-            {field:'totalUsed',title:'总用时'},
+            {field:'profit',title:'盈利'},
         ]
         tableUtil.init(tableDiv, columns, '', function (config) {
             config.uniqueId = 'id';
