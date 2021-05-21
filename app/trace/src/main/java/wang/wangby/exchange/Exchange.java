@@ -234,6 +234,7 @@ public class Exchange {
         orderDto.setPrice(null);
         orderDto.setTimeInForce(null);
         orderDto.setStopPrice(newPrice);
+        orderDto.setWorkingType(WorkingType.CONTRACT_PRICE);
 
         Order order = client.post(Api.ORDER, OrderBuilder.builder(orderDto));
         if (order.getStatus() != OrderState.NEW) {
@@ -259,6 +260,7 @@ public class Exchange {
         orderDto.setPrice(null);
         orderDto.setTimeInForce(null);
         orderDto.setStopPrice(newPrice);
+        orderDto.setWorkingType(WorkingType.CONTRACT_PRICE);
 
         Order order = client.post(Api.ORDER, OrderBuilder.builder(orderDto));
         if (order.getStatus() != OrderState.NEW) {

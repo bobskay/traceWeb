@@ -22,7 +22,7 @@ public class ExchangeTest {
         String billNo="B_20210521003820";
         String sellNo="B_20210521003820_2547_C0";
 
-        Order order= exchange.getOrder("S_20210522013620_2444_C0");
+        Order order= exchange.getOrder("S_20210522033455_2342_C3");
         System.out.println(jsonUtil.toFormatString(order));
       //  exchange.reSell();
 //        for(OpenOrder op: exchange.openOrders()){
