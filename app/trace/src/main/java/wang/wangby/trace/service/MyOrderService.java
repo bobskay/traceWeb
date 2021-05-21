@@ -141,16 +141,17 @@ public class MyOrderService {
         }
     }
 
-    public void checkUpgrade(MyOrder order, BigDecimal price) throws InterruptedException {
+    public boolean checkUpgrade(MyOrder order, BigDecimal price) throws InterruptedException {
         UpInfo upInfo = order.getUpInfo(price, orderConfig);
         if (!upInfo.isUp()) {
-            return;
+            return false;
         }
         if (order.isBuy()) {
             reSell(order, upInfo.getReOrderPrice());
         } else {
             reBuy(order, upInfo.getReOrderPrice());
         }
+        return true;
     }
 
     private String reBuy(MyOrder order, BigDecimal newPrice) throws InterruptedException {

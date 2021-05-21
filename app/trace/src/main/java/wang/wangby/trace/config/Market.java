@@ -84,10 +84,15 @@ public class Market {
             runningInfo.setBasePrice(price);
         }
         List<MyOrder> openOrders = myOrderService.openOrders();
+        boolean hasActive=false;
+        boolean upgrade=false;
         for (MyOrder order : openOrders) {
             //创建
             if (order.isActive()) {
-                myOrderService.checkUpgrade(order, price);
+                boolean up=myOrderService.checkUpgrade(order, price);
+                if(!upgrade){
+                    upgrade=up;
+                }
             } else {
                 boolean active = myOrderService.checkCreate(order, price);
                 if (active) {
@@ -98,11 +103,19 @@ public class Market {
                 }else{
                     runningInfo.setBasePrice(order.getSellPrice());
                 }
+                hasActive=true;
             }
         }
 
-        if(openOrders.size()>0){
+        if(hasActive){
             return;
+        }
+
+        if(openOrders.size()>0){
+            if(upgrade){
+                myOrderService.newOrder(openOrders.get(0));
+                return;
+            }
         }
 
         if (price.subtract(runningInfo.getBasePrice()).compareTo(orderConfig.getUpgradePrice()) > 0) {
