@@ -121,7 +121,7 @@ public class MyOrderService {
     }
 
     public boolean checkCreate(MyOrder order, BigDecimal price) throws InterruptedException {
-        UpInfo upInfo = order.getUpInfo(price, orderConfig.getUpgradePrice(), orderConfig.getStep());
+        UpInfo upInfo = order.getUpInfo(price, orderConfig);
         if (!upInfo.isUp()) {
             return false;
         }
@@ -142,7 +142,7 @@ public class MyOrderService {
     }
 
     public void checkUpgrade(MyOrder order, BigDecimal price) throws InterruptedException {
-        UpInfo upInfo = order.getUpInfo(price, orderConfig.getUpgradePrice(), orderConfig.getStep());
+        UpInfo upInfo = order.getUpInfo(price, orderConfig);
         if (!upInfo.isUp()) {
             return;
         }
