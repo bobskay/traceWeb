@@ -93,10 +93,14 @@ public class Market {
                 if (active) {
                     myOrderService.newOrder(order);
                 }
-                runningInfo.setBasePrice(price);
+                if(order.isBuy()){
+                    runningInfo.setBasePrice(order.getBuyPrice());
+                }else{
+                    runningInfo.setBasePrice(order.getSellPrice());
+                }
+
             }
         }
-
 
         if (price.subtract(runningInfo.getBasePrice()).compareTo(orderConfig.getUpgradePrice()) > 0) {
             myOrderService.newBuy();
