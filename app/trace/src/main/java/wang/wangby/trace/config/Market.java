@@ -98,8 +98,11 @@ public class Market {
                 }else{
                     runningInfo.setBasePrice(order.getSellPrice());
                 }
-                return;
             }
+        }
+
+        if(openOrders.size()>0){
+            return;
         }
 
         if (price.subtract(runningInfo.getBasePrice()).compareTo(orderConfig.getUpgradePrice()) > 0) {
