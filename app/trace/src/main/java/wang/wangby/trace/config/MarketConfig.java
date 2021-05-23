@@ -45,7 +45,7 @@ public class MarketConfig {
     private BigDecimal sellPlus = new BigDecimal(40);
 
     @Remark("交易数量")
-    private BigDecimal quantity = new BigDecimal("0.1");
+    private BigDecimal quantity = new BigDecimal("0.1").setScale(2);
 
     @Remark("最后一个卖价减去这个价格，挂买单")
     private BigDecimal buySubtract = new BigDecimal(70);
@@ -62,5 +62,5 @@ public class MarketConfig {
     public BigDecimal ignoreMin=new BigDecimal(5);
 
     @Remark("小于这个持仓时的买入")
-    public BigDecimal minQuantity=new BigDecimal(0.1);
+    public BigDecimal minQuantity=new BigDecimal("0.1");
 }
