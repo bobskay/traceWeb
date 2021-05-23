@@ -62,5 +62,5 @@ public class MarketConfig {
     public BigDecimal ignoreMin=new BigDecimal(5);
 
     @Remark("小于这个持仓时的买入")
-    public BigDecimal minQuantity=new BigDecimal(1);
+    public BigDecimal minQuantity=new BigDecimal(0.1);
 }
