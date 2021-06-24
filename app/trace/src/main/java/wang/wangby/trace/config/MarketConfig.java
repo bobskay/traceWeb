@@ -42,25 +42,25 @@ public class MarketConfig {
     @Remark("最小持仓")
     private int base = 0;
     @Remark("买入后加价卖出")
-    private BigDecimal sellPlus = new BigDecimal(40);
+    private BigDecimal sellPlus = new BigDecimal(100);
 
     @Remark("交易数量")
-    private BigDecimal quantity = new BigDecimal("0.1").setScale(2);
+    private BigDecimal quantity = new BigDecimal("00.1").setScale(2);
 
     @Remark("最后一个卖价减去这个价格，挂买单")
-    private BigDecimal buySubtract = new BigDecimal(70);
+    private BigDecimal buySubtract = new BigDecimal(400);
 
     @Remark("买入间隔")
     private long buyInterval = 20 * 1000L;
 
     private String accountSymbol="usdt";
 
-    @Remark("当前几个超过买价多少后重新申请")
-    public int buyCancel=71;
+    @Remark("当前价格过买价多少后重新申请")
+    public int buyCancel=500;
 
     @Remark("持仓小于多少就忽略当前买入数量")
-    public BigDecimal ignoreMin=new BigDecimal(5);
+    public BigDecimal ignoreMin=new BigDecimal(0);
 
     @Remark("小于这个持仓时的买入")
-    public BigDecimal minQuantity=new BigDecimal("0.1");
+    public BigDecimal minQuantity=new BigDecimal("00.1");
 }
