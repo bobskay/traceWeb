@@ -9,6 +9,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import wang.wangby.exchange.dto.OpenOrder;
 import wang.wangby.exchange.enums.OrderSide;
 import wang.wangby.exchange.enums.OrderState;
+import wang.wangby.exchange.socket.listener.AggTradeListener;
 import wang.wangby.repostory.Repository;
 import wang.wangby.serialize.json.JsonUtil;
 import wang.wangby.trace.model.Stock;
@@ -44,6 +45,9 @@ public class Market {
     Rule rule;
     @Autowired
     TraceOrderService traceOrderService;
+    @Autowired
+    AggTradeListener aggTradeListener;
+
 
     //最后的买入时间，
     private long lastBuyTime = 0;
@@ -180,18 +184,16 @@ public class Market {
         if (currentBuy == null) {
             marketService.buy(price,null);
             lastBuyTime = System.currentTimeMillis();
+            aggTradeListener.setRecentHigh(price);
             return;
         }
 
-        //价格高与下单价好多
-        if (rule.isCancel(price, currentBuy)) {
-            marketService.cancel(currentBuy);
-            marketService.buy(price,currentBuy.getClientOrderId());
+        BigDecimal buyPrice=aggTradeListener.getRecentHigh().subtract(marketConfig.getBuySubtract());
+        if(price.compareTo(buyPrice)<0){
+            marketService.buy(price,null);
             lastBuyTime = System.currentTimeMillis();
+            aggTradeListener.setRecentHigh(price);
             return;
         }
-//        log.info("当前价格:" + price +
-//                ",等待买入:" + currentBuy.getPrice() +
-//                ",取消价格：" + rule.cancelPrice(price,currentBuy));
     }
 }

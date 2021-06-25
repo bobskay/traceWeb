@@ -2,6 +2,7 @@ package wang.wangby.exchange.socket.listener;
 
 import com.alibaba.fastjson.JSONObject;
 import lombok.Getter;
+import lombok.Setter;
 import wang.wangby.exchange.enums.Stream;
 import wang.wangby.utils.DateTime;
 
@@ -29,10 +30,19 @@ public class AggTradeListener implements MessageListener {
     @Getter
     private volatile DateTime updated;
 
+    //最近的最高价
+    @Getter @Setter
+    private BigDecimal recentHigh=BigDecimal.ZERO;
+
     @Override
     public boolean listen(JSONObject js){
         this.price = js.getBigDecimal("p");
         this.updated = new DateTime(js.getLong("T"),DateTime.Format.YEAR_TO_MILLISECOND);
+
+        if(price.compareTo(recentHigh)>0){
+            recentHigh=price;
+        }
+
         return true;
     }
 

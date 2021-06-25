@@ -9,6 +9,7 @@ import wang.wangby.exchange.Exchange;
 import wang.wangby.exchange.dto.OpenOrder;
 import wang.wangby.exchange.enums.OrderSide;
 import wang.wangby.exchange.socket.listener.AccountUpdateListener;
+import wang.wangby.exchange.socket.listener.AggTradeListener;
 import wang.wangby.exchange.vo.BalanceVo;
 import wang.wangby.trace.config.MarketConfig;
 import wang.wangby.trace.config.Rule;
@@ -19,6 +20,7 @@ import wang.wangby.trace.utils.OrderId;
 import wang.wangby.trace.vo.TraceVo;
 import wang.wangby.web.controller.BaseController;
 
+import java.math.BigDecimal;
 import java.util.*;
 
 @RestController
@@ -37,6 +39,9 @@ public class OrderController extends BaseController {
     AccountUpdateListener accountUpdateListener;
     @Autowired
     MarketConfig marketConfig;
+
+    @Autowired
+    AggTradeListener aggTradeListener;
 
     @Menu("挂单")
     @RequestMapping("index")
@@ -74,9 +79,9 @@ public class OrderController extends BaseController {
         if(stock.sellPrice()!=null){
             tr.setSell(stock.sellPrice().getPrice()+"");
         }
-        if(stock.buyPrice()!=null){
-            tr.setBuy(stock.buyPrice().getPrice()+"");
-        }
+
+        BigDecimal buy=aggTradeListener.getRecentHigh().subtract(marketConfig.getBuySubtract());
+        tr.setBuy(buy+"");
 
         BalanceVo vo = accountUpdateListener.getBalance(marketConfig.getAccountSymbol());
         if (vo != null) {
