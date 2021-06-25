@@ -32,7 +32,7 @@ public class AggTradeListener implements MessageListener {
 
     //最近的最高价
     @Getter @Setter
-    private BigDecimal recentHigh=BigDecimal.ZERO;
+    private volatile BigDecimal recentHigh=BigDecimal.ZERO;
 
     @Override
     public boolean listen(JSONObject js){

@@ -177,18 +177,8 @@ public class Market {
             return;
         }
 
-
-        OpenOrder currentBuy = stock.buyPrice();
-
-        //无买单
-        if (currentBuy == null) {
-            marketService.buy(price,null);
-            lastBuyTime = System.currentTimeMillis();
-            aggTradeListener.setRecentHigh(price);
-            return;
-        }
-
         BigDecimal buyPrice=aggTradeListener.getRecentHigh().subtract(marketConfig.getBuySubtract());
+        log.info("当前价格{}买入价{},还差{}",price,buyPrice,price.subtract(buyPrice));
         if(price.compareTo(buyPrice)<0){
             marketService.buy(price,null);
             lastBuyTime = System.currentTimeMillis();
