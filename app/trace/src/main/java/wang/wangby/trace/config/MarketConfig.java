@@ -17,6 +17,7 @@ public class MarketConfig {
     public static String SECRET_KEY;
     public static String PASSWORD;
     public static boolean test=false;
+    public static String MYSQL_PWD="root";
 
     static {
         File file=new File("/opt/config/traceConfig");
@@ -30,7 +31,8 @@ public class MarketConfig {
         MarketConfig.PASSWORD=keys[2].trim();
         if(keys.length>3){
             try{
-                test=Boolean.parseBoolean(keys[3].trim());
+                MYSQL_PWD=keys[3].trim();
+                test=Boolean.parseBoolean(keys[4].trim());
             }catch (Exception ex){
                 log.error(ex.getMessage(),ex);
             }

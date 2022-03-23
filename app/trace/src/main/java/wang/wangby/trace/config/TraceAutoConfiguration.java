@@ -75,7 +75,7 @@ public class TraceAutoConfiguration implements CommandLineRunner {
     public void run(String... args) throws Exception {
         DatabaseInfo databaseInfo=new DatabaseInfo();
         databaseInfo.setUsername("root");
-        databaseInfo.setPassword("root");
+        databaseInfo.setPassword(MarketConfig.MYSQL_PWD);
         databaseInfo.setUrl("jdbc:mysql://127.0.0.1/trace");
         routingDataSource.addDtasource(databaseInfo.getKey(),databaseInfo);
     }
