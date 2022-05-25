@@ -123,7 +123,7 @@ public class TraceController extends BaseController {
         klineVo.setMin(min + "");
         klineVo.setMax(max + "");
 
-        BalanceVo vo = accountUpdateListener.getBalance(marketConfig.getAccountSymbol());
+        BalanceVo vo = accountUpdateListener.getBalance(exchange.accountSymbol);
         if (vo != null) {
             klineVo.setWallet(vo.getTotal() + "");
         }else{
