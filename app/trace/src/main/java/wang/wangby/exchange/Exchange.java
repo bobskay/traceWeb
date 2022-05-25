@@ -26,10 +26,11 @@ public class Exchange {
     @Getter
     private String symbol;
     private Integer scale;
+    public static final String accountSymbol="busd";
 
     public Exchange() {
         client = new HttpClient();
-        symbol = "PEOPLEUSDT";
+        symbol = "ETHBUSD";
         scale = 6;
     }
 

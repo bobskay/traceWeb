@@ -83,7 +83,7 @@ public class OrderController extends BaseController {
         BigDecimal buy=aggTradeListener.getRecentHigh().subtract(marketConfig.getBuySubtract());
         tr.setBuy(buy+"");
 
-        BalanceVo vo = accountUpdateListener.getBalance(marketConfig.getAccountSymbol());
+        BalanceVo vo = accountUpdateListener.getBalance(Exchange.accountSymbol);
         if (vo != null) {
             tr.setWallet(vo.getTotal() + "");
         }else{
