@@ -40,17 +40,17 @@ public class MarketConfig {
     }
 
     @Remark("最大持仓")
-    private BigDecimal maxHold = new BigDecimal(10);
+    private BigDecimal maxHold = new BigDecimal(500000);
     @Remark("最小持仓")
     private int base = 0;
     @Remark("买入后加价卖出")
-    private BigDecimal sellPlus = new BigDecimal(100);
+    private BigDecimal sellPlus = new BigDecimal("0.0002");
 
     @Remark("交易数量")
-    private BigDecimal quantity = new BigDecimal("00.1").setScale(2);
+    private BigDecimal quantity = new BigDecimal(20000);
 
     @Remark("最后一个卖价减去这个价格，挂买单")
-    private BigDecimal buySubtract = new BigDecimal(400);
+    private BigDecimal buySubtract = new BigDecimal("0.0002");
 
     @Remark("买入间隔")
     private long buyInterval = 20 * 1000L;
@@ -64,7 +64,7 @@ public class MarketConfig {
     public BigDecimal ignoreMin=new BigDecimal(0);
 
     @Remark("小于这个持仓时的买入")
-    public BigDecimal minQuantity=new BigDecimal("0.01");
+    public BigDecimal minQuantity=new BigDecimal("20000");
 
     
 }

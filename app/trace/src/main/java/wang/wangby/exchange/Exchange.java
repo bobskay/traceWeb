@@ -29,8 +29,8 @@ public class Exchange {
 
     public Exchange() {
         client = new HttpClient();
-        symbol = "ETHBUSD";
-        scale = 2;
+        symbol = "PEOPLEUSDT";
+        scale = 6;
     }
 
     public Ticker ticker() {
@@ -128,6 +128,7 @@ public class Exchange {
             orderDto.setPrice(null);
             orderDto.setTimeInForce(null);
         }
+
         Order order = client.post(Api.ORDER, OrderBuilder.builder(orderDto));
         if (order.getStatus() != OrderState.NEW) {
             log.error("下单失败：" + order.getStatus() + ":" + order.getResponse());

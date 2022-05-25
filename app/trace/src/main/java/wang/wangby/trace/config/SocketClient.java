@@ -16,6 +16,7 @@ import java.util.List;
 public class SocketClient {
     public static int sleep=30*60*1000;
     public static int error=5*60*1000;
+    public static boolean ERROR=false;
 
     private MyWebSocketClient client;
     private List<MessageListener> messageListeners;
@@ -26,6 +27,26 @@ public class SocketClient {
        this.exchange=exchange;
        this.messageListeners=messageListeners;
        this.accountListeners=accountListeners;
+
+        new Thread(() -> {
+            while (true) {
+                try {
+                    if(ERROR){
+                        log.error("出现异常重新创建socket");
+                        createClient();
+                        ERROR=false;
+                    }
+                    Thread.sleep(60*1000);
+                } catch (Exception e) {
+                    log.error("重启webSocket出错" + e.getMessage(), e);
+                    try {
+                        Thread.sleep(error);
+                    } catch (InterruptedException ex) {
+                        log.error(ex.getMessage(),ex);
+                    }
+                }
+            }
+        }).start();
 
         new Thread(() -> {
             while (true) {

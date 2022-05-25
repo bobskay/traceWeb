@@ -8,7 +8,7 @@ my:
     permission: false
 
 server:
-   port: 9999
+   port: 9998
 
 spring:
   application:

@@ -12,6 +12,7 @@ import wang.wangby.exchange.Exchange;
 import wang.wangby.exchange.socket.listener.AccountListener;
 import wang.wangby.exchange.socket.listener.MessageListener;
 import wang.wangby.serialize.json.JsonUtil;
+import wang.wangby.trace.config.SocketClient;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -96,7 +97,7 @@ public class MyWebSocketClient extends WebSocketClient {
     @Override
     public void onError(Exception e) {
         log.error("出现异常" + e.getMessage(), e);
-
+        SocketClient.ERROR=true;
     }
 
 
