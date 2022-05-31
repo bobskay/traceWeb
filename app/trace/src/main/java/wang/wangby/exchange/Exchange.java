@@ -120,15 +120,9 @@ public class Exchange {
             log.info("小数点过多，修改数量：" + quantity + "-->" + newQuantity);
         }
         OrderDto orderDto = OrderBuilder.order(orderSide, newPrice, newQuantity);
+        log.info("下单："+orderDto);
         orderDto.setSymbol(symbol);
         orderDto.setNewClientOrderId(id);
-
-
-        if (price.compareTo(BigDecimal.ZERO) == 0) {
-            orderDto.setType(OrderType.MARKET);
-            orderDto.setPrice(null);
-            orderDto.setTimeInForce(null);
-        }
 
         Order order = client.post(Api.ORDER, OrderBuilder.builder(orderDto));
         if (order.getStatus() != OrderState.NEW) {

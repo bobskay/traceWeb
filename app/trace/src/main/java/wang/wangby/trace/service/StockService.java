@@ -24,21 +24,18 @@ public class StockService implements CommandLineRunner {
     @Autowired
     Exchange exchange;
 
-    private Stock stock;
+    private volatile Stock stock;
 
 
     public Stock getStock(){
         return stock;
     }
 
-    @Scheduled(cron = "0/10 * * * * ? ")
-    public void updateSock(){
+    public Stock updateSock(){
         List<OpenOrder> all = exchange.openOrders();
         List<OpenOrder> list=new ArrayList<>();
         for(OpenOrder o:all){
-            if(OrderId.getSide(o.getClientOrderId())!=null){
-                list.add(o);
-            }
+            list.add(o);
         }
 
         Collections.sort(list, Comparator.comparing(OpenOrder::getClientOrderId));
@@ -55,7 +52,7 @@ public class StockService implements CommandLineRunner {
         stock=new Stock();
         stock.setHolds(hold);
         stock.setOpenOrders(list);
-
+        return stock;
     }
 
     @Override

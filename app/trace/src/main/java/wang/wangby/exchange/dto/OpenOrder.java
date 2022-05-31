@@ -44,16 +44,27 @@ public class OpenOrder extends ApiResponse {
             if(clientOrderId.startsWith(s.code)){
                 return s;
             }
+            if(s.toString().equalsIgnoreCase(side)){
+                return s;
+            }
         }
+
        return null;
     }
 
     public String getOrderTime(){
-        Date date= OrderId.getOrderTime(this.clientOrderId);
-        if(date==null){
+        try{
+            Date date= OrderId.getOrderTime(this.clientOrderId);
+            if(date==null){
+                return "";
+            }
+            return new DateTime(date).toString(DateTime.Format.YEAR_TO_SECOND);
+        }catch (Exception ex){
             return "";
         }
-        return new DateTime(date).toString(DateTime.Format.YEAR_TO_SECOND);
+
+
+
     }
 
     //下单价格

@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
+import wang.wangby.exchange.Exchange;
 import wang.wangby.exchange.dto.OpenOrder;
 import wang.wangby.exchange.enums.OrderSide;
 import wang.wangby.exchange.enums.OrderState;
@@ -29,7 +30,7 @@ import java.util.Set;
 @Slf4j
 public class Market {
     @Getter
-    private boolean test= MarketConfig.test;
+    private boolean test = MarketConfig.test;
 
     JsonUtil jsonUtil = JsonUtil.INSTANCE;
 
@@ -47,6 +48,8 @@ public class Market {
     TraceOrderService traceOrderService;
     @Autowired
     AggTradeListener aggTradeListener;
+    @Autowired
+    Exchange exchange;
 
 
     //最后的买入时间，
@@ -97,8 +100,8 @@ public class Market {
                 repository.update(traceOrder);
             }
 
-            if(order.getSide() == OrderSide.CLOSE){
-                String sellId=order.getClientOrderId().replace(OrderSide.CLOSE.code,OrderSide.SELL.code);
+            if (order.getSide() == OrderSide.CLOSE) {
+                String sellId = order.getClientOrderId().replace(OrderSide.CLOSE.code, OrderSide.SELL.code);
                 TraceOrder traceOrder = traceOrderService.getBySellId(sellId);
                 if (traceOrder == null) {
                     log.error("找不到对应买单：" + sellId);
@@ -151,39 +154,41 @@ public class Market {
         repository.delete(StockOrder.class, id);
     }
 
+    Integer count = 0;
 
     @Scheduled(cron = "0/3 * * * * ? ")
-    public void doTrace() {
+    public void doTrace() throws InterruptedException {
+        log.info("执行次数：" + count++);
+        Stock stock = stockService.updateSock();
         BigDecimal price = marketService.getPrice();
-        Stock stock = stockService.getStock();
-        if(price==null||stock==null){
+        if (price == null) {
             log.info("等待系统启动");
             return;
         }
 
-        if (System.currentTimeMillis() - lastBuyTime < marketConfig.getBuyInterval()) {
-            long remain=marketConfig.getBuyInterval()-(System.currentTimeMillis() - lastBuyTime);
-            log.info("短时间内成交过，还需等待："+remain);
+        OpenOrder buy = null;
+        for (OpenOrder openOrder : stock.getOpenOrders()) {
+            if (openOrder.getSide() == OrderSide.BUY) {
+                buy = openOrder;
+            }
+        }
+
+        if (buy == null) {
+            String id = OrderId.newId(OrderSide.BUY, price);
+            BigDecimal buyP = rule.buyPrice(price);
+            exchange.order(OrderSide.BUY, buyP, rule.quantity(price), id);
+            log.info("下完单休息10秒");
+            Thread.sleep(10000);
+            return;
+        }
+        BigDecimal buyCancel = new BigDecimal(marketConfig.getBuyCancel());
+        if (price.subtract(buy.getPrice()).compareTo(buyCancel) > 0) {
+            exchange.cancel(buy.getClientOrderId());
+            log.info("价格差距过大，重新买入"+buy.getClientOrderId());
+            Thread.sleep(2000);
             return;
         }
 
-        if (stock == null) {
-            log.info("账户信息未初始化");
-            return;
-        }
-
-        if (rule.totalRemain().compareTo(BigDecimal.ZERO)<=0) {
-            log.info("已到达最大持仓，请注意风险：" + stock.getHolds());
-            return;
-        }
-
-        BigDecimal buyPrice=aggTradeListener.getRecentHigh().subtract(marketConfig.getBuySubtract());
-        log.info("当前价格{}买入价{},还差{}",price,buyPrice,price.subtract(buyPrice));
-        if(price.compareTo(buyPrice)<0){
-            marketService.buy(price,null);
-            lastBuyTime = System.currentTimeMillis();
-            aggTradeListener.setRecentHigh(price);
-            return;
-        }
+        log.info("等待买入：" + buy.getPrice()+"->"+price);
     }
 }

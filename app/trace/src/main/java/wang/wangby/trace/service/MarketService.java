@@ -124,6 +124,12 @@ public class MarketService {
 
         String id = OrderId.newId(OrderSide.SELL, currentPrice);
         BigDecimal sellPrice=rule.sellPrice(currentPrice,quantity);
+
+        BigDecimal current=getPrice();
+        if(current.compareTo(sellPrice)>0){
+            sellPrice=currentPrice.add(BigDecimal.ONE);
+        }
+
         exchange.order(OrderSide.SELL, sellPrice, quantity, id);
         return id;
     }

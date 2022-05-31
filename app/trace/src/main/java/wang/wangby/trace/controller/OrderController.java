@@ -70,7 +70,7 @@ public class OrderController extends BaseController {
     }
 
     private TraceVo getTraceVo() {
-        Stock stock = stockService.getStock();
+        Stock stock = stockService.updateSock();
         TraceVo tr = new TraceVo();
         tr.setPrice(marketService.getPrice() + "");
         tr.setHold(stock.getHolds() + "");

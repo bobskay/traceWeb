@@ -45,10 +45,13 @@ public class Rule {
         OpenOrder o=stockService.getStock().sellPrice();
         //如果一个卖单都没有，说明当前空仓，当前价格减1就买
         if(o==null){
-            return currentPrice;
+            return currentPrice.subtract(marketConfig.getBuySubtract());
         }
-
-        return o.getPrice().subtract(marketConfig.getBuySubtract());
+        BigDecimal newP= o.getPrice().subtract(marketConfig.getBuySubtract());
+        if(currentPrice.subtract(newP).compareTo(BigDecimal.ONE)<0){
+            newP=currentPrice.subtract(BigDecimal.ONE);
+        }
+        return newP;
     }
 
     public BigDecimal quantity(BigDecimal currentPrice) {

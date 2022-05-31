@@ -37,7 +37,7 @@ public class OrderId {
             }
             return null;
         } catch (Exception ex) {
-            log.error(ex.getMessage(), ex);
+            log.error("无法获取时间："+clientOrderId);
             return null;
         }
     }

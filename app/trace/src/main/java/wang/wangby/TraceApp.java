@@ -20,6 +20,7 @@ public class TraceApp implements CommandLineRunner {
 
 
     public static void main(String[] args) {
+        MarketConfig.test=false;
         SpringApplication.run(TraceApp.class, args);
     }
 
