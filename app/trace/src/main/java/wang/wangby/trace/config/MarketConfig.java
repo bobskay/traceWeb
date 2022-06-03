@@ -40,7 +40,7 @@ public class MarketConfig {
     }
 
     @Remark("最大持仓")
-    private BigDecimal maxHold = new BigDecimal(10);
+    private BigDecimal maxHold = new BigDecimal(1);
     @Remark("最小持仓")
     private int base = 0;
     @Remark("买入后加价卖出")
@@ -59,8 +59,8 @@ public class MarketConfig {
     @Remark("当前价格过买价多少后重新申请")
     public int buyCancel=500;
 
-    @Remark("持仓小于多少就忽略当前买入数量")
-    public BigDecimal ignoreMin=new BigDecimal(0);
+    @Remark("低于多少持仓")
+    public BigDecimal ignoreMin=new BigDecimal(2);
 
     @Remark("小于这个持仓时的买入")
     public BigDecimal minQuantity=new BigDecimal("0.2");
