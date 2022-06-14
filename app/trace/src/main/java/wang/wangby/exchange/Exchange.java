@@ -31,7 +31,7 @@ public class Exchange {
     public Exchange() {
         client = new HttpClient();
         symbol = "ETHBUSD";
-        scale = 6;
+        scale = 2;
     }
 
     public Ticker ticker() {
