@@ -48,7 +48,7 @@ public class Rule {
             return currentPrice;
         }
 
-        return o.getPrice().subtract(marketConfig.getBuySubtract());
+        return currentPrice;
     }
 
     public BigDecimal quantity(BigDecimal currentPrice) {
