@@ -132,7 +132,7 @@ public class Exchange {
 
         Order order = client.post(Api.ORDER, OrderBuilder.builder(orderDto));
         if (order.getStatus() != OrderState.NEW) {
-            log.error("下单失败：" + order.getStatus() + ":" + order.getResponse());
+            log.error("下单失败,参数{}，返回{}", orderDto , order.getResponse(),new Exception());
         }
         return  order;
     }
