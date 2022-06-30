@@ -48,7 +48,12 @@ public class Rule {
             return currentPrice;
         }
 
-        return currentPrice;
+        BigDecimal newBuy=o.getPrice();
+        //为防止间隔过小，如果上一单的买价减3大于当前价就用当前价
+        if(newBuy.subtract(new BigDecimal(3)).compareTo(currentPrice)>0){
+            return currentPrice;
+        }
+        return newBuy;
     }
 
     public BigDecimal quantity(BigDecimal currentPrice) {
